@@ -12,6 +12,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 
+import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Page_lang;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
@@ -27,8 +28,9 @@ import java.util.ArrayList;
  */
 
 public class FirstFragment extends Fragment {
-    Context context;
 
+    private ConnectFirebase connectFirebase;
+    Context context;
     public void setContext(Context context) {
         this.context = context;
     }
@@ -57,13 +59,13 @@ public class FirstFragment extends Fragment {
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
+        connectFirebase= new ConnectFirebase();
+        final DatabaseReference myRef =  connectFirebase.getDatabaseReference
+                ("supp_B/page_lang");
+
         final ArrayAdapter<ArrayList<String>> adapter;
         adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
-        final DatabaseReference myRef = database.getReference("supp_B/page_lang");
 
         myRef.addChildEventListener(new ChildEventListener(){
             @Override
@@ -85,6 +87,7 @@ public class FirstFragment extends Fragment {
                 Log.w("TAG:", "Failed to read value.", error.toException()); }
         });
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
