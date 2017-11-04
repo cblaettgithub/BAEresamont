@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by chbla on 31.10.2017.
@@ -61,18 +62,24 @@ public class FirstFragment extends Fragment {
 
         connectFirebase= new ConnectFirebase();
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference
-                ("supp_B/page_lang");
+                ("/supp_B/pages/5/pages_lang/");
 
         final ArrayAdapter<ArrayList<String>> adapter;
+        final String key="text";
         adapter = new ArrayAdapter<>(getContext(),
                 android.R.layout.simple_list_item_1, android.R.id.text1);
-
         myRef.addChildEventListener(new ChildEventListener(){
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
-                Page_lang pages = dataSnapshot.getValue(Page_lang.class);
-                myWebView.loadData(pages.getText(), "text/html", "UTF-8");
+                ///supp_B/pages_lang/
+                //Page_lang pages = dataSnapshot.getValue(Page_lang.class);
+                //myWebView.loadData(pages.getText(), "text/html", "UTF-8");
+                HashMap<String, Object> result = (HashMap<String, Object>) dataSnapshot.getValue();
+                String output=result.get(key).toString();//nicht in String einlesen <p>
+                Log.w("Title:", output);
+                myWebView.loadData("<p>Page de test</p>", "text/html", "UTF-8");
+
             }
             public void onChildRemoved(DataSnapshot dataSnapshot){
                 Pages value = dataSnapshot.getValue(Pages.class);
@@ -87,7 +94,6 @@ public class FirstFragment extends Fragment {
                 Log.w("TAG:", "Failed to read value.", error.toException()); }
         });
     }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);

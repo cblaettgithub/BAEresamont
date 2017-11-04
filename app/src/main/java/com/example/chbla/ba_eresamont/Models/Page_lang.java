@@ -70,6 +70,5 @@ public class Page_lang {
         HashMap<String, Page_lang> result = new HashMap<>();
         return (Map)result;
     }
-    
 
 }

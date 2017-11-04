@@ -6,7 +6,15 @@
         <item
             android:id="@+id/fragment_first"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Pages" />
+            android:title="Guide médical" />
+        <item
+            android:id="@+id/fragment_second"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Boite à outils" />
+        <item
+            android:id="@+id/fragment_third"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Consultation de médecine de montagne" />
     </group>
     <item android:title="Communicate">
         <menu>

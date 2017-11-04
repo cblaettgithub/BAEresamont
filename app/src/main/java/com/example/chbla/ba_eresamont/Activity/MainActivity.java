@@ -12,11 +12,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
+import com.example.chbla.ba_eresamont.Fragment.SecondFragment;
+import com.example.chbla.ba_eresamont.Fragment.ThirdFragment;
 import com.example.chbla.ba_eresamont.R;
 
 public class MainActivity extends AppCompatActivity
@@ -31,7 +35,6 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,10 +48,10 @@ public class MainActivity extends AppCompatActivity
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        //navigationView.setNavigationItemSelectedListener(this); alt
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -60,23 +63,35 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        Log.d("backpressed","*******************backpressed");
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
+    @Override
+    protected void onUserLeaveHint()
+    {
+        Log.d("onUserLeaveHint","**********************Home button pressed");
+        super.onUserLeaveHint();
+    }
 
     private void navigationItem(MenuItem menuItem)
     {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = null;
-
+        Log.d("navigationItem","**********************navigationItem");
         switch (menuItem.getItemId()){
             case R.id.fragment_first:
                 fragment = new FirstFragment();
                 break;
-
+            case R.id.fragment_second:
+                fragment = new SecondFragment();
+                break;
+            case R.id.fragment_third:
+                fragment = new ThirdFragment();
+                break;
         }
         //With this code it will replace the container with the selected fragment
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
@@ -98,14 +113,16 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        switch(id){
+            case R.id.homeAsUp:
+                return true;
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {

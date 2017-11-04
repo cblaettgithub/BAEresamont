@@ -2,12 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.chbla.ba_eresamont.Fragment.FirstFragment">
+    tools:context="com.example.chbla.ba_eresamont.Fragment.ThirdFragment">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="First Fragment"
+        android:text="Third Fragment"
         android:textSize="25sp" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +17,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:orientation="vertical">              
 
