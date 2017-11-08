@@ -13,14 +13,12 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Fragment.SecondFragment;
-import com.example.chbla.ba_eresamont.Fragment.ThirdFragment;
 import com.example.chbla.ba_eresamont.R;
 
 public class MainActivity extends AppCompatActivity
@@ -59,6 +57,13 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
+        Menu menu= navigationView.getMenu();
+        menu.clear();;
+        //Menu submenu = menu.addSubMenu("New Super SubMenu");
+        menu.add(0,R.id.fragment_first , 1, "Guide médical").setIcon(R.drawable.ic_menu_gallery);;
+        navigationView.invalidate();
+
+
     }
     @Override
     public void onBackPressed() {
@@ -88,9 +93,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.fragment_second:
                 fragment = new SecondFragment();
-                break;
-            case R.id.fragment_third:
-                fragment = new ThirdFragment();
                 break;
         }
         //With this code it will replace the container with the selected fragment

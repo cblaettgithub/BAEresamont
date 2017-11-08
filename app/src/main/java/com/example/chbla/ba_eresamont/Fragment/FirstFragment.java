@@ -11,6 +11,8 @@ import android.support.v4.app.Fragment;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Page_lang;
@@ -27,7 +29,6 @@ import java.util.HashMap;
 /**
  * Created by chbla on 31.10.2017.
  */
-
 public class FirstFragment extends Fragment {
 
     private ConnectFirebase connectFirebase;
@@ -51,8 +52,16 @@ public class FirstFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         setContext(container.getContext());
         GetDataPages();
+        ButtonCreator();
         return view;
         //return inflater.inflate(R.layout.fragment_first, container, false);
+    }
+
+    private void ButtonCreator() {
+        Button button = new Button(getContext());
+        button.setText("TestButton");
+        WebView myWebView = (WebView) view.findViewById(R.id.webView);
+        myWebView.addView(button);
     }
 
     private void GetDataPages() {
@@ -75,11 +84,11 @@ public class FirstFragment extends Fragment {
                 ///supp_B/pages_lang/
                 //Page_lang pages = dataSnapshot.getValue(Page_lang.class);
                 //myWebView.loadData(pages.getText(), "text/html", "UTF-8");
+                //Hinweis jedesmal holt er ein neues items
                 HashMap<String, Object> result = (HashMap<String, Object>) dataSnapshot.getValue();
                 String output=result.get(key).toString();//nicht in String einlesen <p>
                 Log.w("Title:", output);
                 myWebView.loadData("<p>Page de test</p>", "text/html", "UTF-8");
-
             }
             public void onChildRemoved(DataSnapshot dataSnapshot){
                 Pages value = dataSnapshot.getValue(Pages.class);
