@@ -57,14 +57,23 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
-        Menu menu= navigationView.getMenu();
-        menu.clear();;
-        //Menu submenu = menu.addSubMenu("New Super SubMenu");
-        menu.add(0,R.id.fragment_first , 1, "Guide médical").setIcon(R.drawable.ic_menu_gallery);;
-        navigationView.invalidate();
-
-
+        CreateMenus(navigationView,new String[]{"Guide médical","Testing"},
+                new int[]{R.id.fragment_first, R.id.fragment_second});
     }
+
+    private void CreateMenus(NavigationView navigationView, String[] menusnames,
+                             int[] fragmentnames) {
+
+        Menu menu= navigationView.getMenu();
+        menu.clear();
+        for(int i=0;i<menusnames.length;i++){
+            Menu menushow= navigationView.getMenu();
+            menushow.add(0, fragmentnames[i] , 1,
+                    menusnames[i]).setIcon(R.drawable.ic_menu_gallery);        ;
+        }
+        navigationView.invalidate();
+    }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -87,12 +96,19 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = null;
         Log.d("navigationItem","**********************navigationItem");
+        Bundle args;
         switch (menuItem.getItemId()){
             case R.id.fragment_first:
+                args= new Bundle();
                 fragment = new FirstFragment();
+                args.putString(FirstFragment.FRAGMENTNAME, "first");
+                fragment.setArguments(args);
                 break;
             case R.id.fragment_second:
-                fragment = new SecondFragment();
+                args= new Bundle();
+                fragment = new FirstFragment();
+                args.putString(FirstFragment.FRAGMENTNAME, "second");
+                fragment.setArguments(args);
                 break;
         }
         //With this code it will replace the container with the selected fragment

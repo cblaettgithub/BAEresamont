@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Page_lang;
@@ -45,23 +46,43 @@ public class FirstFragment extends Fragment {
     public void setView(View view) {
         this.view = view;
     }
+    public static final String FRAGMENTNAME ="text";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         setContext(container.getContext());
-        GetDataPages();
-        ButtonCreator();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            GetDataPages();
+            switch(bundle.getString(FRAGMENTNAME)){
+                case"first":
+                    for(int i=0;i<3;i++){
+                        ButtonCreator("Guide médical", 1);
+                    }
+                    break;
+                case"second":
+                    for(int i=0;i<2;i++){
+                        ButtonCreator("Testing", 1);
+                    }
+                    break;
+            }
+        }
         return view;
         //return inflater.inflate(R.layout.fragment_first, container, false);
     }
 
-    private void ButtonCreator() {
+    private void ButtonCreator(String buttonname, int id) {
         Button button = new Button(getContext());
-        button.setText("TestButton");
-        WebView myWebView = (WebView) view.findViewById(R.id.webView);
-        myWebView.addView(button);
+        button.setText(buttonname);
+        button.setOnClickListener(new View.OnClickListener() {
+          public void onClick(View v) {
+              GetDataPages();}
+        });
+        LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
+        linearLayout.addView(button);
     }
 
     private void GetDataPages() {
@@ -69,6 +90,8 @@ public class FirstFragment extends Fragment {
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //database.setPersistenceEnabled(true);
         connectFirebase= new ConnectFirebase();
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference
                 ("/supp_B/pages/5/pages_lang/");
