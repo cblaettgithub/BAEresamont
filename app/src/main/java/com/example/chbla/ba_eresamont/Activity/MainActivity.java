@@ -63,8 +63,12 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        GetDataFirebase("Menu");
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu menu= navigationView.getMenu();
+        menu.clear();
+        GetDataFirebase("Menu");
+        navigationView.invalidate();
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             DBMenueName dbMenueName= new DBMenueName();
             @Override
@@ -80,13 +84,11 @@ public class MainActivity extends AppCompatActivity
         String select="/Ba_2017/pages/";
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
-        final Pages pages=new Pages();
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
 
-        final  ArrayList<String> a = new ArrayList<>();
          switch (choice){
             case "Menu":
-                query=myRef.orderByKey().startAt("85").endAt("90");
+                query=myRef.orderByKey().startAt("85").endAt("86");
                 break;
             case "childelements":
                  query=myRef.orderByChild("parent_id").equalTo(86);///parentid von 86 bis 90
@@ -97,15 +99,17 @@ public class MainActivity extends AppCompatActivity
 
         query.addChildEventListener(new ChildEventListener(){
             String temp;
-            //ArrayList<String> a = new ArrayList<>();
+            int i=0;
+            NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
+            int[] fragmentarray=new int[]{R.id.fragment_first, R.id.fragment_second};
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
                 temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
                 Log.w("GetDataFirebase 1:hash:",  temp);
-                a.add(temp);
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                CreateMenus(navigationView,new String[]{a.get(0),a.get(0)},
-                        new int[]{R.id.fragment_first, R.id.fragment_second});
+                Menu menushow= navigationView.getMenu();
+                menushow.add(0, fragmentarray[i] , 1,
+                       temp).setIcon(R.drawable.ic_menu_gallery);
+                i++;
             }
             public void onChildRemoved(DataSnapshot dataSnapshot){
 
@@ -120,9 +124,6 @@ public class MainActivity extends AppCompatActivity
 
     private void CreateMenus(NavigationView navigationView, String[] menusnames,
                              int[] fragmentnames) {
-
-        Menu menu= navigationView.getMenu();
-        menu.clear();
         for(int i=0;i<menusnames.length;i++){
             Menu menushow= navigationView.getMenu();
             menushow.add(0, fragmentnames[i] , 1,
