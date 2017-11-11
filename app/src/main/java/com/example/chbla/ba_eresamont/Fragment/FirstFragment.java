@@ -94,6 +94,7 @@ public class FirstFragment extends Fragment {
 
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference
                 (query);
+        myRef.keepSynced(true);
 
         final ArrayAdapter<ArrayList<String>> adapter;
         final String key="text";

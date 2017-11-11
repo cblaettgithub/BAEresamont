@@ -9,10 +9,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class ConnectFirebase {
     private FirebaseDatabase database=null;
+    private static boolean isPersistenceEnabled = false;
 
     public ConnectFirebase(){
+        if (!isPersistenceEnabled) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            isPersistenceEnabled = true;
+        }
         database = FirebaseDatabase.getInstance();
-        //database.setPersistenceEnabled(true);
     }
     public DatabaseReference getDatabaseReference(String value) {
         return database.getReference(value);
@@ -21,5 +25,4 @@ public class ConnectFirebase {
         database.goOffline();
         database =null;
     }
-
 }

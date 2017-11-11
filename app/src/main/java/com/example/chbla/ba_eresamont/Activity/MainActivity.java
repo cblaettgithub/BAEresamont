@@ -30,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
@@ -38,17 +39,11 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private ConnectFirebase connectFirebase;
     private String select="/supp_B/pages/5/pages_lang/";
-    private Page_lang page_lang;
-    public String getMenu_name() {     return menu_name;    }
-    public void setMenu_name(String menu_name) {    this.menu_name = menu_name;    }
-    private String menu_name;
-    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        String test;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,8 +64,6 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setHomeButtonEnabled(true);
 
         GetDataFirebase("Menu");
-        //GetDataFirebase("Childelements");
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             DBMenueName dbMenueName= new DBMenueName();
@@ -80,24 +73,23 @@ public class MainActivity extends AppCompatActivity
                 return true;
             }
         });
-       //GetDataFirebase();
-        CreateMenus(navigationView,new String[]{"temp","temp"},
-                new int[]{R.id.fragment_first, R.id.fragment_second});
-    }
+      }
     //get all menutitle //getallChile
     private void GetDataFirebase(String choice) {
         connectFirebase= new ConnectFirebase();
         String select="/Ba_2017/pages/";
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
+        myRef.keepSynced(true);
         final Pages pages=new Pages();
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
 
-        switch (choice){
+        final  ArrayList<String> a = new ArrayList<>();
+         switch (choice){
             case "Menu":
-                 query=myRef.orderByKey().equalTo("1");///pages mit id 1
+                query=myRef.orderByKey().startAt("85").endAt("90");
                 break;
             case "childelements":
-                 //query=myRef.orderByChild("parent_id").equalTo(86);///parentid von 86 bis 90
+                 query=myRef.orderByChild("parent_id").equalTo(86);///parentid von 86 bis 90
                 break;
             default:
                 break;
@@ -105,10 +97,15 @@ public class MainActivity extends AppCompatActivity
 
         query.addChildEventListener(new ChildEventListener(){
             String temp;
+            //ArrayList<String> a = new ArrayList<>();
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
                 temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
                 Log.w("GetDataFirebase 1:hash:",  temp);
+                a.add(temp);
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                CreateMenus(navigationView,new String[]{a.get(0),a.get(0)},
+                        new int[]{R.id.fragment_first, R.id.fragment_second});
             }
             public void onChildRemoved(DataSnapshot dataSnapshot){
 

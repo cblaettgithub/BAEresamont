@@ -27,9 +27,7 @@ public class DBMenueName extends AppCompatActivity {
     private ArrayList<String> values;
     Query query;
     private Page_lang page_lang;
-    public DBMenueName(){
-        connectFirebase= new ConnectFirebase();
-    }
+
     HashMap<String, Object> result;
 
     @Override
@@ -43,7 +41,7 @@ public class DBMenueName extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
-                HashMap<String, Object> result = (HashMap<String, Object>) dataSnapshot.getValue();
+                result = (HashMap<String, Object>) dataSnapshot.getValue();
 
             }
             public void onChildRemoved(DataSnapshot dataSnapshot){
