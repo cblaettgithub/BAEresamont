@@ -8,9 +8,18 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 
 public class ConnectFirebase {
+    private FirebaseDatabase database=null;
+
+    public ConnectFirebase(){
+        database = FirebaseDatabase.getInstance();
+        //database.setPersistenceEnabled(true);
+    }
     public DatabaseReference getDatabaseReference(String value) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
         return database.getReference(value);
     }
+    public void close(){
+        database.goOffline();
+        database =null;
+    }
+
 }

@@ -16,20 +16,39 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 
+import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
+import com.example.chbla.ba_eresamont.Database.DBMenueName;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
-import com.example.chbla.ba_eresamont.Fragment.SecondFragment;
+import com.example.chbla.ba_eresamont.Models.Page_lang;
+import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawerLayout;
+    private ConnectFirebase connectFirebase;
+    private String select="/supp_B/pages/5/pages_lang/";
+    private Page_lang page_lang;
+    public String getMenu_name() {     return menu_name;    }
+    public void setMenu_name(String menu_name) {    this.menu_name = menu_name;    }
+    private String menu_name;
+    Query query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        String test;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -49,16 +68,57 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+        GetDataFirebase("Menu");
+        //GetDataFirebase("Childelements");
+
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            DBMenueName dbMenueName= new DBMenueName();
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 navigationItem(item);
                 return true;
             }
         });
-        CreateMenus(navigationView,new String[]{"Guide médical","Testing"},
+       //GetDataFirebase();
+        CreateMenus(navigationView,new String[]{"temp","temp"},
                 new int[]{R.id.fragment_first, R.id.fragment_second});
+    }
+    //get all menutitle //getallChile
+    private void GetDataFirebase(String choice) {
+        connectFirebase= new ConnectFirebase();
+        String select="/Ba_2017/pages/";
+        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
+        final Pages pages=new Pages();
+        Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
+
+        switch (choice){
+            case "Menu":
+                 query=myRef.orderByKey().equalTo("1");///pages mit id 1
+                break;
+            case "childelements":
+                 //query=myRef.orderByChild("parent_id").equalTo(86);///parentid von 86 bis 90
+                break;
+            default:
+                break;
+        }
+
+        query.addChildEventListener(new ChildEventListener(){
+            String temp;
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+            {
+                temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
+                Log.w("GetDataFirebase 1:hash:",  temp);
+            }
+            public void onChildRemoved(DataSnapshot dataSnapshot){
+
+            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w("TAG:", "Failed to read value.", error.toException()); }
+        });
     }
 
     private void CreateMenus(NavigationView navigationView, String[] menusnames,

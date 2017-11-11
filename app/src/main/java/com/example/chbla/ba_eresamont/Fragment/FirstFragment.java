@@ -33,6 +33,7 @@ import java.util.HashMap;
 public class FirstFragment extends Fragment {
 
     private ConnectFirebase connectFirebase;
+    private DatabaseReference databaseReference;
     Context context;
     public void setContext(Context context) {
         this.context = context;
@@ -48,15 +49,16 @@ public class FirstFragment extends Fragment {
     }
     public static final String FRAGMENTNAME ="text";
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         setContext(container.getContext());
         Bundle bundle = getArguments();
+        connectFirebase= new ConnectFirebase();
+
         if (bundle != null) {
-            GetDataPages();
+            GetDataPages("/supp_B/pages/5/pages_lang/");
             switch(bundle.getString(FRAGMENTNAME)){
                 case"first":
                     for(int i=0;i<3;i++){
@@ -79,22 +81,19 @@ public class FirstFragment extends Fragment {
         button.setText(buttonname);
         button.setOnClickListener(new View.OnClickListener() {
           public void onClick(View v) {
-              GetDataPages();}
+              GetDataPages("/supp_B/pages/5/pages_lang/");}
         });
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.addView(button);
     }
 
-    private void GetDataPages() {
+    private void GetDataPages(String query) {
         final WebView myWebView = (WebView) view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //database.setPersistenceEnabled(true);
-        connectFirebase= new ConnectFirebase();
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference
-                ("/supp_B/pages/5/pages_lang/");
+                (query);
 
         final ArrayAdapter<ArrayList<String>> adapter;
         final String key="text";
@@ -125,6 +124,7 @@ public class FirstFragment extends Fragment {
             public void onCancelled(DatabaseError error) {
                 Log.w("TAG:", "Failed to read value.", error.toException()); }
         });
+
     }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
