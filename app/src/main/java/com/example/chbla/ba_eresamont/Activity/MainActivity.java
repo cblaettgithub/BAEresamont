@@ -66,12 +66,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu menu= navigationView.getMenu();
         menu.clear();
+        Menu menushow= navigationView.getMenu();
+        menushow.add(0, R.id.fragment_zero , 1,
+                "Home").setIcon(R.drawable.ic_menu_gallery);
         GetDataFirebase("Menu");
         navigationView.invalidate();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            DBMenueName dbMenueName= new DBMenueName();
-            @Override
+             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 navigationItem(item);
                 return true;
@@ -152,6 +154,12 @@ public class MainActivity extends AppCompatActivity
         Log.d("navigationItem","**********************navigationItem");
         Bundle args;
         switch (menuItem.getItemId()){
+            case R.id.fragment_zero:
+                args= new Bundle();
+                fragment = new FirstFragment();
+                args.putString(FirstFragment.FRAGMENTNAME, "zero");
+                fragment.setArguments(args);
+                break;
             case R.id.fragment_first:
                 args= new Bundle();
                 fragment = new FirstFragment();
@@ -167,7 +175,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.fragment_third:
                 args= new Bundle();
                 fragment = new FirstFragment();
-                args.putString(FirstFragment.FRAGMENTNAME, "second");
+                args.putString(FirstFragment.FRAGMENTNAME, "third");
                 fragment.setArguments(args);
                 break;
         }
