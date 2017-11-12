@@ -3,8 +3,10 @@ package com.example.chbla.ba_eresamont.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
@@ -24,6 +26,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -61,19 +65,58 @@ public class FirstFragment extends Fragment {
             GetDataPages("/supp_B/pages/5/pages_lang/");
             switch(bundle.getString(FRAGMENTNAME)){
                 case"first":
-                    for(int i=0;i<3;i++){
-                        ButtonCreator("Guide médical", 1);
-                    }
+                    GetDataFirebase( "first");
                     break;
                 case"second":
-                    for(int i=0;i<2;i++){
-                        ButtonCreator("Testing", 1);
-                    }
+                    GetDataFirebase( "second");
+                    break;
+                case"third":
+                    GetDataFirebase( "third");
                     break;
             }
         }
         return view;
         //return inflater.inflate(R.layout.fragment_first, container, false);
+    }
+    private void GetDataFirebase(String choice) {
+        connectFirebase= new ConnectFirebase();
+        String select="/Ba_2017/pages/";
+        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
+        myRef.keepSynced(true);
+        Query query=null;
+
+        switch (choice){
+            case "first":
+                query=myRef.orderByChild("parent_id").equalTo(85);
+                break;
+            case "second":
+                query=myRef.orderByChild("parent_id").equalTo(86);
+                break;
+            case "third":
+                query=myRef.orderByChild("parent_id").equalTo(87);
+                break;
+            default:
+                break;
+        }
+
+        query.addChildEventListener(new ChildEventListener(){
+            String temp;
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+            {
+                if (dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null) {
+                    temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
+                    Log.w("GetDataFirebase 1:hash:", temp);
+                    ButtonCreator(temp, 1);
+                }
+            }
+            public void onChildRemoved(DataSnapshot dataSnapshot){
+            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w("TAG:", "Failed to read value.", error.toException()); }
+        });
     }
 
     private void ButtonCreator(String buttonname, int id) {
@@ -104,12 +147,8 @@ public class FirstFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
-                ///supp_B/pages_lang/
-                //Page_lang pages = dataSnapshot.getValue(Page_lang.class);
-                //myWebView.loadData(pages.getText(), "text/html", "UTF-8");
-                //Hinweis jedesmal holt er ein neues items
                 HashMap<String, Object> result = (HashMap<String, Object>) dataSnapshot.getValue();
-                String output=result.get(key).toString();//nicht in String einlesen <p>
+                String output=result.get(key).toString();
                 Log.w("Title:", output);
                 myWebView.loadData("<p>Page de test</p>", "text/html", "UTF-8");
             }

@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
       }
-    //get all menutitle //getallChile
     private void GetDataFirebase(String choice) {
         connectFirebase= new ConnectFirebase();
         String select="/Ba_2017/pages/";
@@ -88,10 +87,7 @@ public class MainActivity extends AppCompatActivity
 
          switch (choice){
             case "Menu":
-                query=myRef.orderByKey().startAt("85").endAt("86");
-                break;
-            case "childelements":
-                 query=myRef.orderByChild("parent_id").equalTo(86);///parentid von 86 bis 90
+                query=myRef.orderByKey().startAt("85").endAt("87");
                 break;
             default:
                 break;
@@ -101,7 +97,7 @@ public class MainActivity extends AppCompatActivity
             String temp;
             int i=0;
             NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
-            int[] fragmentarray=new int[]{R.id.fragment_first, R.id.fragment_second};
+            int[] fragmentarray=new int[]{R.id.fragment_first, R.id.fragment_second,R.id.fragment_third};
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
                 temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
@@ -163,6 +159,12 @@ public class MainActivity extends AppCompatActivity
                 fragment.setArguments(args);
                 break;
             case R.id.fragment_second:
+                args= new Bundle();
+                fragment = new FirstFragment();
+                args.putString(FirstFragment.FRAGMENTNAME, "second");
+                fragment.setArguments(args);
+                break;
+            case R.id.fragment_third:
                 args= new Bundle();
                 fragment = new FirstFragment();
                 args.putString(FirstFragment.FRAGMENTNAME, "second");
