@@ -90,6 +90,9 @@ public class FirstFragment extends Fragment {
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
+        LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
+        linearLayout.removeAllViews();
+
         switch (choice){
             case "first":
                 query=myRef.orderByChild("parent_id").equalTo(85);
