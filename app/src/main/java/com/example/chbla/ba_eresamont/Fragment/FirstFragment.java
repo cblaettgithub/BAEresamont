@@ -84,7 +84,7 @@ public class FirstFragment extends Fragment {
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query query=null;
-        Query queryhtml=null;
+        //Query queryhtml=null;
 
         final WebView myWebView = (WebView) view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
@@ -106,7 +106,7 @@ public class FirstFragment extends Fragment {
             default:
                 break;
         }
-        queryhtml=myRef.orderByChild("parent_id").equalTo(85);
+        //queryhtml=myRef.orderByChild("parent_id").equalTo(85);
 
         query.addChildEventListener(new ChildEventListener(){
             String temp;
@@ -115,10 +115,10 @@ public class FirstFragment extends Fragment {
                 if (dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null) {
                     temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
                     Log.w("GetDataFirebase 1:hash:", temp);
-                    ButtonCreator(temp, 1, "first");
+                    ButtonCreator(temp, 1, dataSnapshot.getKey());
                 }
-                if (dataSnapshot.child("pages_lang").child("0").child("text").getValue()!=null)
-                    myWebView.loadData(dataSnapshot.child("pages_lang").child("0").child("text").getValue().toString(), "text/html", "UTF-8");
+                if (dataSnapshot.child("pages_lang").child("0").child("translate").getValue()!=null)
+                    myWebView.loadData(dataSnapshot.child("pages_lang").child("0").child("translate").getValue().toString(), "text/html", "UTF-8");
             }
             public void onChildRemoved(DataSnapshot dataSnapshot){
             }
@@ -129,15 +129,46 @@ public class FirstFragment extends Fragment {
                 Log.w("TAG:", "Failed to read value.", error.toException()); }
         });
     }
-    private void ButtonCreator(String buttonname, int id, String link) {
+    private void ButtonCreator(String buttonname, int id, String key) {
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         Button button = new Button(getContext());
         button.setText(buttonname);
+        final String finalTemp = key;
+        Log.w("ButtonCreator:", finalTemp);
         button.setOnClickListener(new View.OnClickListener() {
           public void onClick(View v) {
-              GetDataFirebase("first");}
+              ButtonShowContent(finalTemp);}
         });
-        Log.d("ButtonCreator", Integer.toString(linearLayout.getChildCount()));
         linearLayout.addView(button);
+    }
+    private void ButtonShowContent(String key){
+        connectFirebase= new ConnectFirebase();
+        String select="/Ba_2019/pages/";
+        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
+        myRef.keepSynced(true);
+        Query queryhtml=myRef.orderByKey().equalTo(key);
+        Log.w("ButtonShowContent:", key);
+
+        final WebView myWebView = (WebView) view.findViewById(R.id.webView);
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        queryhtml.addChildEventListener(new ChildEventListener(){
+            String temp;
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+            {
+                if (dataSnapshot.child("pages_lang").child("0").child("text").getValue()!=null)
+                    Log.w("ButtonShowContent data", dataSnapshot.child("pages_lang").child("0").child("text").getValue().toString());
+                    myWebView.loadData(dataSnapshot.child("pages_lang").child("0").child("translate").getValue().toString(), "text/html", "UTF-8");
+            }
+            public void onChildRemoved(DataSnapshot dataSnapshot){
+            }
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w("TAG:", "Failed to read value.", error.toException()); }
+        });
+
     }
 }
