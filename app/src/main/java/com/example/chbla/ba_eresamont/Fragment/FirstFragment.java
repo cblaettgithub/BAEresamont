@@ -64,6 +64,9 @@ public class FirstFragment extends Fragment {
         if (bundle != null) {
             //GetDataPages("/supp_B/pages/5/pages_lang/");
             switch(bundle.getString(FRAGMENTNAME)){
+                case"home":
+                    SetHomeScreen();
+                    break;
                 case"first":
                     GetDataFirebase( "first");
                     break;
@@ -94,14 +97,14 @@ public class FirstFragment extends Fragment {
         linearLayout.removeAllViews();
 
         switch (choice){
-            case "first":
+           case "first":
                 query=myRef.orderByChild("parent_id").equalTo(85);
                 break;
             case "second":
-                query=myRef.orderByChild("parent_id").equalTo(86);
+                query=myRef.orderByChild("parent_id").equalTo(87);
                 break;
             case "third":
-                query=myRef.orderByChild("parent_id").equalTo(87);
+                query=myRef.orderByChild("parent_id").equalTo(88);
                 break;
             default:
                 break;
@@ -133,6 +136,7 @@ public class FirstFragment extends Fragment {
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         Button button = new Button(getContext());
         button.setText(buttonname);
+        button.setHeight(40);
         final String finalTemp = key;
         Log.w("ButtonCreator:", finalTemp);
         button.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +145,15 @@ public class FirstFragment extends Fragment {
         });
         linearLayout.addView(button);
     }
+    private void SetHomeScreen(){
+        final WebView myWebView = (WebView) view.findViewById(R.id.webView);
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        myWebView.loadData("<html><body><h2>Welcome</h2></br>" +
+                "<h2>e-Resamont 2017</h2></br><p>Healt Assement</p>" +
+                "</br><p>Medical Guide </p></body></html>", "text/html", "UTF-8");
+    }
+
     private void ButtonShowContent(String key){
         connectFirebase= new ConnectFirebase();
         String select="/Ba_2019/pages/";

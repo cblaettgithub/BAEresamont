@@ -16,22 +16,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
-import com.example.chbla.ba_eresamont.Database.DBMenueName;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
-import com.example.chbla.ba_eresamont.Models.Page_lang;
-import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -69,8 +62,9 @@ public class MainActivity extends AppCompatActivity
         Menu menushow= navigationView.getMenu();
         menushow.add(0, R.id.fragment_zero , 1,
                 "Home").setIcon(R.drawable.ic_menu_gallery);
-        GetDataFirebase("Menu");
+        CreatingMenus("Menu");
         navigationView.invalidate();
+        setHomeAtfirst();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
              @Override
@@ -80,9 +74,9 @@ public class MainActivity extends AppCompatActivity
             }
         });
       }
-    private void GetDataFirebase(String choice) {
+    private void CreatingMenus(String choice) {
         connectFirebase= new ConnectFirebase();
-        String select="/Ba_2017/pages/";
+        String select="/Ba_2019/pages/";
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
@@ -94,7 +88,6 @@ public class MainActivity extends AppCompatActivity
             default:
                 break;
         }
-
         query.addChildEventListener(new ChildEventListener(){
             String temp;
             int i=0;
@@ -103,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
                 temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                Log.w("GetDataFirebase 1:hash:",  temp);
+                Log.w("CreatingMenus 1:hash:",  temp);
                 Menu menushow= navigationView.getMenu();
                 menushow.add(0, fragmentarray[i] , 1,
                        temp).setIcon(R.drawable.ic_menu_gallery);
@@ -118,16 +111,6 @@ public class MainActivity extends AppCompatActivity
             public void onCancelled(DatabaseError error) {
                 Log.w("TAG:", "Failed to read value.", error.toException()); }
         });
-    }
-
-    private void CreateMenus(NavigationView navigationView, String[] menusnames,
-                             int[] fragmentnames) {
-        for(int i=0;i<menusnames.length;i++){
-            Menu menushow= navigationView.getMenu();
-            menushow.add(0, fragmentnames[i] , 1,
-                    menusnames[i]).setIcon(R.drawable.ic_menu_gallery);        ;
-        }
-        navigationView.invalidate();
     }
 
     @Override
@@ -146,6 +129,17 @@ public class MainActivity extends AppCompatActivity
         Log.d("onUserLeaveHint","**********************Home button pressed");
         super.onUserLeaveHint();
     }
+    public void setHomeAtfirst(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = null;
+        Bundle args;
+        args= new Bundle();
+        fragment = new FirstFragment();
+        args.putString(FirstFragment.FRAGMENTNAME, "home");
+        fragment.setArguments(args);
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+    }
 
     private void navigationItem(MenuItem menuItem)
     {
@@ -157,7 +151,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.fragment_zero:
                 args= new Bundle();
                 fragment = new FirstFragment();
-                args.putString(FirstFragment.FRAGMENTNAME, "zero");
+                args.putString(FirstFragment.FRAGMENTNAME, "home");
                 fragment.setArguments(args);
                 break;
             case R.id.fragment_first:
