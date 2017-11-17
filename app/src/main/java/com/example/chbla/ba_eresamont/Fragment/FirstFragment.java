@@ -111,7 +111,7 @@ public class FirstFragment extends Fragment {
     }
     private void GetDataFirebase(String choice) {
         connectFirebase= new ConnectFirebase();
-        String select="/Ba_2019/pages/";
+        String select="/Ba_2020/pages/";
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query query=null;
@@ -219,7 +219,7 @@ public class FirstFragment extends Fragment {
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
         connectFirebase= new ConnectFirebase();
-        String select="/Ba_2019/pages/";
+        String select="/Ba_2020/pages/";
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query queryhtml=myRef.orderByKey().equalTo(key);

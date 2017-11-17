@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity
       }
     public void creatingMenus(String choice) {
         connectFirebase= new ConnectFirebase();
-        String select="/Ba_2019/pages/";
+        String select="/Ba_2020/pages/";
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
