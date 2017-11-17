@@ -26,12 +26,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener,
+        FirstFragment.OnHeadlineSelectedListener     {
 
     private DrawerLayout drawerLayout;
     private ConnectFirebase connectFirebase;
     private String select="/supp_B/pages/5/pages_lang/";
+    private HashMap hashMap;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +67,12 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         Menu menu= navigationView.getMenu();
         menu.clear();
+
         Menu menushow= navigationView.getMenu();
         menushow.add(0, R.id.fragment_zero , 1,
                 "Home").setIcon(R.drawable.ic_menu_gallery);
-        CreatingMenus("Menu");
+
+        creatingMenus("Menu");
         navigationView.invalidate();
         setHomeAtfirst();
 
@@ -74,7 +84,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
       }
-    private void CreatingMenus(String choice) {
+    public void creatingMenus(String choice) {
         connectFirebase= new ConnectFirebase();
         String select="/Ba_2019/pages/";
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
@@ -84,33 +94,51 @@ public class MainActivity extends AppCompatActivity
          switch (choice){
             case "Menu":
                 query=myRef.orderByKey().startAt("85").endAt("87");
+                query.addChildEventListener(new ChildEventListener(){
+                    String temp;
+                    int i=0;
+
+                    NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
+                    int[] fragmentarray=new int[]{R.id.fragment_first, R.id.fragment_second,R.id.fragment_third};
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+                    {
+                        temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
+                        Log.w("creatingMenus 10:hash:",  temp);
+                        Menu menushow= navigationView.getMenu();
+                        menushow.add(0, fragmentarray[i] , 1,
+                                temp).setIcon(R.drawable.ic_menu_gallery);
+                        i++;
+                    }
+                    public void onChildRemoved(DataSnapshot dataSnapshot){
+
+                    }
+                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
+                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Log.w("TAG:", "Failed to read value.", error.toException()); }
+                });
                 break;
+             case "MenuChange":
+                 NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
+                 Menu menushow= navigationView.getMenu();
+                 menushow.clear();
+                 menushow.add(0, R.id.fragment_zero , 1,
+                         "Home").setIcon(R.drawable.ic_menu_gallery);
+                 int[] fragmentarray=new int[]{R.id.fragment_first, R.id.fragment_second,R.id.fragment_third};
+                Iterator iterator=hashMap.entrySet().iterator();
+                 for(int i=0;i<3;i++){
+                    Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
+                    //entry.getValue();
+                    Log.w("MenuChange:",  entry.getValue());
+                     menushow.add(0, fragmentarray[i] , 1,
+                             entry.getValue()).setIcon(R.drawable.ic_menu_gallery);
+                 }
+                 break;
             default:
                 break;
         }
-        query.addChildEventListener(new ChildEventListener(){
-            String temp;
-            int i=0;
-            NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
-            int[] fragmentarray=new int[]{R.id.fragment_first, R.id.fragment_second,R.id.fragment_third};
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
-            {
-                temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                Log.w("CreatingMenus 1:hash:",  temp);
-                Menu menushow= navigationView.getMenu();
-                menushow.add(0, fragmentarray[i] , 1,
-                       temp).setIcon(R.drawable.ic_menu_gallery);
-                i++;
-            }
-            public void onChildRemoved(DataSnapshot dataSnapshot){
 
-            }
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.w("TAG:", "Failed to read value.", error.toException()); }
-        });
     }
 
     @Override
@@ -138,7 +166,6 @@ public class MainActivity extends AppCompatActivity
         args.putString(FirstFragment.FRAGMENTNAME, "home");
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
-
     }
 
     private void navigationItem(MenuItem menuItem)
@@ -209,5 +236,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onArticleSelected(HashMap ohashMap) {
+        hashMap=ohashMap;
+        creatingMenus("MenuChange");
     }
 }
