@@ -21,7 +21,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.chbla.ba_eresamont.Activity.MainActivity;
-import com.example.chbla.ba_eresamont.ClassMenue;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Page_lang;
 import com.example.chbla.ba_eresamont.Models.Pages;
@@ -115,7 +114,6 @@ public class FirstFragment extends Fragment {
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query query=null;
-        //Query queryhtml=null;
 
         final WebView myWebView = (WebView) view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
@@ -149,7 +147,8 @@ public class FirstFragment extends Fragment {
                     public void onCancelled(DatabaseError error) {
                         Log.w("TAG:", "Failed to read value.", error.toException()); }
                 });
-
+                hashMap.clear();
+                mCallback.onArticleSelected(hashMap);
                 break;
            case "first":
                 query=myRef.orderByChild("parent_id").equalTo(85);
@@ -166,13 +165,14 @@ public class FirstFragment extends Fragment {
         //queryhtml=myRef.orderByChild("parent_id").equalTo(85);
 
         if (choice!="home"){
+            hashMap.clear();
             query.addChildEventListener(new ChildEventListener(){
                 String temp;
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
                 {
                     if (dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null) {
                         temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                        Log.w("GetDataFirebase 1:hash:", temp);
+                        Log.w("GetDataFirebase:!home:", temp);
                         ButtonCreator(temp, 1, dataSnapshot.getKey());
                     }
                     if (dataSnapshot.child("pages_lang").child("0").child("translate").getValue()!=null)

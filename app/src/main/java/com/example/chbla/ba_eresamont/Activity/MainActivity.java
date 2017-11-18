@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
         menushow.add(0, R.id.fragment_zero , 1,
                 "Home").setIcon(R.drawable.ic_menu_gallery);
 
-        creatingMenus("Menu");
+        //creatingMenus("Menu");
         navigationView.invalidate();
         setHomeAtfirst();
 
@@ -99,13 +99,12 @@ public class MainActivity extends AppCompatActivity
                     int i=0;
 
                     NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
-                    int[] fragmentarray=new int[]{R.id.fragment_first, R.id.fragment_second,R.id.fragment_third};
                     public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
                     {
                         temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
                         Log.w("creatingMenus 10:hash:",  temp);
                         Menu menushow= navigationView.getMenu();
-                        menushow.add(0, fragmentarray[i] , 1,
+                        menushow.add(0, R.id.fragment_first , 1,
                                 temp).setIcon(R.drawable.ic_menu_gallery);
                         i++;
                     }
@@ -125,20 +124,17 @@ public class MainActivity extends AppCompatActivity
                  menushow.clear();
                  menushow.add(0, R.id.fragment_zero , 1,
                          "Home").setIcon(R.drawable.ic_menu_gallery);
-                 int[] fragmentarray=new int[]{R.id.fragment_first, R.id.fragment_second,R.id.fragment_third};
-                Iterator iterator=hashMap.entrySet().iterator();
-                 for(int i=0;i<3;i++){
-                    Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
-                    //entry.getValue();
-                    Log.w("MenuChange:",  entry.getValue());
-                     menushow.add(0, fragmentarray[i] , 1,
-                             entry.getValue()).setIcon(R.drawable.ic_menu_gallery);
+                     Iterator iterator=hashMap.entrySet().iterator();
+                     while(iterator.hasNext()){
+                         Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
+                         Log.w("MenuChange:",  entry.getValue());
+                         menushow.add(0, R.id.fragment_first , 1,
+                                 entry.getValue()).setIcon(R.drawable.ic_menu_gallery);
                  }
                  break;
             default:
                 break;
         }
-
     }
 
     @Override
@@ -150,12 +146,6 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
-    }
-    @Override
-    protected void onUserLeaveHint()
-    {
-        Log.d("onUserLeaveHint","**********************Home button pressed");
-        super.onUserLeaveHint();
     }
     public void setHomeAtfirst(){
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -185,18 +175,6 @@ public class MainActivity extends AppCompatActivity
                 args= new Bundle();
                 fragment = new FirstFragment();
                 args.putString(FirstFragment.FRAGMENTNAME, "first");
-                fragment.setArguments(args);
-                break;
-            case R.id.fragment_second:
-                args= new Bundle();
-                fragment = new FirstFragment();
-                args.putString(FirstFragment.FRAGMENTNAME, "second");
-                fragment.setArguments(args);
-                break;
-            case R.id.fragment_third:
-                args= new Bundle();
-                fragment = new FirstFragment();
-                args.putString(FirstFragment.FRAGMENTNAME, "third");
                 fragment.setArguments(args);
                 break;
         }
