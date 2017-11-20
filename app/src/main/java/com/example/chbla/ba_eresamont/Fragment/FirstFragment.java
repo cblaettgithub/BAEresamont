@@ -64,8 +64,10 @@ public class FirstFragment extends Fragment {
         this.view = view;
     }
     public static final String FRAGMENTNAME ="";
-    private final String pageroot="/Ba_2020/pages/";
+    public static final String LANGUAGE="0"; //0 French, 1 English, 2 Italy
+    private final String PAGEROOT="/Ba_2020/pages/";
     private String LOG_TAG=FirstFragment.class.getSimpleName();
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -98,7 +100,7 @@ public class FirstFragment extends Fragment {
     }
     private void GetDataFirebase(String choice) {
         connectFirebase= new ConnectFirebase();
-        String select="/Ba_2020/pages/";
+        String select=PAGEROOT;
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query query=null;
@@ -119,11 +121,11 @@ public class FirstFragment extends Fragment {
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
                 {
                     if (dataSnapshot.child("parent_id").exists()==false) {
-                        if (dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null){
+                        if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null){
                             temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
                             Log.w(LOG_TAG+":GetData:Parentid :", temp);
                             ButtonCreator(temp, 1, dataSnapshot.getKey());
-                        }
+                                      }
                     }
                 }
                 public void onChildRemoved(DataSnapshot dataSnapshot){
@@ -145,13 +147,13 @@ public class FirstFragment extends Fragment {
                 String temp;
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
                 {
-                    if (dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null) {
-                        temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
+                    if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null) {
+                        temp = (String) dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue();
                         Log.w(LOG_TAG+":GetDataFirebase:!home:", temp);
                         ButtonCreator(temp, 1, dataSnapshot.getKey());
                     }
-                    if (dataSnapshot.child("pages_lang").child("0").child("translate").getValue()!=null)
-                        myWebView.loadData(dataSnapshot.child("pages_lang").child("0").child("translate").getValue().toString(), "text/html", "UTF-8");
+                    if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue()!=null)
+                        myWebView.loadData(dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue().toString(), "text/html", "UTF-8");
                 }
                 public void onChildRemoved(DataSnapshot dataSnapshot){
                 }
@@ -184,7 +186,7 @@ public class FirstFragment extends Fragment {
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
         connectFirebase= new ConnectFirebase();
-        String select="/Ba_2020/pages/";
+        String select=PAGEROOT;
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query queryhtml=myRef.orderByKey().equalTo(key);
@@ -198,10 +200,9 @@ public class FirstFragment extends Fragment {
            String temp="";
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
-                if(dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null){
-                temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
+                if(dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null){
+                temp = (String) dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue();
                 Log.w(LOG_TAG+":GetDataFirebase:!home:", temp);
-                ButtonCreator(temp, 1, dataSnapshot.getKey());
             }
 
             }

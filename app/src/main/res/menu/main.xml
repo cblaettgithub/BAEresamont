@@ -6,4 +6,19 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/French_settings"
+        android:orderInCategory="100"
+        android:title="French"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/English_settings"
+        android:orderInCategory="100"
+        android:title="English"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/Italy_settings"
+        android:orderInCategory="100"
+        android:title="Italian"
+        app:showAsAction="never" />
 </menu>

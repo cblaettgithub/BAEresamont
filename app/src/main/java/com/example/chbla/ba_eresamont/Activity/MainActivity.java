@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity
     private TreeMap hashMap;
     private TreeMap hashMapold;
     private String LOG_TAG=MainActivity.class.getSimpleName();
+    private final String PAGEROOT="/Ba_2020/pages/";
+    private String mlanguage="0";//0 French
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity
       }
     public void creatingMenus(String choice) {
         connectFirebase= new ConnectFirebase();
-        String select="/Ba_2020/pages/";
+        String select=PAGEROOT;
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
@@ -152,6 +154,7 @@ public class MainActivity extends AppCompatActivity
         args= new Bundle();
         fragment = new FirstFragment();
         args.putString(FirstFragment.FRAGMENTNAME, "1");
+        args.putString(FirstFragment.LANGUAGE, mlanguage);
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         /*if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -167,6 +170,7 @@ public class MainActivity extends AppCompatActivity
         args= new Bundle();
         fragment = new FirstFragment();
         args.putString(FirstFragment.FRAGMENTNAME, "home");
+        args.putString(FirstFragment.LANGUAGE, mlanguage);
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
     }
@@ -187,12 +191,14 @@ public class MainActivity extends AppCompatActivity
                 args= new Bundle();
                 fragment = new FirstFragment();
                 args.putString(FirstFragment.FRAGMENTNAME, "home");
+                args.putString(FirstFragment.LANGUAGE, mlanguage);
                 fragment.setArguments(args);
                 break;
             default:
                 args= new Bundle();
                 fragment = new FirstFragment();
                 args.putString(FirstFragment.FRAGMENTNAME,Integer.toString(menuItem.getItemId()));
+                args.putString(FirstFragment.LANGUAGE, mlanguage);
                 fragment.setArguments(args);
                 break;
         }
@@ -216,15 +222,24 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Log.w(LOG_TAG+":onOptionsItemSed",Integer.toString(id));
         switch(id){
-            case R.id.homeAsUp:
-                return true;
+            case R.id.French_settings:
+                mlanguage="0";
+                break;
+            case R.id.English_settings:
+                mlanguage="1";
+                break;
+            case R.id.Italy_settings:
+                mlanguage="2";
+                break;
+                default:
+                mlanguage="0";
+            break;
         }
+        return true;
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+
     }
 
     @Override
