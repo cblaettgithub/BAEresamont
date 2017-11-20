@@ -34,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 
@@ -133,6 +134,7 @@ public class FirstFragment extends Fragment {
             String temp;
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
+
                 if (select =="home"){
                     if (dataSnapshot.child("parent_id").exists()==false) {
                         if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null){
@@ -185,8 +187,8 @@ public class FirstFragment extends Fragment {
             case 0:
                 button.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        ButtonShowContent(finalTemp);
                         mCallback.onArticleSelected(hashMap);
+                        ButtonCreator("test", 1, "92");
                         ReadDBData_Firebase(query1, "progress");
                     }
                 });

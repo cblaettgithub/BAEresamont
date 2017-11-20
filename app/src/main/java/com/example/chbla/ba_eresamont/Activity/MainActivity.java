@@ -149,31 +149,28 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Log.d("backpressed","*******************backpressed");
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = null;
-        Bundle args;
-        args= new Bundle();
-        fragment = new FirstFragment();
-        args.putString(FirstFragment.FRAGMENTNAME, "1");
-        args.putString(FirstFragment.LANGUAGE, mlanguage);
-        fragment.setArguments(args);
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        Fragment_Man("1", mlanguage);
         /*if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }*/
     }
-    public void setHomeAtfirst(){
+
+    private void Fragment_Man(String value, String mlanguage) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = null;
         Bundle args;
-        args= new Bundle();
+        args = new Bundle();
         fragment = new FirstFragment();
-        args.putString(FirstFragment.FRAGMENTNAME, "home");
+        args.putString(FirstFragment.FRAGMENTNAME, value);
         args.putString(FirstFragment.LANGUAGE, mlanguage);
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+    }
+
+    public void setHomeAtfirst(){
+        Fragment_Man("home", mlanguage);
     }
 
     private void navigationItem(MenuItem menuItem)
@@ -182,29 +179,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void FragmentManager(MenuItem menuItem) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        Fragment fragment = null;
         Log.d(LOG_TAG+":navigationItem","*****"+menuItem.getItemId()+":"+menuItem.getTitle());
-        Bundle args;
-        //kein switch mhr, key hier herauslesen
         switch (menuItem.getItemId()){
             case R.id.fragment_zero:
-                args= new Bundle();
-                fragment = new FirstFragment();
-                args.putString(FirstFragment.FRAGMENTNAME, "home");
-                args.putString(FirstFragment.LANGUAGE, mlanguage);
-                fragment.setArguments(args);
+                Fragment_Man("home", mlanguage);
                 break;
             default:
-                args= new Bundle();
-                fragment = new FirstFragment();
-                args.putString(FirstFragment.FRAGMENTNAME,Integer.toString(menuItem.getItemId()));
-                args.putString(FirstFragment.LANGUAGE, mlanguage);
-                fragment.setArguments(args);
+                Fragment_Man(Integer.toString(menuItem.getItemId()), mlanguage);
                 break;
         }
-        //With this code it will replace the container with the selected fragment
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
         menuItem.setChecked(true);
         setTitle(menuItem.getTitle());
         drawerLayout.closeDrawers();
@@ -240,7 +223,6 @@ public class MainActivity extends AppCompatActivity
         }
         return true;
         //noinspection SimplifiableIfStatement
-
     }
 
     @Override
