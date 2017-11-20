@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -38,8 +39,9 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private ConnectFirebase connectFirebase;
     private String select="/supp_B/pages/5/pages_lang/";
-    private HashMap hashMap;
-
+    private TreeMap hashMap;
+    private TreeMap hashMapold;
+    private String LOG_TAG=MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,20 +94,23 @@ public class MainActivity extends AppCompatActivity
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
 
          switch (choice){
-            case "Menu":
+            case "Menu"://wird nicht mehr aufgerufen
                 query=myRef.orderByKey().startAt("85").endAt("87");
                 query.addChildEventListener(new ChildEventListener(){
-                    String temp;
+                    String name, id, parent;
                     int i=0;
 
                     NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
                     public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
                     {
-                        temp= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                        Log.w("creatingMenus 10:hash:",  temp);
+                        name= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
+                        id = dataSnapshot.child("pages_lang").getKey();
+                        id = dataSnapshot.child("pages_lang").child("0").child("parent_id").toString();
+                        Log.w(LOG_TAG+":creatingMenus ::",  name+": id:"+ id+" parent:"+parent);
+
                         Menu menushow= navigationView.getMenu();
                         menushow.add(0, R.id.fragment_first , 1,
-                                temp).setIcon(R.drawable.ic_menu_gallery);
+                                name).setIcon(R.drawable.ic_menu_gallery);
                         i++;
                     }
                     public void onChildRemoved(DataSnapshot dataSnapshot){
@@ -124,11 +129,11 @@ public class MainActivity extends AppCompatActivity
                  menushow.clear();
                  menushow.add(0, R.id.fragment_zero , 1,
                          "Home").setIcon(R.drawable.ic_menu_gallery);
-                     Iterator iterator=hashMap.entrySet().iterator();
-                     while(iterator.hasNext()){
+                 Iterator iterator=hashMap.entrySet().iterator();
+                     while(iterator.hasNext()){//neu
                          Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
-                         Log.w("MenuChange:",  entry.getValue());
-                         menushow.add(0, R.id.fragment_first , 1,
+                         Log.w(LOG_TAG+":MenuChange:", entry.getValue()+" :key "+entry.getKey());
+                         menushow.add(0, Integer.parseInt(entry.getKey()) , 1,
                                  entry.getValue()).setIcon(R.drawable.ic_menu_gallery);
                  }
                  break;
@@ -141,11 +146,19 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Log.d("backpressed","*******************backpressed");
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = null;
+        Bundle args;
+        args= new Bundle();
+        fragment = new FirstFragment();
+        args.putString(FirstFragment.FRAGMENTNAME, "1");
+        fragment.setArguments(args);
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+        /*if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
     public void setHomeAtfirst(){
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -160,10 +173,15 @@ public class MainActivity extends AppCompatActivity
 
     private void navigationItem(MenuItem menuItem)
     {
+        FragmentManager(menuItem);
+    }
+
+    private void FragmentManager(MenuItem menuItem) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = null;
-        Log.d("navigationItem","**********************navigationItem");
+        Log.d(LOG_TAG+":navigationItem","*****"+menuItem.getItemId()+":"+menuItem.getTitle());
         Bundle args;
+        //kein switch mhr, key hier herauslesen
         switch (menuItem.getItemId()){
             case R.id.fragment_zero:
                 args= new Bundle();
@@ -171,10 +189,10 @@ public class MainActivity extends AppCompatActivity
                 args.putString(FirstFragment.FRAGMENTNAME, "home");
                 fragment.setArguments(args);
                 break;
-            case R.id.fragment_first:
+            default:
                 args= new Bundle();
                 fragment = new FirstFragment();
-                args.putString(FirstFragment.FRAGMENTNAME, "first");
+                args.putString(FirstFragment.FRAGMENTNAME,Integer.toString(menuItem.getItemId()));
                 fragment.setArguments(args);
                 break;
         }
@@ -217,7 +235,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onArticleSelected(HashMap ohashMap) {
+    public void onArticleSelected(TreeMap ohashMap) {
         hashMap=ohashMap;
         creatingMenus("MenuChange");
     }

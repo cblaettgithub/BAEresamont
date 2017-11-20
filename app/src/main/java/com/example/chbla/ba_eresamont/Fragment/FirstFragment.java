@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 
 /**
@@ -41,12 +42,12 @@ import java.util.HashMap;
 public class FirstFragment extends Fragment {
     OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
-        public void onArticleSelected(HashMap hashMap);
+        public void onArticleSelected(TreeMap hashMap);
     }
-    public void onListItemClick(ListView l, View v, HashMap hashMap) {
+    public void onListItemClick(ListView l, View v, TreeMap hashMap) {
         mCallback.onArticleSelected(hashMap);
     }
-    private HashMap hashMap;
+    private TreeMap hashMap;
     private ConnectFirebase connectFirebase;
     private DatabaseReference databaseReference;
     Context context;
@@ -62,7 +63,9 @@ public class FirstFragment extends Fragment {
     public void setView(View view) {
         this.view = view;
     }
-    public static final String FRAGMENTNAME ="home";
+    public static final String FRAGMENTNAME ="";
+    private final String pageroot="/Ba_2020/pages/";
+    private String LOG_TAG=FirstFragment.class.getSimpleName();
 
     @Override
     public void onAttach(Activity activity) {
@@ -86,25 +89,10 @@ public class FirstFragment extends Fragment {
         Bundle bundle = getArguments();
 
         connectFirebase= new ConnectFirebase();
-        hashMap=new HashMap<String,String>();
-        Log.d("Fragment Name","" + bundle.getString(FRAGMENTNAME));
-        if (bundle != null) {
-            //GetDataPages("/supp_B/pages/5/pages_lang/");
-            switch(bundle.getString(FRAGMENTNAME)){
-                case"home":
-                    GetDataFirebase( "home");
-                    break;
-                case"first":
-                    GetDataFirebase( "first");
-                    break;
-                case"second":
-                    GetDataFirebase( "second");
-                    break;
-                case"third":
-                    GetDataFirebase( "third");
-                    break;
-            }
-        }
+        hashMap=new TreeMap();
+        Log.d(LOG_TAG+":onCreateView Fragment","" + bundle.getString(FRAGMENTNAME));
+        if (bundle != null)
+            GetDataFirebase( bundle.getString(FRAGMENTNAME));
         return view;
         //return inflater.inflate(R.layout.fragment_first, container, false);
     }
@@ -118,53 +106,40 @@ public class FirstFragment extends Fragment {
         final WebView myWebView = (WebView) view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        Log.d(LOG_TAG+":Start:GetdataFirebase", choice);
 
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
 
-        switch (choice){
-            case "home":
-                /*check
-                query=myRef.orderByChild("parent_id").equalTo(null);*/
-                query=myRef.orderByChild("icon");
-                query.addChildEventListener(new ChildEventListener(){
-                    String temp;
-                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
-                    {
-                        if (dataSnapshot.child("parent_id").exists()==false) {
-                            if (dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null){
-                                temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                                Log.w("GetData:Parentid :", temp);
-                                ButtonCreator(temp, 1, dataSnapshot.getKey());
-                            }
+        if (choice =="home"){
+            Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
+            query=myRef.orderByChild("id");
+            query.addChildEventListener(new ChildEventListener(){
+                String temp;
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
+                {
+                    if (dataSnapshot.child("parent_id").exists()==false) {
+                        if (dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null){
+                            temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
+                            Log.w(LOG_TAG+":GetData:Parentid :", temp);
+                            ButtonCreator(temp, 1, dataSnapshot.getKey());
                         }
                     }
-                    public void onChildRemoved(DataSnapshot dataSnapshot){
-                    }
-                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
-                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        Log.w("TAG:", "Failed to read value.", error.toException()); }
-                });
-                hashMap.clear();
-                mCallback.onArticleSelected(hashMap);
-                break;
-           case "first":
-                query=myRef.orderByChild("parent_id").equalTo(85);
-                break;
-            case "second":
-                query=myRef.orderByChild("parent_id").equalTo(87);
-                break;
-            case "third":
-                query=myRef.orderByChild("parent_id").equalTo(88);
-                break;
-            default:
-                break;
+                }
+                public void onChildRemoved(DataSnapshot dataSnapshot){
+                }
+                public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
+                public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
+                @Override
+                public void onCancelled(DatabaseError error) {
+                    Log.w(LOG_TAG, "Failed to read value.", error.toException()); }
+            });
+            hashMap.clear();
+            mCallback.onArticleSelected(hashMap);
         }
-        //queryhtml=myRef.orderByChild("parent_id").equalTo(85);
-
-        if (choice!="home"){
+        else{
+            Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
+            query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
             hashMap.clear();
             query.addChildEventListener(new ChildEventListener(){
                 String temp;
@@ -172,7 +147,7 @@ public class FirstFragment extends Fragment {
                 {
                     if (dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null) {
                         temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                        Log.w("GetDataFirebase:!home:", temp);
+                        Log.w(LOG_TAG+":GetDataFirebase:!home:", temp);
                         ButtonCreator(temp, 1, dataSnapshot.getKey());
                     }
                     if (dataSnapshot.child("pages_lang").child("0").child("translate").getValue()!=null)
@@ -184,10 +159,9 @@ public class FirstFragment extends Fragment {
                 public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
                 @Override
                 public void onCancelled(DatabaseError error) {
-                    Log.w("TAG:", "Failed to read value.", error.toException()); }
+                    Log.w(LOG_TAG, "Failed to read value.", error.toException()); }
             });
         }
-
     }
     private void ButtonCreator(String buttonname, int id, String key) {
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
@@ -195,9 +169,8 @@ public class FirstFragment extends Fragment {
         button.setText(buttonname);
         button.setHeight(40);
         final String finalTemp = key;
-        Log.w("ButtonCreator:", finalTemp);
+        Log.w(LOG_TAG+":ButtonCreator:", finalTemp);
         hashMap.put(key, buttonname);
-        Log.w("ButtonCreator:Hashmap:", finalTemp);
         button.setOnClickListener(new View.OnClickListener() {
           public void onClick(View v) {
               ButtonShowContent(finalTemp);
@@ -205,14 +178,6 @@ public class FirstFragment extends Fragment {
           }
         });
         linearLayout.addView(button);
-    }
-    private void SetHomeScreen(){
-        final WebView myWebView = (WebView) view.findViewById(R.id.webView);
-        WebSettings webSettings = myWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        myWebView.loadData("<html><body><h2>Welcome</h2></br>" +
-                "<h2>e-Resamont 2017</h2></br><p>Healt Assement</p>" +
-                "</br><p>Medical Guide </p></body></html>", "text/html", "UTF-8");
     }
 
     private void ButtonShowContent(String key){
@@ -223,19 +188,22 @@ public class FirstFragment extends Fragment {
         final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
         myRef.keepSynced(true);
         Query queryhtml=myRef.orderByKey().equalTo(key);
-        Log.w("ButtonShowContent:", key);
+        Log.w(LOG_TAG+":ButtonShowContent:", key);
 
         final WebView myWebView = (WebView) view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
         queryhtml.addChildEventListener(new ChildEventListener(){
-            String temp;
+           String temp="";
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
             {
-                if (dataSnapshot.child("pages_lang").child("0").child("text").getValue()!=null)
-                    Log.w("ButtonShowContent data", dataSnapshot.child("pages_lang").child("0").child("text").getValue().toString());
-                    myWebView.loadData(dataSnapshot.child("pages_lang").child("0").child("translate").getValue().toString(), "text/html", "UTF-8");
+                if(dataSnapshot.child("pages_lang").child("0").child("title").getValue()!=null){
+                temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
+                Log.w(LOG_TAG+":GetDataFirebase:!home:", temp);
+                ButtonCreator(temp, 1, dataSnapshot.getKey());
+            }
+
             }
             public void onChildRemoved(DataSnapshot dataSnapshot){
             }
@@ -246,6 +214,4 @@ public class FirstFragment extends Fragment {
                 Log.w("TAG:", "Failed to read value.", error.toException()); }
         });
     }
-
-
 }
