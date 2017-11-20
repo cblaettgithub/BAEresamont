@@ -38,9 +38,7 @@ public class MainActivity extends AppCompatActivity
 
     private DrawerLayout drawerLayout;
     private ConnectFirebase connectFirebase;
-    private String select="/supp_B/pages/5/pages_lang/";
     private TreeMap hashMap;
-    private TreeMap hashMapold;
     private String LOG_TAG=MainActivity.class.getSimpleName();
     private final String PAGEROOT="/Ba_2020/pages/";
     private String mlanguage="0";//0 French
@@ -76,7 +74,6 @@ public class MainActivity extends AppCompatActivity
         menushow.add(0, R.id.fragment_zero , 1,
                 "Home").setIcon(R.drawable.ic_menu_gallery);
 
-        //creatingMenus("Menu");
         navigationView.invalidate();
         setHomeAtfirst();
 
@@ -89,42 +86,10 @@ public class MainActivity extends AppCompatActivity
         });
       }
     public void creatingMenus(String choice) {
-        connectFirebase= new ConnectFirebase();
-        String select=PAGEROOT;
-        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
-        myRef.keepSynced(true);
+        final DatabaseReference myRef = getDatabaseReference();
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
 
          switch (choice){
-            case "Menu"://wird nicht mehr aufgerufen
-                query=myRef.orderByKey().startAt("85").endAt("87");
-                query.addChildEventListener(new ChildEventListener(){
-                    String name, id, parent;
-                    int i=0;
-
-                    NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
-                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
-                    {
-                        name= (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                        id = dataSnapshot.child("pages_lang").getKey();
-                        id = dataSnapshot.child("pages_lang").child("0").child("parent_id").toString();
-                        Log.w(LOG_TAG+":creatingMenus ::",  name+": id:"+ id+" parent:"+parent);
-
-                        Menu menushow= navigationView.getMenu();
-                        menushow.add(0, R.id.fragment_first , 1,
-                                name).setIcon(R.drawable.ic_menu_gallery);
-                        i++;
-                    }
-                    public void onChildRemoved(DataSnapshot dataSnapshot){
-
-                    }
-                    public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
-                    public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        Log.w("TAG:", "Failed to read value.", error.toException()); }
-                });
-                break;
              case "MenuChange":
                  NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
                  Menu menushow= navigationView.getMenu();
@@ -236,5 +201,13 @@ public class MainActivity extends AppCompatActivity
     public void onArticleSelected(TreeMap ohashMap) {
         hashMap=ohashMap;
         creatingMenus("MenuChange");
+    }
+    @NonNull
+    private DatabaseReference getDatabaseReference() {
+        String select=PAGEROOT;
+        connectFirebase= new ConnectFirebase();
+        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
+        myRef.keepSynced(true);
+        return myRef;
     }
 }

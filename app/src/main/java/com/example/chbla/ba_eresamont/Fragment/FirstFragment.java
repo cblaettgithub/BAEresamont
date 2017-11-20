@@ -99,10 +99,7 @@ public class FirstFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_first, container, false);
     }
     private void GetDataFirebase(String choice) {
-        connectFirebase= new ConnectFirebase();
-        String select=PAGEROOT;
-        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select).orderByKey().getRef();
-        myRef.keepSynced(true);
+        final DatabaseReference myRef = getDatabaseReference();
         Query query=null;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice);
 
@@ -119,8 +116,9 @@ public class FirstFragment extends Fragment {
         else{
             Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
             query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-            hashMap.clear();
             ReadDBData_Firebase(query, "progress");
+            hashMap.clear();
+            mCallback.onArticleSelected(hashMap);
         }
     }
 
@@ -139,7 +137,7 @@ public class FirstFragment extends Fragment {
                     if (dataSnapshot.child("parent_id").exists()==false) {
                         if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null){
                             temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                            Log.w(LOG_TAG+":GetData:Parentid :", temp);
+                            Log.w(LOG_TAG+":GetDataFirebase:home :", temp);
                             ButtonCreator(temp, 0, dataSnapshot.getKey());
                         }
                     }
@@ -147,7 +145,7 @@ public class FirstFragment extends Fragment {
                 if (select=="progress"){
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null) {
                         temp = (String) dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue();
-                        Log.w(LOG_TAG+":GetDataFirebase:!home:", temp);
+                        Log.w(LOG_TAG+":GetDataF:progress:", temp);
                         ButtonCreator(temp, 1, dataSnapshot.getKey());
                     }
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue()!=null)
@@ -156,7 +154,7 @@ public class FirstFragment extends Fragment {
                 else if(select =="show"){
                     if(dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null){
                         temp = (String) dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue();
-                        Log.w(LOG_TAG+":GetDataFirebase:!home:", temp);
+                        Log.w(LOG_TAG+":GetDataFirebase:show:", temp);
                         myWebView.loadData(dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue().toString(), "text/html", "UTF-8");
                     }
                 }
@@ -173,12 +171,12 @@ public class FirstFragment extends Fragment {
     private void ButtonCreator(String buttonname, int id, String key) {
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         Button button = ConfigButton(buttonname);
+
         final String finalTemp = key;
         Log.w(LOG_TAG+":ButtonCreator:", finalTemp);
         hashMap.put(key, buttonname);
 
-        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(PAGEROOT).orderByKey().getRef();
-        myRef.keepSynced(true);
+        final DatabaseReference myRef = getDatabaseReference();
         Query query=null;
         query=myRef.orderByChild("parent_id").equalTo(finalTemp);
         final Query query1=query;
@@ -213,14 +211,22 @@ public class FirstFragment extends Fragment {
         return button;
     }
     private void ButtonShowContent(String key){
+        //Alle Label im Content entfernen//vorher query setzen
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
-        connectFirebase= new ConnectFirebase();
-        String select=PAGEROOT;
-        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
-        myRef.keepSynced(true);
+
+        final DatabaseReference myRef = getDatabaseReference();
         Query queryhtml=myRef.orderByKey().equalTo(key);
         Log.w(LOG_TAG+":ButtonShowContent:", key);
         ReadDBData_Firebase(queryhtml, "show");
+    }
+
+    @NonNull
+    private DatabaseReference getDatabaseReference() {
+        String select=PAGEROOT;
+        connectFirebase= new ConnectFirebase();
+        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
+        myRef.keepSynced(true);
+        return myRef;
     }
 }
