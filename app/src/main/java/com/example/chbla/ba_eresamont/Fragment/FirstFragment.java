@@ -167,7 +167,7 @@ public class FirstFragment extends Fragment {
     }
     private void ButtonCreator(final Pages pages) {
         final LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
-        Button button = ConfigButton(pages.getPages_lang().get(0).getTitle());
+        Button button = ConfigButton(pages.getPages_lang().get(Integer.parseInt(LANGUAGE)).getTitle());
 
         Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
         hashMap.put(pages.getId().toString(), pages.getPages_lang().get(0).getTitle());
@@ -177,7 +177,6 @@ public class FirstFragment extends Fragment {
                 mCallback.onArticleSelected(hashMap);
             }
         });
-
         linearLayout.addView(button);
     }
 
