@@ -5,36 +5,27 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Switch;
-import android.widget.TextView;
 
-import com.example.chbla.ba_eresamont.Activity.MainActivity;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
-import com.example.chbla.ba_eresamont.Models.Page_lang;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 
@@ -66,9 +57,10 @@ public class FirstFragment extends Fragment {
         this.view = view;
     }
     public static final String FRAGMENTNAME ="";
-    public static final String LANGUAGE="0"; //0 French, 1 English, 2 Italy
+    public static final String LANGUAGE="2"; //0 French, 1 English, 2 Italy
     private final String PAGEROOT="/Ba_2020/pages/";
     private String LOG_TAG=FirstFragment.class.getSimpleName();
+    private ArrayList<Pages> pagesArrayList;
 
     @Override
     public void onAttach(Activity activity) {
@@ -89,6 +81,7 @@ public class FirstFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         setContext(container.getContext());
         Bundle bundle = getArguments();
+        pagesArrayList= new ArrayList<>();
 
         connectFirebase= new ConnectFirebase();
         hashMap=new TreeMap();
@@ -138,7 +131,10 @@ public class FirstFragment extends Fragment {
                         if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null){
                             temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
                             Log.w(LOG_TAG+":GetDataFirebase:home :", temp);
-                            ButtonCreator(temp, 0, dataSnapshot.getKey());
+                            Pages pages = dataSnapshot.getValue(Pages.class);
+                            pagesArrayList.add(pages);
+                            Log.w(LOG_TAG, "testReadObje ID:" + pages.getId());
+                            ButtonCreator(pages);
                         }
                     }
                 }else
@@ -146,7 +142,8 @@ public class FirstFragment extends Fragment {
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null) {
                         temp = (String) dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue();
                         Log.w(LOG_TAG+":GetDataF:progress:", temp);
-                        ButtonCreator(temp, 1, dataSnapshot.getKey());
+                        Pages pages = dataSnapshot.getValue(Pages.class);
+                        ButtonCreator(pages);
                     }
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue()!=null)
                         myWebView.loadData(dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue().toString(), "text/html", "UTF-8");
@@ -168,38 +165,19 @@ public class FirstFragment extends Fragment {
                 Log.w(LOG_TAG, "Failed to read value.", error.toException()); }
         });
     }
-    private void ButtonCreator(String buttonname, int id, String key) {
-        LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
-        Button button = ConfigButton(buttonname);
+    private void ButtonCreator(final Pages pages) {
+        final LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
+        Button button = ConfigButton(pages.getPages_lang().get(0).getTitle());
 
-        final String finalTemp = key;
-        Log.w(LOG_TAG+":ButtonCreator:", finalTemp);
-        hashMap.put(key, buttonname);
+        Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
+        hashMap.put(pages.getId().toString(), pages.getPages_lang().get(0).getTitle());
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                ButtonShowContent(pages.getId().toString());
+                mCallback.onArticleSelected(hashMap);
+            }
+        });
 
-        final DatabaseReference myRef = getDatabaseReference();
-        Query query=null;
-        query=myRef.orderByChild("parent_id").equalTo(finalTemp);
-        final Query query1=query;
-
-        switch(id){//start content
-            case 0:
-                button.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        mCallback.onArticleSelected(hashMap);
-                        ButtonCreator("test", 1, "92");
-                        ReadDBData_Firebase(query1, "progress");
-                    }
-                });
-                break;
-            case 1: //normal content
-                button.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        ButtonShowContent(finalTemp);
-                        mCallback.onArticleSelected(hashMap);
-                    }
-                });
-                break;
-        }
         linearLayout.addView(button);
     }
 
@@ -216,7 +194,7 @@ public class FirstFragment extends Fragment {
         linearLayout.removeAllViews();
 
         final DatabaseReference myRef = getDatabaseReference();
-        Query queryhtml=myRef.orderByKey().equalTo(key);
+        Query queryhtml=myRef.equalTo(key).orderByChild("title");
         Log.w(LOG_TAG+":ButtonShowContent:", key);
         ReadDBData_Firebase(queryhtml, "show");
     }

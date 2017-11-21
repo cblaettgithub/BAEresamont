@@ -1,5 +1,6 @@
 package com.example.chbla.ba_eresamont.Models;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,97 +9,111 @@ import java.util.Map;
  */
 
 public class Pages {
-    String color;
-    String deleted;
-    String has_own_style;
-    String partid;
-    String position;
-    String template;
-    String text_color;
-    String unactived;
-    String updated;
+    String icon;
+    Long id;
+    boolean unactivated;
+    Long updated;
+    boolean deleted;
+    Long position;
+    Long template;
+    boolean has_own_style;
+    ArrayList<Pages_lang> pages_lang;
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-    public void setDeleted(String deleted) {
-        this.deleted = deleted;
-    }
-    public void setHas_own_style(String has_own_style) {
-        this.has_own_style = has_own_style;
-    }
-    public void setPartid(String partid) {
-        this.partid = partid;
-    }
-    public void setPosition(String position) {
-        this.position = position;
-    }
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-    public void setText_color(String text_color) {
-        this.text_color = text_color;
-    }
-    public void setUnactived(String unactived) {    this.unactived = unactived;    }
-    public void setUpdated(String updated) {
+    public Pages(String icon, Long id, boolean unactived, Long updated, boolean deleted,
+                 Long position, Long template, boolean has_own_style, ArrayList<Pages_lang> pages_lang) {
+        this.icon = icon;
+        this.id = id;
+        this.unactivated = unactived;
         this.updated = updated;
+        this.deleted = deleted;
+        this.position = position;
+        this.template = template;
+        this.has_own_style = has_own_style;
+        this.pages_lang = pages_lang;
     }
 
-    public String getColor() {
-        return color;
+    public Pages() {
     }
-    public String getDeleted() {
-        return deleted;
+
+    public String getIcon() {
+        return icon;
     }
-    public String getHas_own_style() {
-        return has_own_style;
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
-    public String getPartid() { return partid; }
-    public String getPosition() {
-        return position;
+
+    public Long getId() {
+        return id;
     }
-    public String getTemplate() {
-        return template;
+
+    public void setId(Long id) {
+        this.id = id;
     }
-    public String getText_color() {
-        return text_color;
+
+    public boolean getUnactivated() {
+        return unactivated;
     }
-    public String getUnactived() {
-        return unactived;
+
+    public void setUnactivated(boolean unactivated) {
+        this.unactivated = unactivated;
     }
-    public String getUpdated() {
+
+    public Long getUpdated() {
         return updated;
     }
 
-    public Map<String, Boolean> stars = new HashMap<>();
-
-    public Pages() {
-        // Default constructor required for calls to DataSnapshot.getValue(Post.class)
+    public void setUpdated(Long updated) {
+        this.updated = updated;
     }
 
-    public Pages(String color, String deleted, String has_own_style, String partid,
-                 String position, String template, String text_color,String unactived, String updated) {
-        this.color = color;
+    public boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
-        this.has_own_style = has_own_style;
-        this.partid = partid;
+    }
+
+    public Long getPosition() {
+        return position;
+    }
+
+    public void setPosition(Long position) {
         this.position = position;
+    }
+
+    public Long getTemplate() {
+        return template;
+    }
+
+    public void setTemplate(Long template) {
         this.template = template;
-        this.text_color=text_color;
-        this.unactived = unactived;
-        this.updated = updated;
+    }
+
+    public boolean getHas_own_style() {
+        return has_own_style;
+    }
+
+    public void setHas_own_style(boolean has_own_style) {
+        this.has_own_style = has_own_style;
+    }
+
+    public ArrayList<Pages_lang> getPages_lang() {
+        return pages_lang;
+    }
+
+    public void setPages_lang(ArrayList<Pages_lang> pages_lang) {
+        this.pages_lang = pages_lang;
     }
 
     public Map<String, Object> toMap() {
         HashMap<String, Object> result = new HashMap<>();
-        result.put("color", color);
         result.put("deleted", deleted);
         result.put("has_own_style", has_own_style);
-        result.put("partid", partid);
         result.put("position", position);
         result.put("template", template);
-        result.put("text_color", text_color);
-        result.put("unactived", unactived);
+        result.put("unactivated", unactivated);
         result.put("updated", updated);
         return result;
     }

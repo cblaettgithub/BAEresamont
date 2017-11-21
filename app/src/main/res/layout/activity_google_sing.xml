@@ -15,7 +15,7 @@
                 android:id="@+id/status_textview"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:text="Welcome to BA Erasomont"
+                android:title="Welcome to BA Erasomont"
                 android:visibility="visible" />
 
             <com.google.android.gms.common.SignInButton
@@ -27,7 +27,7 @@
                 android:id="@+id/signOutButton"
                 android:layout_width="140dp"
                 android:layout_height="wrap_content"
-                android:text="Sign out" />
+                android:title="Sign out" />
         </LinearLayout>
 
 </FrameLayout>

@@ -19,6 +19,8 @@ import android.view.View;
 
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
+import com.example.chbla.ba_eresamont.Models.Pages;
+import com.example.chbla.ba_eresamont.Models.Pages_lang;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +28,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,11 +45,13 @@ public class MainActivity extends AppCompatActivity
     private String LOG_TAG=MainActivity.class.getSimpleName();
     private final String PAGEROOT="/Ba_2020/pages/";
     private String mlanguage="0";//0 French
+    private ArrayList<Pages> pagesArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        pagesArrayList= new ArrayList<>();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -76,6 +81,8 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.invalidate();
         setHomeAtfirst();
+        //testing()
+        //testReadObjectFirebase();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
              @Override
@@ -85,6 +92,35 @@ public class MainActivity extends AppCompatActivity
             }
         });
       }
+
+      public void testReadObjectFirebase(){
+          final DatabaseReference myRef = getDatabaseReference();
+          Query query=null;//
+          query=myRef.orderByChild("id");
+          Log.w(LOG_TAG, "testReadObjectFirebase:");
+
+          final ChildEventListener childEventListener = query.addChildEventListener
+                  (new ChildEventListener() {
+              public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                  Pages pages = dataSnapshot.getValue(Pages.class);
+                  pagesArrayList.add(pages);
+                  Log.w(LOG_TAG, "testReadObje ID:" + pages.getId());
+              }
+              @Override
+              public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+              }
+              @Override
+              public void onChildRemoved(DataSnapshot dataSnapshot) {
+              }
+              @Override
+              public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+              }
+              @Override
+              public void onCancelled(DatabaseError databaseError) {
+              }
+          });
+      }
+
     public void creatingMenus(String choice) {
         final DatabaseReference myRef = getDatabaseReference();
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
@@ -186,6 +222,7 @@ public class MainActivity extends AppCompatActivity
                 mlanguage="0";
             break;
         }
+        Log.w(LOG_TAG+":onOptionsItemSed",mlanguage);
         return true;
         //noinspection SimplifiableIfStatement
     }
