@@ -1,5 +1,7 @@
 package com.example.chbla.ba_eresamont.Database;
 
+import android.support.annotation.NonNull;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -10,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 public class ConnectFirebase {
     private FirebaseDatabase database=null;
     private static boolean isPersistenceEnabled = false;
+    private final String PAGEROOT="/Ba_2020/pages/";
 
     public ConnectFirebase(){
         if (!isPersistenceEnabled) {
@@ -25,4 +28,15 @@ public class ConnectFirebase {
         database.goOffline();
         database =null;
     }
+
+    @NonNull
+    public DatabaseReference getDatabaseReference() {
+        String select=PAGEROOT;
+        final DatabaseReference myRef =  this.getDatabaseReference(select);
+        myRef.keepSynced(true);
+        return myRef;
+    }
+
+
+
 }
