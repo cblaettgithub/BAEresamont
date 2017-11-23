@@ -57,7 +57,6 @@ public class FirstFragment extends Fragment {
     }
     public static final String FRAGMENTNAME ="";
     public static final String LANGUAGE="0"; //0 French, 1 English, 2 Italy
-    private final String PAGEROOT="/Ba_2020/pages/";
     private String LOG_TAG=FirstFragment.class.getSimpleName();
     private ArrayList<Pages> pagesArrayList;
     private ButtonManager buttonManager;
@@ -85,7 +84,7 @@ public class FirstFragment extends Fragment {
         pagesArrayList= new ArrayList<>();
         buttonManager= new ButtonManager(getContext(),
                 (LinearLayout)view.findViewById(R.id.outputlabel),(WebView) view.findViewById(R.id.webView));
-
+        connectFirebase= new ConnectFirebase();
         hashMap=new TreeMap();
 
         Log.d(LOG_TAG+":onCreateView Fragment","" + bundle.getString(FRAGMENTNAME));
@@ -95,7 +94,7 @@ public class FirstFragment extends Fragment {
         //return inflater.inflate(R.layout.fragment_first, container, false);
     }
     private void GetDataFirebase(String choice) {
-        final DatabaseReference myRef = getDatabaseReference();
+        final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
         Query query=null;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice);
 
@@ -166,12 +165,4 @@ public class FirstFragment extends Fragment {
         });
     }
 
-    @NonNull
-    private DatabaseReference getDatabaseReference() {
-        String select=PAGEROOT;
-        connectFirebase= new ConnectFirebase();
-        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
-        myRef.keepSynced(true);
-        return myRef;
-    }
 }

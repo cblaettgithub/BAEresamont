@@ -13,6 +13,7 @@ public class ConnectFirebase {
     private FirebaseDatabase database=null;
     private static boolean isPersistenceEnabled = false;
     private final String PAGEROOT="/Ba_2020/pages/";
+    private DatabaseReference myRef;
 
     public ConnectFirebase(){
         if (!isPersistenceEnabled) {
@@ -21,22 +22,13 @@ public class ConnectFirebase {
         }
         database = FirebaseDatabase.getInstance();
     }
-    public DatabaseReference getDatabaseReference(String value) {
-        return database.getReference(value);
+    public DatabaseReference getDatabaseReference() {
+        this.myRef = database.getReference(PAGEROOT);
+        myRef.keepSynced(true);
+        return myRef;
     }
     public void close(){
         database.goOffline();
         database =null;
     }
-
-    @NonNull
-    public DatabaseReference getDatabaseReference() {
-        String select=PAGEROOT;
-        final DatabaseReference myRef =  this.getDatabaseReference(select);
-        myRef.keepSynced(true);
-        return myRef;
-    }
-
-
-
 }

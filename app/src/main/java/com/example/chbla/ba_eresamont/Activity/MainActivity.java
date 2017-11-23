@@ -20,7 +20,6 @@ import android.view.View;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Models.Pages;
-import com.example.chbla.ba_eresamont.Models.Pages_lang;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -29,8 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -94,8 +92,9 @@ public class MainActivity extends AppCompatActivity
       }
 
       public void testReadObjectFirebase(){
-          final DatabaseReference myRef = getDatabaseReference();
-          Query query=null;//
+          connectFirebase= new ConnectFirebase();
+          final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
+           Query query=null;//
           query=myRef.orderByChild("id");
           Log.w(LOG_TAG, "testReadObjectFirebase:");
 
@@ -122,7 +121,8 @@ public class MainActivity extends AppCompatActivity
       }
 
     public void creatingMenus(String choice) {
-        final DatabaseReference myRef = getDatabaseReference();
+        connectFirebase= new ConnectFirebase();
+        final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
         Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
 
          switch (choice){
@@ -238,13 +238,5 @@ public class MainActivity extends AppCompatActivity
     public void onArticleSelected(TreeMap ohashMap) {
         hashMap=ohashMap;
         creatingMenus("MenuChange");
-    }
-    @NonNull
-    private DatabaseReference getDatabaseReference() {
-        String select=PAGEROOT;
-        connectFirebase= new ConnectFirebase();
-        final DatabaseReference myRef =  connectFirebase.getDatabaseReference(select);
-        myRef.keepSynced(true);
-        return myRef;
     }
 }
