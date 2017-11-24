@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Pages;
+import com.example.chbla.ba_eresamont.Models.Pages_lang;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -69,7 +70,7 @@ public class ButtonManager {
     }
     public String GetLanguageID(Pages pages, String lang){
        int languageid=0;
-       for(int i=0;i<pages.getPages_lang().size();i++){
+       for(int i=0;i<pages.getPages_lang().size()-1;i++){
            if (( String.valueOf(pages.getPages_lang().get(i).getLanguage())).equals(mlang))
                languageid=i;
        }
@@ -115,12 +116,12 @@ public class ButtonManager {
                for(int i=0;i<pagesArrayList.size();i++)
                     ButtonCreator(pagesArrayList.get(i),  null,hashMap);*/
                ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap, mlang);
-               pagesArrayList.add(pages);
+               /*pagesArrayList.add(pages);
                 Collections.sort(pagesArrayList, new Comparator<Pages>(){
                     public int compare(Pages o1, Pages o2){
                         return (int) (o1.getId() - o2.getId());
                     }
-                });
+                });*/
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -140,8 +141,11 @@ public class ButtonManager {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-        webView.loadData(pages.getPages_lang().get(Integer.parseInt(LANGUAGE)).
-                getTranslate().toString(), "text/html", "UTF-8");
+        if (pages.getPages_lang().get(Integer.parseInt(mlang)) !=null)
+            webView.loadData(pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString(), "text/html", "UTF-8");
+        else
+            webView.loadData("<p> No content available </p>", "text/html", "UTF-8");
+
     }
 }
 
