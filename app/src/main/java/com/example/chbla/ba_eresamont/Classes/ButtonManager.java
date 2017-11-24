@@ -62,7 +62,7 @@ public class ButtonManager {
 
     public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap) {
         Button button = this.ConfigButton(pages.getPages_lang().
-                get(Integer.parseInt(LANGUAGE)).getTitle(), pages.getId().intValue());
+                get(Integer.parseInt(LANGUAGE)).getTitle(), ((int) pages.getPages_lang().get(0).getId()));
         this.pages=pages;
         this.hashMap=hashMap;
         Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
@@ -71,7 +71,7 @@ public class ButtonManager {
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (pages2==null){
-                    ButtonShowContent();
+                    ButtonShowContent(pages);
                 }
                 else{//create button in button
                     SubButton(pages, hashMap);
@@ -111,11 +111,11 @@ public class ButtonManager {
         });
     }
 
-    private void ButtonShowContent(){
+    private void ButtonShowContent(Pages pages){
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-        webView.loadData(this.pages.getPages_lang().get(Integer.parseInt(LANGUAGE)).
+        webView.loadData(pages.getPages_lang().get(Integer.parseInt(LANGUAGE)).
                 getTranslate().toString(), "text/html", "UTF-8");
     }
 }
