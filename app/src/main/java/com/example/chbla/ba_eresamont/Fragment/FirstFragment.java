@@ -26,6 +26,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.TreeMap;
 
 /**
@@ -58,10 +60,13 @@ public class FirstFragment extends Fragment {
     public static final String FRAGMENTNAME ="";
     public static final String LANGUAGE="0"; //0 French, 1 English, 2 Italy
     private String LOG_TAG=FirstFragment.class.getSimpleName();
-    private ArrayList<Pages> pagesArrayList;
+
     private ButtonManager buttonManager;
     private LinearLayout linearLayout=null;
     private WebView webView;
+    private Pages pages;
+    Pages pagesx;
+    static int counter=0;
 
     @Override
     public void onAttach(Activity activity) {
@@ -81,11 +86,12 @@ public class FirstFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         setContext(container.getContext());
         Bundle bundle = getArguments();
-        pagesArrayList= new ArrayList<>();
+
         buttonManager= new ButtonManager(getContext(),
                 (LinearLayout)view.findViewById(R.id.outputlabel),(WebView) view.findViewById(R.id.webView));
         connectFirebase= new ConnectFirebase();
         hashMap=new TreeMap();
+
 
         Log.d(LOG_TAG+":onCreateView Fragment","" + bundle.getString(FRAGMENTNAME));
         if (bundle != null)
@@ -104,7 +110,7 @@ public class FirstFragment extends Fragment {
         if (choice =="home"){
             Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
             query=myRef.orderByChild("id");
-            ReadDBData_Firebase(query, "home");
+           ReadDBData_Firebase(query, "home");
             hashMap.clear();
             mCallback.onArticleSelected(hashMap);
         }
@@ -116,53 +122,66 @@ public class FirstFragment extends Fragment {
             mCallback.onArticleSelected(hashMap);
         }
     }
-
     private void ReadDBData_Firebase(Query query, String choice) {
-        final String select=choice;
+        final String select = choice;
         final WebView myWebView = view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        final List<Pages> pagesArrayList = new ArrayList<>();
 
-        query.addChildEventListener(new ChildEventListener(){
+        query.addChildEventListener(new ChildEventListener() {
             String temp;
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName)
-            {
-                if (select =="home"){
-                    if (dataSnapshot.child("parent_id").exists()==false) {
-                        if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null){
-                            temp = (String) dataSnapshot.child("pages_lang").child("0").child("title").getValue();
-                            Log.w(LOG_TAG+":GetDataFirebase:home :", temp);
-                            Pages pages = dataSnapshot.getValue(Pages.class);
+            Pages pages;
+
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                if (select == "home") {
+                    if (dataSnapshot.child("parent_id").exists() == false) {
+                        if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
+                                getValue() != null) {
+                            pages = dataSnapshot.getValue(Pages.class);
                             pagesArrayList.add(pages);
-                            Log.w(LOG_TAG, "testReadObje ID:" + pages.getId());
-                            buttonManager.ButtonCreator(pages,pages,hashMap);
+                            Log.w(LOG_TAG + ":Call ButtonCreator", "out");
+                            buttonManager.ButtonCreator(pages, pages, hashMap);
                             mCallback.onArticleSelected(buttonManager.getHashMap());
-                            //ButtonCreator(pages, pages);
+
                         }
                     }
-                }else
-                if (select=="progress"){
-                    if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue()!=null) {
-                        temp = (String) dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").getValue();
-                        Log.w(LOG_TAG+":GetDataF:progress:", temp);
+                } else if (select == "progress") {
+                    if (dataSnapshot.child("pages_lang").child(LANGUAGE).
+                            child("title").getValue() != null) {
+                        temp = (String) dataSnapshot.child("pages_lang").
+                                child(LANGUAGE).child("title").getValue();
+                        Log.w(LOG_TAG + ":GetDataF:progress:", temp);
                         Pages pages = dataSnapshot.getValue(Pages.class);
-                        buttonManager.ButtonCreator(pages,null, hashMap);
+                        buttonManager.ButtonCreator(pages, null, hashMap);
                         mCallback.onArticleSelected(buttonManager.getHashMap());
-                        //ButtonCreator(pages, null);
+
                     }
-                    if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue()!=null)
+                    if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue() != null)
                         myWebView.loadData(dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue().toString(), "text/html", "UTF-8");
                 }
-
+                for (int i = 0; i < pagesArrayList.size(); i++) {
+                    counter++;
+                    Log.w(LOG_TAG + ":GetDataF:after:", pagesArrayList.get(i).getId().toString()
+                            + ":size" + pagesArrayList.size() + "counter" + counter);
+                }
             }
-            public void onChildRemoved(DataSnapshot dataSnapshot){
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
             }
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName){}
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName){}
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+            }
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+            }
             @Override
             public void onCancelled(DatabaseError error) {
-                Log.w(LOG_TAG, "Failed to read value.", error.toException()); }
+                Log.w(LOG_TAG, "Failed to read value.", error.toException());
+            }
+            ;
         });
+        for (int i = 0; i < pagesArrayList.size(); i++) {
+            counter++;
+            Log.w(LOG_TAG + ":After closing:", pagesArrayList.get(i).getId().toString()
+                    + ":size" + pagesArrayList.size() + "counter" + counter);
+        }
     }
-
 }

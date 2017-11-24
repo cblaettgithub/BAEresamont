@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity
     private ConnectFirebase connectFirebase;
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
-    private final String PAGEROOT="/Ba_2020/pages/";
     private String mlanguage="0";//0 French
     private ArrayList<Pages> pagesArrayList;
 
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity
       public void testReadObjectFirebase(){
           connectFirebase= new ConnectFirebase();
           final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
-           Query query=null;//
+          Query query=null;//
           query=myRef.orderByChild("id");
           Log.w(LOG_TAG, "testReadObjectFirebase:");
 
