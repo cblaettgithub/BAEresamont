@@ -109,18 +109,17 @@ public class FirstFragment extends Fragment {
 
         if (choice =="home"){
             Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
-            query=myRef.orderByChild("id");
-           ReadDBData_Firebase(query, "home");
-            hashMap.clear();
-            mCallback.onArticleSelected(hashMap);
+            query=myRef.orderByChild("pages_lang/0/title");
+            ReadDBData_Firebase(query, "home");
         }
         else{
             Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
+            //query=myRef.child("parent_id").equalTo(Integer.parseInt(choice)).orderByChild("pages_lang/0/title)
             query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
             ReadDBData_Firebase(query, "progress");
-            hashMap.clear();
-            mCallback.onArticleSelected(hashMap);
         }
+        hashMap.clear();
+        mCallback.onArticleSelected(hashMap);
     }
     private void ReadDBData_Firebase(Query query, String choice) {
         final String select = choice;
@@ -143,7 +142,6 @@ public class FirstFragment extends Fragment {
                             Log.w(LOG_TAG + ":Call ButtonCreator", "out");
                             buttonManager.ButtonCreator(pages, pages, hashMap);
                             mCallback.onArticleSelected(buttonManager.getHashMap());
-
                         }
                     }
                 } else if (select == "progress") {
@@ -155,15 +153,9 @@ public class FirstFragment extends Fragment {
                         Pages pages = dataSnapshot.getValue(Pages.class);
                         buttonManager.ButtonCreator(pages, null, hashMap);
                         mCallback.onArticleSelected(buttonManager.getHashMap());
-
                     }
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue() != null)
                         myWebView.loadData(dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue().toString(), "text/html", "UTF-8");
-                }
-                for (int i = 0; i < pagesArrayList.size(); i++) {
-                    counter++;
-                    Log.w(LOG_TAG + ":GetDataF:after:", pagesArrayList.get(i).getId().toString()
-                            + ":size" + pagesArrayList.size() + "counter" + counter);
                 }
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -178,10 +170,5 @@ public class FirstFragment extends Fragment {
             }
             ;
         });
-        for (int i = 0; i < pagesArrayList.size(); i++) {
-            counter++;
-            Log.w(LOG_TAG + ":After closing:", pagesArrayList.get(i).getId().toString()
-                    + ":size" + pagesArrayList.size() + "counter" + counter);
-        }
     }
 }

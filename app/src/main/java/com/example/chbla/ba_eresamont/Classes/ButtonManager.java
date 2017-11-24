@@ -1,5 +1,6 @@
 package com.example.chbla.ba_eresamont.Classes;
 import android.content.Context;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -16,6 +17,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -30,8 +34,9 @@ public class ButtonManager {
     private TreeMap hashMap;
     private Pages pages;
     private WebView webView;
-    private List<Pages> pagesArrayList;
+    private ArrayList<Pages> pagesArrayList;
     ConnectFirebase connectFirebase=new ConnectFirebase();
+    Query query=null;
 
     final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
     public WebView getWebView() {
@@ -81,20 +86,22 @@ public class ButtonManager {
         linearLayout.addView(button);
     }
 
-    private void SubButton(Pages pages, final TreeMap hashMap) {
+    private void SubButton(final Pages pages, final TreeMap hashMap) {
         for(int i=0;i<linearLayout.getChildCount();i++)
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
         linearLayout.removeViewAt(1);
 
-        Query query=null;
         query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(pages.getId().toString()));
-
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                Pages pages = dataSnapshot.getValue(Pages.class);
-                ButtonCreator(pages,  null,hashMap);
+                /*for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                    pagesArrayList.add(dataSnapshot.getValue(Pages.class));
+                }
+               for(int i=0;i<pagesArrayList.size();i++)
+                    ButtonCreator(pagesArrayList.get(i),  null,hashMap);*/
+                ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap);
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

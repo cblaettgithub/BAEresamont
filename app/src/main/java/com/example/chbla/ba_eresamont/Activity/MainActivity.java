@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity
         FirstFragment.OnHeadlineSelectedListener     {
 
     private DrawerLayout drawerLayout;
-    private ConnectFirebase connectFirebase;
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
     private String mlanguage="0";//0 French
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity
         });
       }
 
-      public void testReadObjectFirebase(){
+      /*public void testReadObjectFirebase(){
           connectFirebase= new ConnectFirebase();
           final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
           Query query=null;//
@@ -117,13 +116,9 @@ public class MainActivity extends AppCompatActivity
               public void onCancelled(DatabaseError databaseError) {
               }
           });
-      }
+      }*/
 
     public void creatingMenus(String choice) {
-        connectFirebase= new ConnectFirebase();
-        final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
-        Query query=null;//=myRef.orderByKey().equalTo("1");///pages mit id 1;
-
          switch (choice){
              case "MenuChange":
                  NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
@@ -131,7 +126,7 @@ public class MainActivity extends AppCompatActivity
                  menushow.clear();
                  menushow.add(0, R.id.fragment_zero , 1,
                          "Home").setIcon(R.drawable.ic_menu_gallery);
-                 hashMap.descendingKeySet();
+                 //hashMap.descendingKeySet();
                  Iterator iterator=hashMap.entrySet().iterator();
                      while(iterator.hasNext()){//neu
                          Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
