@@ -32,9 +32,8 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
-    private String mlanguage="0";//0 French
+    private String mlanguage="1";//1 French //default
     private ArrayList<Pages> pagesArrayList;
-    public static  String LANGUAGE="1"; //0 French, 1 English, 2 Italy
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +69,6 @@ public class MainActivity extends AppCompatActivity
 
         navigationView.invalidate();
         setHomeAtfirst();
-        //testing()
-        //testReadObjectFirebase();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
              @Override
@@ -81,35 +78,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
       }
-
-      /*public void testReadObjectFirebase(){
-          connectFirebase= new ConnectFirebase();
-          final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
-          Query query=null;//
-          query=myRef.orderByChild("id");
-          Log.w(LOG_TAG, "testReadObjectFirebase:");
-
-          final ChildEventListener childEventListener = query.addChildEventListener
-                  (new ChildEventListener() {
-              public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                  Pages pages = dataSnapshot.getValue(Pages.class);
-                  pagesArrayList.add(pages);
-                  Log.w(LOG_TAG, "testReadObje ID:" + pages.getId());
-              }
-              @Override
-              public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-              }
-              @Override
-              public void onChildRemoved(DataSnapshot dataSnapshot) {
-              }
-              @Override
-              public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-              }
-              @Override
-              public void onCancelled(DatabaseError databaseError) {
-              }
-          });
-      }*/
 
     public void creatingMenus(String choice) {
          switch (choice){
@@ -196,16 +164,16 @@ public class MainActivity extends AppCompatActivity
         Log.w(LOG_TAG+":onOptionsItemSed",Integer.toString(id));
         switch(id){
             case R.id.French_settings:
-                mlanguage="0";
+                mlanguage="1";
                 break;
             case R.id.English_settings:
-                mlanguage="1";
+                mlanguage="3";
                 break;
             case R.id.Italy_settings:
                 mlanguage="2";
                 break;
                 default:
-                mlanguage="0";
+                mlanguage="1";
             break;
         }
         Log.w(LOG_TAG+":onOptionsItemSed",mlanguage);

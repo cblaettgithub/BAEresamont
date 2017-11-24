@@ -30,7 +30,8 @@ import java.util.TreeMap;
 public class ButtonManager {
     private String LOG_TAG=ButtonManager.class.getSimpleName();
     private Context contex;
-    public static final String LANGUAGE="0";
+    public static final String LANGUAGE="3";
+    //language 1= french, 2= italy, 3= english
     private LinearLayout linearLayout=null;
     private TreeMap hashMap;
     private Pages pages;
@@ -38,6 +39,7 @@ public class ButtonManager {
     private ArrayList<Pages> pagesArrayList;
     ConnectFirebase connectFirebase=new ConnectFirebase();
     Query query=null;
+    private String mlang;
 
     final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
     public WebView getWebView() {
@@ -65,14 +67,24 @@ public class ButtonManager {
         button.setId(key);
         return button;
     }
+    public String GetLanguageID(Pages pages, String lang){
+       int languageid=0;
+       for(int i=0;i<pages.getPages_lang().size();i++){
+           if (( String.valueOf(pages.getPages_lang().get(i).getLanguage())).equals(mlang))
+               languageid=i;
+       }
+       return (String.valueOf(languageid));
+    }
 
-    public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap) {
+    public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap, String lang) {
+        mlang=lang;
+        String rowlang=GetLanguageID(pages, lang);
         Button button = this.ConfigButton(pages.getPages_lang().
-                get(Integer.parseInt(LANGUAGE)).getTitle(), ((int) pages.getPages_lang().get(Integer.parseInt(LANGUAGE)).getId()));
+                get(Integer.parseInt(rowlang)).getTitle(), ((int) pages.getPages_lang().get(Integer.parseInt(rowlang)).getId()));
         this.pages=pages;
         this.hashMap=hashMap;
         Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
-        hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(LANGUAGE)).getTitle());
+        hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(rowlang)).getTitle());
         pagesArrayList.add(pages);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -102,7 +114,7 @@ public class ButtonManager {
                 }
                for(int i=0;i<pagesArrayList.size();i++)
                     ButtonCreator(pagesArrayList.get(i),  null,hashMap);*/
-               ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap);
+               ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap, mlang);
                pagesArrayList.add(pages);
                 Collections.sort(pagesArrayList, new Comparator<Pages>(){
                     public int compare(Pages o1, Pages o2){

@@ -58,18 +58,14 @@ public class FirstFragment extends Fragment {
         this.view = view;
     }
     public static final String FRAGMENTNAME ="";
-
-    public static void setLANGUAGE(String LANGUAGE) {
-        FirstFragment.LANGUAGE = LANGUAGE;
-    }
-
-    public static  String LANGUAGE="0"; //0 French, 1 English, 2 Italy
+        //language = 1 = french, 2 = italy, 3 = english
+    public  static final String LANGUAGE="1";
     private String LOG_TAG=FirstFragment.class.getSimpleName();
     private ButtonManager buttonManager;
     private LinearLayout linearLayout=null;
     private WebView webView;
     private Pages pages;
-    static int counter=0;
+    private String mlanguage;
 
     @Override
     public void onAttach(Activity activity) {
@@ -96,16 +92,17 @@ public class FirstFragment extends Fragment {
         hashMap=new TreeMap();
 
         Log.d(LOG_TAG+":onCreateView Fragment","" + bundle.getString(FRAGMENTNAME));
-        if (bundle != null)
-            GetDataFirebase( bundle.getString(FRAGMENTNAME), bundle.getString((LANGUAGE)));
+        if (bundle != null){
+            GetDataFirebase( bundle.getString(FRAGMENTNAME),bundle.getString(LANGUAGE));
+        }
         return view;
         //return inflater.inflate(R.layout.fragment_first, container, false);
     }
     private void GetDataFirebase(String choice, String lang) {
         final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
         Query query=null;
+        mlanguage=lang;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice);
-        //this.setLANGUAGE(lang);
 
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
@@ -144,7 +141,7 @@ public class FirstFragment extends Fragment {
                             pages = dataSnapshot.getValue(Pages.class);
                             pagesArrayList.add(pages);
                             Log.w(LOG_TAG + ":Call ButtonCreator", "out");
-                            buttonManager.ButtonCreator(pages, pages, hashMap);
+                            buttonManager.ButtonCreator(pages, pages, hashMap, mlanguage);
                             mCallback.onArticleSelected(buttonManager.getHashMap());
                         }
                     }
@@ -155,7 +152,7 @@ public class FirstFragment extends Fragment {
                                 child(LANGUAGE).child("title").getValue();
                         Log.w(LOG_TAG + ":GetDataF:progress:", temp);
                         Pages pages = dataSnapshot.getValue(Pages.class);
-                        buttonManager.ButtonCreator(pages, null, hashMap);
+                        buttonManager.ButtonCreator(pages, null, hashMap, mlanguage);
                         mCallback.onArticleSelected(buttonManager.getHashMap());
                     }
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue() != null)
