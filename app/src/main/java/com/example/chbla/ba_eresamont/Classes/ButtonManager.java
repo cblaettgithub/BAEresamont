@@ -19,6 +19,7 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
@@ -67,11 +68,11 @@ public class ButtonManager {
 
     public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap) {
         Button button = this.ConfigButton(pages.getPages_lang().
-                get(Integer.parseInt(LANGUAGE)).getTitle(), ((int) pages.getPages_lang().get(0).getId()));
+                get(Integer.parseInt(LANGUAGE)).getTitle(), ((int) pages.getPages_lang().get(Integer.parseInt(LANGUAGE)).getId()));
         this.pages=pages;
         this.hashMap=hashMap;
         Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
-        hashMap.put(pages.getId().toString(), pages.getPages_lang().get(0).getTitle());
+        hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(LANGUAGE)).getTitle());
         pagesArrayList.add(pages);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -101,7 +102,13 @@ public class ButtonManager {
                 }
                for(int i=0;i<pagesArrayList.size();i++)
                     ButtonCreator(pagesArrayList.get(i),  null,hashMap);*/
-                ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap);
+               ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap);
+               pagesArrayList.add(pages);
+                Collections.sort(pagesArrayList, new Comparator<Pages>(){
+                    public int compare(Pages o1, Pages o2){
+                        return (int) (o1.getId() - o2.getId());
+                    }
+                });
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -117,7 +124,6 @@ public class ButtonManager {
             }
         });
     }
-
     private void ButtonShowContent(Pages pages){
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -126,3 +132,4 @@ public class ButtonManager {
                 getTranslate().toString(), "text/html", "UTF-8");
     }
 }
+

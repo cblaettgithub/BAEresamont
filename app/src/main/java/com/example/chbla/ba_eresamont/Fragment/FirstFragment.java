@@ -58,14 +58,17 @@ public class FirstFragment extends Fragment {
         this.view = view;
     }
     public static final String FRAGMENTNAME ="";
-    public static final String LANGUAGE="0"; //0 French, 1 English, 2 Italy
-    private String LOG_TAG=FirstFragment.class.getSimpleName();
 
+    public static void setLANGUAGE(String LANGUAGE) {
+        FirstFragment.LANGUAGE = LANGUAGE;
+    }
+
+    public static  String LANGUAGE="0"; //0 French, 1 English, 2 Italy
+    private String LOG_TAG=FirstFragment.class.getSimpleName();
     private ButtonManager buttonManager;
     private LinearLayout linearLayout=null;
     private WebView webView;
     private Pages pages;
-    Pages pagesx;
     static int counter=0;
 
     @Override
@@ -92,17 +95,17 @@ public class FirstFragment extends Fragment {
         connectFirebase= new ConnectFirebase();
         hashMap=new TreeMap();
 
-
         Log.d(LOG_TAG+":onCreateView Fragment","" + bundle.getString(FRAGMENTNAME));
         if (bundle != null)
-            GetDataFirebase( bundle.getString(FRAGMENTNAME));
+            GetDataFirebase( bundle.getString(FRAGMENTNAME), bundle.getString((LANGUAGE)));
         return view;
         //return inflater.inflate(R.layout.fragment_first, container, false);
     }
-    private void GetDataFirebase(String choice) {
+    private void GetDataFirebase(String choice, String lang) {
         final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
         Query query=null;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice);
+        //this.setLANGUAGE(lang);
 
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
@@ -120,6 +123,7 @@ public class FirstFragment extends Fragment {
         }
         hashMap.clear();
         mCallback.onArticleSelected(hashMap);
+        this.connectFirebase.close();
     }
     private void ReadDBData_Firebase(Query query, String choice) {
         final String select = choice;
@@ -167,8 +171,7 @@ public class FirstFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError error) {
                 Log.w(LOG_TAG, "Failed to read value.", error.toException());
-            }
-            ;
+            }            ;
         });
     }
 }

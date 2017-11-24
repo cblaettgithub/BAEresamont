@@ -16,19 +16,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
-
 import java.util.ArrayList;
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -42,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     private String LOG_TAG=MainActivity.class.getSimpleName();
     private String mlanguage="0";//0 French
     private ArrayList<Pages> pagesArrayList;
+    public static  String LANGUAGE="1"; //0 French, 1 English, 2 Italy
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +160,6 @@ public class MainActivity extends AppCompatActivity
     public void setHomeAtfirst(){
         Fragment_Man("home", mlanguage);
     }
-
     private void navigationItem(MenuItem menuItem)
     {
         FragmentManager(menuItem);
