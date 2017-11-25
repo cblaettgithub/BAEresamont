@@ -43,6 +43,7 @@ public class GoogleSingActivity extends AppCompatActivity implements
     GoogleApiClient mGoogleApiClient;
     private static final String TAG="SignInActivity";
     private static final int RC_SIGN_IN=9001;
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class GoogleSingActivity extends AppCompatActivity implements
 
         signOutButton=(Button)findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener(this);
-        // [END config_signin]
+
     }
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -96,7 +97,11 @@ public class GoogleSingActivity extends AppCompatActivity implements
         if (result.isSuccess()){
             GoogleSignInAccount account=result.getSignInAccount();
             statusTextView.setText(("hello, "+account.getDisplayName()));
+            intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
+
         }else{
+            statusTextView.setText(("Error, "+"User or Password wrong"));
         }
     }
     private void signOut() {
