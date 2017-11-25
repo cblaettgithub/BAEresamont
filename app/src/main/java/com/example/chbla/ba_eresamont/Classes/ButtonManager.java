@@ -69,7 +69,6 @@ public class ButtonManager {
         return button;
     }
     //check if value exist if not work with mlang = 3
-
     public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap, String lang) {
        this.mlang=lang;
         Button button = this.ConfigButton(pages.getPages_lang().
@@ -137,7 +136,7 @@ public class ButtonManager {
         if (mlang.equals("3"))
                 webView.loadData("<p> there is no content available", "text/html", "UTF-8");
         else
-                webView.loadData(pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString(), "text/html", "UTF-8");
+                webView.loadData("<html><body>"+pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString()+"</html></body>", "text/html", "UTF-8");
     }
 }
 

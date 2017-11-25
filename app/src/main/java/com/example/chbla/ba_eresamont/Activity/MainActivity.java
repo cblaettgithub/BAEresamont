@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
     private String mlanguage="1";//1 French //default
+    private Integer mMenuID;
     private ArrayList<Pages> pagesArrayList;
 
     @Override
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity
                  Iterator iterator=hashMap.entrySet().iterator();
                      while(iterator.hasNext()){//neu
                          Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
-                         Log.w(LOG_TAG+":MenuChange:", entry.getValue()+" :key "+entry.getKey());
+                         //Log.w(LOG_TAG+":MenuChange:", entry.getValue()+" :key "+entry.getKey());
                          menushow.add(0, Integer.parseInt(entry.getKey()) , 1,
                                  entry.getValue()).setIcon(R.drawable.ic_menu_gallery);
                  }
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Log.d("backpressed","*******************backpressed");
-        Fragment_Man("1", mlanguage);
+        Fragment_Man("1", mlanguage, 0);
         /*if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         }*/
     }
 
-    private void Fragment_Man(String value, String mlanguage) {
+    private void Fragment_Man(String value, String mlanguage, int menuID) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = null;
         Bundle args;
@@ -121,12 +122,13 @@ public class MainActivity extends AppCompatActivity
         fragment = new FirstFragment();
         args.putString(FirstFragment.FRAGMENTNAME, value);
         args.putString(FirstFragment.LANGUAGE, mlanguage);
+        args.putInt(FirstFragment.MENUID, menuID);
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
     }
 
     public void setHomeAtfirst(){
-        Fragment_Man("home", mlanguage);
+        Fragment_Man("home", mlanguage, 0);
     }
     private void navigationItem(MenuItem menuItem)
     {
@@ -137,10 +139,10 @@ public class MainActivity extends AppCompatActivity
         Log.d(LOG_TAG+":navigationItem","*****"+menuItem.getItemId()+":"+menuItem.getTitle());
         switch (menuItem.getItemId()){
             case R.id.fragment_zero:
-                Fragment_Man("home", mlanguage);
+                Fragment_Man("home", mlanguage, menuItem.getItemId());
                 break;
             default:
-                Fragment_Man(Integer.toString(menuItem.getItemId()), mlanguage);
+                Fragment_Man(Integer.toString(menuItem.getItemId()), mlanguage, menuItem.getItemId());
                 break;
         }
         menuItem.setChecked(true);
