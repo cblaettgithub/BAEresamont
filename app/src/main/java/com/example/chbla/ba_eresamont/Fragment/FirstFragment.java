@@ -66,6 +66,7 @@ public class FirstFragment extends Fragment {
     private WebView webView;
     private Pages pages;
     private String mlanguage;
+    private String mlang="3";//no value
 
     @Override
     public void onAttach(Activity activity) {
@@ -139,9 +140,9 @@ public class FirstFragment extends Fragment {
                         if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
                                 getValue() != null) {
                             pages = dataSnapshot.getValue(Pages.class);
-                            pagesArrayList.add(pages);
+                            GetLanguageID(pages, mlanguage);
                             Log.w(LOG_TAG + ":Call ButtonCreator", "out");
-                            buttonManager.ButtonCreator(pages, pages, hashMap, mlanguage);
+                            buttonManager.ButtonCreator(pages, pages, hashMap, mlang);
                             mCallback.onArticleSelected(buttonManager.getHashMap());
                         }
                     }
@@ -152,11 +153,12 @@ public class FirstFragment extends Fragment {
                                 child(LANGUAGE).child("title").getValue();
                         Log.w(LOG_TAG + ":GetDataF:progress:", temp);
                         Pages pages = dataSnapshot.getValue(Pages.class);
-                        buttonManager.ButtonCreator(pages, null, hashMap, mlanguage);
+                        GetLanguageID(pages, mlanguage);
+                        buttonManager.ButtonCreator(pages, null, hashMap, mlang);
                         mCallback.onArticleSelected(buttonManager.getHashMap());
                     }
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue() != null)
-                        myWebView.loadData(dataSnapshot.child("pages_lang").child(LANGUAGE).child("translate").getValue().toString(), "text/html", "UTF-8");
+                        myWebView.loadData(dataSnapshot.child("pages_lang").child(mlang).child("translate").getValue().toString(), "text/html", "UTF-8");
                 }
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {
@@ -170,5 +172,14 @@ public class FirstFragment extends Fragment {
                 Log.w(LOG_TAG, "Failed to read value.", error.toException());
             }            ;
         });
+    }
+    //mlang stands for the destination row
+    public void GetLanguageID(Pages pages, String inputlang){
+        Log.w(LOG_TAG+":GetLanguageID:Input", inputlang);
+        for(int i=0;i<pages.getPages_lang().size();i++){
+            if (( String.valueOf(pages.getPages_lang().get(i).getLanguage())).equals(inputlang))
+                mlang=Integer.toString(i);
+        }
+        Log.w(LOG_TAG+":GetLanguageID:", mlang);
     }
 }

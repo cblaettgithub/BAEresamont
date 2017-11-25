@@ -40,7 +40,7 @@ public class ButtonManager {
     private ArrayList<Pages> pagesArrayList;
     ConnectFirebase connectFirebase=new ConnectFirebase();
     Query query=null;
-    private String mlang;
+    private String mlang="3";//no value
 
     final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
     public WebView getWebView() {
@@ -68,24 +68,16 @@ public class ButtonManager {
         button.setId(key);
         return button;
     }
-    public String GetLanguageID(Pages pages, String lang){
-       int languageid=0;
-       for(int i=0;i<pages.getPages_lang().size()-1;i++){
-           if (( String.valueOf(pages.getPages_lang().get(i).getLanguage())).equals(mlang))
-               languageid=i;
-       }
-       return (String.valueOf(languageid));
-    }
+    //check if value exist if not work with mlang = 3
 
     public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap, String lang) {
-        mlang=lang;
-        String rowlang=GetLanguageID(pages, lang);
+       this.mlang=lang;
         Button button = this.ConfigButton(pages.getPages_lang().
-                get(Integer.parseInt(rowlang)).getTitle(), ((int) pages.getPages_lang().get(Integer.parseInt(rowlang)).getId()));
+                get(Integer.parseInt(mlang)).getTitle(), ((int) pages.getPages_lang().get(Integer.parseInt(mlang)).getId()));
         this.pages=pages;
         this.hashMap=hashMap;
         Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
-        hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(rowlang)).getTitle());
+        hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle());
         pagesArrayList.add(pages);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -141,11 +133,11 @@ public class ButtonManager {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-        if (pages.getPages_lang().get(Integer.parseInt(mlang)) !=null)
-            webView.loadData(pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString(), "text/html", "UTF-8");
+        Log.w(LOG_TAG+":ButtShowContent:mlang:", mlang);
+        if (mlang.equals("3"))
+                webView.loadData("<p> there is no content available", "text/html", "UTF-8");
         else
-            webView.loadData("<p> No content available </p>", "text/html", "UTF-8");
-
+                webView.loadData(pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString(), "text/html", "UTF-8");
     }
 }
 
