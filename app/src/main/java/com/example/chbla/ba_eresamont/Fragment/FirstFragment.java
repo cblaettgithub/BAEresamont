@@ -19,15 +19,20 @@ import android.widget.ListView;
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Pages;
+import com.example.chbla.ba_eresamont.Models.Pages_lang;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -68,6 +73,7 @@ public class FirstFragment extends Fragment {
     private String mlanguage;
     private String mlang="3";//no value
     private Integer mMenuId;
+    private static boolean mMainDetail;
 
     @Override
     public void onAttach(Activity activity) {
@@ -112,28 +118,68 @@ public class FirstFragment extends Fragment {
         linearLayout.removeAllViews();
 
         if (choice =="home"){
+            mMainDetail=false;
             Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
             query=myRef.orderByChild("pages_lang/0/title");
             ReadDBData_Firebase(query, "home");
         }
-        else{//menu top left//find out diffrenece between top menu and deteil menü
-            Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
-            query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-            Log.w(LOG_TAG+":query:Total", Integer.toString(query.toString().getBytes().length));
-            ReadDBData_Firebase(query, "progress");
+        else{
+            if (mMainDetail==false){
+                Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
+                query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
+                Log.w(LOG_TAG+":query:Total", Integer.toString(query.toString().getBytes().length));
+                ReadDBData_Firebase(query, "progress");
+                mMainDetail=true;
+            }
+           else{
+                Log.w(LOG_TAG+":GetDataFirebase:true:", choice);
+                query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
+                Log.w(LOG_TAG+":query:Total", Integer.toString(query.toString().getBytes().length));
+                ReadDBData_FirebaseOneItem(query);
+                mMainDetail=false;
+            }
         }
         hashMap.clear();
         mCallback.onArticleSelected(hashMap);
         this.connectFirebase.close();
     }
+    private void ReadDBData_FirebaseOneItem(Query query)
+    {
+        webView = view.findViewById(R.id.webView);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        Log.w(LOG_TAG+"FirebaseOneItem", Integer.toString(query.toString().getBytes().length));
+        query.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                for (DataSnapshot single : dataSnapshot.getChildren()) {
+                    Pages pages=dataSnapshot.getValue(Pages.class);
+                    GetLanguageID(pages, mlanguage);
+                    webView.loadData(pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate(), "text/html", "UTF-8");
+                }
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
     private void ReadDBData_Firebase(Query query, String choice) {
-        //choice = menuID
+
         final String select = choice;
         final WebView myWebView = view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        final List<Pages> pagesArrayList = new ArrayList<>();
-        Log.w(LOG_TAG+":ReadDBData_Fi:start:", choice+query);
 
         query.addChildEventListener(new ChildEventListener() {
             String temp;

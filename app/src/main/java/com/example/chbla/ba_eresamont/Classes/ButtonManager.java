@@ -101,11 +101,6 @@ public class ButtonManager {
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                /*for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                    pagesArrayList.add(dataSnapshot.getValue(Pages.class));
-                }
-               for(int i=0;i<pagesArrayList.size();i++)
-                    ButtonCreator(pagesArrayList.get(i),  null,hashMap);*/
                ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap, mlang);
                /*pagesArrayList.add(pages);
                 Collections.sort(pagesArrayList, new Comparator<Pages>(){
