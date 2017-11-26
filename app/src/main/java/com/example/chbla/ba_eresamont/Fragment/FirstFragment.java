@@ -3,7 +3,6 @@ package com.example.chbla.ba_eresamont.Fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,27 +11,24 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
+import com.example.chbla.ba_eresamont.Classes.CLanguageID;
+import com.example.chbla.ba_eresamont.Classes.ReadDBHome;
+import com.example.chbla.ba_eresamont.Classes.ReadDBProgress;
+import com.example.chbla.ba_eresamont.Interface.IDBManager;
+import com.example.chbla.ba_eresamont.Classes.ReadDBOne;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Pages;
-import com.example.chbla.ba_eresamont.Models.Pages_lang;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -113,6 +109,7 @@ public class FirstFragment extends Fragment {
         mlanguage=lang;
         mMenuId=MenuId;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice+"mID:"+mMenuId);
+        IDBManager idbManager;
 
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
@@ -121,57 +118,30 @@ public class FirstFragment extends Fragment {
             mMainDetail=false;
             Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
             query=myRef.orderByChild("pages_lang/0/title");
+            //idbManager = new ReadDBHome();
+            //idbManager.ReadDBData_Firebase(query,"",buttonManager,view,webView,hashMap,mlang);
             ReadDBData_Firebase(query, "home");
         }
         else{
             if (mMainDetail==false){
                 Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
                 query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-                Log.w(LOG_TAG+":query:Total", Integer.toString(query.toString().getBytes().length));
+                //idbManager = new ReadDBProgress();
+                //idbManager.ReadDBData_Firebase(query,"",buttonManager,view,webView,hashMap,mlang);
                 ReadDBData_Firebase(query, "progress");
                 mMainDetail=true;
             }
            else{
                 Log.w(LOG_TAG+":GetDataFirebase:true:", choice);
                 query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
-                Log.w(LOG_TAG+":query:Total", Integer.toString(query.toString().getBytes().length));
-                ReadDBData_FirebaseOneItem(query);
-                mMainDetail=false;
+                idbManager = new ReadDBOne();
+                idbManager.ReadDBData_Firebase(query,"",null,view,webView,hashMap,mlang);
+                //ReadDBData_FirebaseOneItem(query);
             }
         }
         hashMap.clear();
         mCallback.onArticleSelected(hashMap);
         this.connectFirebase.close();
-    }
-    private void ReadDBData_FirebaseOneItem(Query query)
-    {
-        webView = view.findViewById(R.id.webView);
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        Log.w(LOG_TAG+"FirebaseOneItem", Integer.toString(query.toString().getBytes().length));
-        query.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot single : dataSnapshot.getChildren()) {
-                    Pages pages=dataSnapshot.getValue(Pages.class);
-                    GetLanguageID(pages, mlanguage);
-                    webView.loadData(pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate(), "text/html", "UTF-8");
-                }
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
     }
 
     private void ReadDBData_Firebase(Query query, String choice) {
@@ -180,38 +150,43 @@ public class FirstFragment extends Fragment {
         final WebView myWebView = view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        CLanguageID cLanguageID = new CLanguageID("3");
 
         query.addChildEventListener(new ChildEventListener() {
             String temp;
             Pages pages;
 
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                if (select == "home") {
-                    if (dataSnapshot.child("parent_id").exists() == false) {
-                        if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
-                                getValue() != null) {
-                            pages = dataSnapshot.getValue(Pages.class);
+                switch (select){
+                    case "home":
+                        if (dataSnapshot.child("parent_id").exists() == false) {
+                            if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
+                                    getValue() != null) {
+                                pages = dataSnapshot.getValue(Pages.class);
+                                GetLanguageID(pages, mlanguage);
+                                Log.w(LOG_TAG + ":ReadDBData Home", "out");
+                                buttonManager.ButtonCreator(pages, pages, hashMap, mlang);
+                                mCallback.onArticleSelected(buttonManager.getHashMap());
+                            }
+                        }
+                        break;
+                    case "progress":
+                        if (dataSnapshot.child("pages_lang").child(LANGUAGE).
+                                child("translate").toString()!=""){
+                            temp = (String) dataSnapshot.child("pages_lang").
+                                    child(LANGUAGE).child("title").getValue();
+                            Log.w(LOG_TAG + ":ReadDBData Progres", temp);
+                            Pages pages = dataSnapshot.getValue(Pages.class);
                             GetLanguageID(pages, mlanguage);
-                            Log.w(LOG_TAG + ":ReadDBData Home", "out");
-                            buttonManager.ButtonCreator(pages, pages, hashMap, mlang);
+                            buttonManager.ButtonCreator(pages, null, hashMap, mlang);
                             mCallback.onArticleSelected(buttonManager.getHashMap());
                         }
-                    }
-                } else if (select == "progress") {//top menüs
-                    if (dataSnapshot.child("pages_lang").child(LANGUAGE).
-                            child("translate").toString()!=""){
-                        temp = (String) dataSnapshot.child("pages_lang").
-                                child(LANGUAGE).child("title").getValue();
-                        Log.w(LOG_TAG + ":ReadDBData Progres", temp);
-                        Pages pages = dataSnapshot.getValue(Pages.class);
-                        GetLanguageID(pages, mlanguage);
-                        buttonManager.ButtonCreator(pages, null, hashMap, mlang);
-                        mCallback.onArticleSelected(buttonManager.getHashMap());
-                    }
-                    else{
+                        break;
+                    default:
                         webView.loadData("<p> there is no content available", "text/html", "UTF-8");
-                    }
+                        break;
                 }
+
             }
             public void onChildRemoved(DataSnapshot dataSnapshot) {
             }

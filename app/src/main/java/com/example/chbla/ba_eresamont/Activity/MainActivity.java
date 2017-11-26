@@ -16,6 +16,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.example.chbla.ba_eresamont.Classes.ReadDBHome;
+import com.example.chbla.ba_eresamont.Classes.ReadDBProgress;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Models.Pages;
@@ -27,7 +30,9 @@ import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        FirstFragment.OnHeadlineSelectedListener     {
+        FirstFragment.OnHeadlineSelectedListener,
+        ReadDBProgress.OnHeadlineSelectedListener,
+        ReadDBHome.OnHeadlineSelectedListener {
 
     private DrawerLayout drawerLayout;
     private TreeMap hashMap;

@@ -128,10 +128,15 @@ public class ButtonManager {
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
         Log.w(LOG_TAG+":ButtShowContent:mlang:", mlang);
-        if (mlang.equals("3"))
-                webView.loadData("<p> there is no content available", "text/html", "UTF-8");
-        else
-                webView.loadData("<html><body>"+pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString()+"</html></body>", "text/html", "UTF-8");
+        if (mlang.equals("3")){
+            webView.loadData("<p> there is no content available", "text/html", "UTF-8");
+        }
+        else{
+            String temp=pages.getPages_lang().get(Integer.parseInt(mlang)).
+                    getTranslate().toString();
+            String neu=temp.replaceAll("(\r\n|\n)", "<br />");
+            webView.loadData(neu, "text/html", "UTF-8");
+        }
     }
 }
 
