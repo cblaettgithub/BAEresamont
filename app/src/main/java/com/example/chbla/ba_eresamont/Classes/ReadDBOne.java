@@ -1,5 +1,6 @@
 package com.example.chbla.ba_eresamont.Classes;
 
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -24,11 +25,13 @@ public class ReadDBOne implements IDBManager {
 
     @Override
     public void ReadDBData_Firebase(Query query, String choice,
-                                    ButtonManager buttonManager, View view, WebView webView, TreeMap hashMap, final String mlanguage) {
+                                    ButtonManager buttonManager, View view, WebView webView,
+                                    TreeMap hashMap, final String mlanguage) {
         {
             final WebView webViewx = view.findViewById(R.id.webView);
             WebSettings webSettings = webViewx.getSettings();
             webSettings.setJavaScriptEnabled(true);
+            Log.w(LOG_TAG + ":ReadDBData_Firebase", "start");
 
             query.addChildEventListener(new ChildEventListener() {
                 String temp;

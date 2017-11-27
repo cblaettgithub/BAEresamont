@@ -18,6 +18,7 @@ public class Pages {
     Long template;
     boolean has_own_style;
     ArrayList<Pages_lang> pages_lang;
+    Long parent_id;
 
     public Pages(String icon, Long id, boolean unactived, Long updated, boolean deleted,
                  Long position, Long template, boolean has_own_style, ArrayList<Pages_lang> pages_lang) {
@@ -34,6 +35,11 @@ public class Pages {
 
     public Pages() {
     }
+    public Long getParent_id() {
+        return parent_id;    }
+
+    public void setParent_id(Long parent_id) {
+        this.parent_id = parent_id;    }
 
     public String getIcon() {
         return icon;

@@ -32,7 +32,8 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         FirstFragment.OnHeadlineSelectedListener,
         ReadDBProgress.OnHeadlineSelectedListener,
-        ReadDBHome.OnHeadlineSelectedListener {
+        ReadDBHome.OnHeadlineSelectedListener
+        {
 
     private DrawerLayout drawerLayout;
     private TreeMap hashMap;

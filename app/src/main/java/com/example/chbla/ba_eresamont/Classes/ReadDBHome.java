@@ -26,8 +26,9 @@ public class ReadDBHome implements IDBManager {
     private String LOG_TAG=ReadDBHome.class.getSimpleName();
     CLanguageID cLanguageID = new CLanguageID("3");
     public  static final String LANGUAGE="1";
-    ReadDBHome.OnHeadlineSelectedListener mCallback;
+    TreeMap hashmap;
 
+    OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
         void onArticleSelected(TreeMap hashMap);
     }
@@ -36,50 +37,51 @@ public class ReadDBHome implements IDBManager {
     }
 
     @Override
-    public void ReadDBData_Firebase(Query query, String choice,
-                                    final ButtonManager buttonManager, View view,
-                                    final WebView webView, final TreeMap hashMap, String mlanguage) {
+    public void ReadDBData_Firebase(Query query, String choice, ButtonManager buttonManager,
+                                    View view, WebView webView, TreeMap phashMap, String mlanguage) {
 
         final String select = choice;
         final WebView myWebView = view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         final String mlanguagex=mlanguage;
+        final ButtonManager buttonManager1=buttonManager;
         Log.w(LOG_TAG + ":ReadDBData_Firebase", "start");
-        ChildEventListener childEventListener;
+        final TreeMap hashMap=phashMap;
 
+            query.addChildEventListener(new ChildEventListener() {
+                String temp;
+                Pages pages;
 
-        childEventListener=query.addChildEventListener(new ChildEventListener() {
-            String temp;
-            Pages pages;
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                if (dataSnapshot.child("parent_id").exists() == false) {
-                    if (dataSnapshot.child("pages_lang").child(mlanguagex).child("title").
-                            getValue() != null) {
-                        pages = dataSnapshot.getValue(Pages.class);
-                        Log.w(LOG_TAG + ":ReadDBData Home", "out");
-                        buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.GetLanguageID(pages,mlanguagex ));
-                        mCallback.onArticleSelected(buttonManager.getHashMap());
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    if (dataSnapshot.child("parent_id").exists() == false) {
+                        if (dataSnapshot.child("pages_lang").child(mlanguagex).child("title").
+                                getValue() != null) {
+                            pages = dataSnapshot.getValue(Pages.class);
+                            Log.w(LOG_TAG + ":ReadDBData Home", "out");
+                            buttonManager1.ButtonCreator(pages, pages, hashMap, cLanguageID.GetLanguageID(pages,mlanguagex ));
+                            //mCallback.onArticleSelected(buttonManager.getHashMap());
+                        }
                     }
                 }
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w(LOG_TAG, "Failed to read value.", databaseError.toException());
-            }
-        });
-        query.removeEventListener(childEventListener);
-        //hashMap.clear();
-        //mCallback.onArticleSelected(hashMap);
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
     }
 }

@@ -16,10 +16,11 @@ import android.widget.ListView;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
 import com.example.chbla.ba_eresamont.Classes.CLanguageID;
-import com.example.chbla.ba_eresamont.Classes.ReadDBHome;
-import com.example.chbla.ba_eresamont.Classes.ReadDBProgress;
+import com.example.chbla.ba_eresamont.Database.aDAOImplHome;
+import com.example.chbla.ba_eresamont.Database.aDAOImplOne;
+import com.example.chbla.ba_eresamont.Database.aDAOImplProgress;
+import com.example.chbla.ba_eresamont.Interface.IDAO;
 import com.example.chbla.ba_eresamont.Interface.IDBManager;
-import com.example.chbla.ba_eresamont.Classes.ReadDBOne;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
@@ -105,20 +106,23 @@ public class FirstFragment extends Fragment {
     }
     private void GetDataFirebase(String choice, String lang, int MenuId) {
         final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
-        Query query=null;
+        Query query;
         mlanguage=lang;
         mMenuId=MenuId;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice+"mID:"+mMenuId);
-        IDBManager idbManager;
 
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
+        IDBManager idbManager=null;
+        IDAO idao;
 
         if (choice =="home"){
             mMainDetail=false;
             Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
             query=myRef.orderByChild("pages_lang/0/title");
-            //idbManager = new ReadDBHome();
+            //idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlang);
+            //idao.ReadDBData_Firebase(view);
+             //idbManager = new ReadDBHome();
             //idbManager.ReadDBData_Firebase(query,"",buttonManager,view,webView,hashMap,mlang);
             ReadDBData_Firebase(query, "home");
         }
@@ -126,6 +130,8 @@ public class FirstFragment extends Fragment {
             if (mMainDetail==false){
                 Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
                 query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
+                //idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlang);
+                //idao.ReadDBData_Firebase(view);
                 //idbManager = new ReadDBProgress();
                 //idbManager.ReadDBData_Firebase(query,"",buttonManager,view,webView,hashMap,mlang);
                 ReadDBData_Firebase(query, "progress");
@@ -134,8 +140,10 @@ public class FirstFragment extends Fragment {
            else{
                 Log.w(LOG_TAG+":GetDataFirebase:true:", choice);
                 query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
-                idbManager = new ReadDBOne();
-                idbManager.ReadDBData_Firebase(query,"",null,view,webView,hashMap,mlang);
+                idao = new aDAOImplOne(query,"",null,hashMap,mlang);
+                idao.ReadDBData_Firebase(view);
+                //idbManager = new ReadDBOne();
+                //idbManager.ReadDBData_Firebase(query,"",null,view,webView,hashMap,mlang);
                 //ReadDBData_FirebaseOneItem(query);
             }
         }
