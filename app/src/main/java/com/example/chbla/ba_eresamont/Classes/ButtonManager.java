@@ -71,26 +71,28 @@ public class ButtonManager {
     //check if value exist if not work with mlang = 3
     public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap, String lang) {
        this.mlang=lang;
-        Button button = this.ConfigButton(pages.getPages_lang().
-                get(Integer.parseInt(mlang)).getTitle(), ((int) pages.getPages_lang().get(Integer.parseInt(mlang)).getId()));
-        this.pages=pages;
-        this.hashMap=hashMap;
-        Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
-        hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle());
-        pagesArrayList.add(pages);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if (pages2==null){
-                    ButtonShowContent(pages);
+       Log.d(LOG_TAG, "ButtonCreator"+pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle());
+       if (!pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle().equals("")){
+            Button button = this.ConfigButton(pages.getPages_lang().
+                    get(Integer.parseInt(mlang)).getTitle(), ((int) pages.getPages_lang().get(Integer.parseInt(mlang)).getId()));
+            this.pages=pages;
+            this.hashMap=hashMap;
+            Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
+            hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle());
+            pagesArrayList.add(pages);
+            button.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    if (pages2==null){
+                        ButtonShowContent(pages);
+                    }
+                    else{//create button in button
+                        SubButton(pages, hashMap);
+                    }
                 }
-                else{//create button in button
-                    SubButton(pages, hashMap);
-                }
-            }
-        });
-        linearLayout.addView(button);
+            });
+            linearLayout.addView(button);
+        }
     }
-
     private void SubButton(final Pages pages, final TreeMap hashMap) {
         for(int i=0;i<linearLayout.getChildCount();i++)
             linearLayout.removeViewAt(i);
@@ -133,7 +135,7 @@ public class ButtonManager {
         }
         else{
             String temp=pages.getPages_lang().get(Integer.parseInt(mlang)).
-                    getTranslate().toString();
+                    getTranslate();
             String neu=temp.replaceAll("(\r\n|\n)", "<br />");
             webView.loadData(neu, "text/html", "UTF-8");
         }

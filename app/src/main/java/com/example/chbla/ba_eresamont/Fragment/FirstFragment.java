@@ -106,7 +106,7 @@ public class FirstFragment extends Fragment {
     }
     private void GetDataFirebase(String choice, String lang, int MenuId) {
         final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
-        Query query;
+        Query query=null;
         mlanguage=lang;
         mMenuId=MenuId;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice+"mID:"+mMenuId);
@@ -116,7 +116,7 @@ public class FirstFragment extends Fragment {
         IDBManager idbManager=null;
         IDAO idao;
 
-        if (choice =="home"){
+        if (choice =="home"){ //Startbildaufruf//Initialsierung
             mMainDetail=false;
             Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
             query=myRef.orderByChild("pages_lang/0/title");
@@ -137,7 +137,7 @@ public class FirstFragment extends Fragment {
                 ReadDBData_Firebase(query, "progress");
                 mMainDetail=true;
             }
-           else{
+           else{//Aufruf von linkem Menü
                 Log.w(LOG_TAG+":GetDataFirebase:true:", choice);
                 query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplOne(query,"",null,hashMap,mlang);

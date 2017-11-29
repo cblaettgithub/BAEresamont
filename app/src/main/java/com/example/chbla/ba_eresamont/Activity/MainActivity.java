@@ -98,9 +98,9 @@ public class MainActivity extends AppCompatActivity
                  Iterator iterator=hashMap.entrySet().iterator();
                      while(iterator.hasNext()){//neu
                          Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
-                         //Log.w(LOG_TAG+":MenuChange:", entry.getValue()+" :key "+entry.getKey());
+                         if (!entry.getValue().equals("")){
                          menushow.add(0, Integer.parseInt(entry.getKey()) , 1,
-                                 entry.getValue()).setIcon(R.drawable.ic_menu_gallery);
+                                 entry.getValue()).setIcon(R.drawable.ic_menu_gallery);}
                  }
                  break;
             default:
@@ -173,16 +173,21 @@ public class MainActivity extends AppCompatActivity
         switch(id){
             case R.id.French_settings:
                 mlanguage="1";
+                setHomeAtfirst();;
                 break;
             case R.id.English_settings:
                 mlanguage="3";
+                setHomeAtfirst();;
                 break;
             case R.id.Italy_settings:
                 mlanguage="2";
+                setHomeAtfirst();;
                 break;
                 default:
                 mlanguage="1";
+                    setHomeAtfirst();;
             break;
+
         }
         Log.w(LOG_TAG+":onOptionsItemSed",mlanguage);
         return true;
