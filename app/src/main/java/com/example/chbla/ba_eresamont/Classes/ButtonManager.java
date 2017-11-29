@@ -97,7 +97,8 @@ public class ButtonManager {
         for(int i=0;i<linearLayout.getChildCount();i++)
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
-        linearLayout.removeViewAt(1);
+        if(linearLayout.getChildCount()>1)
+            linearLayout.removeViewAt(1);
 
         query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(pages.getId().toString()));
         query.addChildEventListener(new ChildEventListener() {
