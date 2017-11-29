@@ -4,10 +4,8 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.ListView;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
-import com.example.chbla.ba_eresamont.Classes.ReadDBProgress;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
@@ -25,14 +23,8 @@ public class aDAOImplProgress extends aDAO {
     public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, String mlanguage) {
         super(query, choice, buttonManager, hashMap, mlanguage);
     }
-    ReadDBProgress.OnHeadlineSelectedListener mCallback;
-    public interface OnHeadlineSelectedListener {
-        void onArticleSelected(TreeMap hashMap);
-    }
-    public void onListItemClick(ListView l, View v, TreeMap hashMap) {
-        mCallback.onArticleSelected(hashMap);
-    }
 
+    public  static final String LANGUAGE="1";
     @Override
     public void ReadDBData_Firebase(View view) {
        final WebView webView = view.findViewById(R.id.webView);
@@ -43,7 +35,7 @@ public class aDAOImplProgress extends aDAO {
             String temp;
             Pages pages;
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 if (dataSnapshot.child("pages_lang").child(LANGUAGE).
                         child("translate").toString()!=""){
                     temp = (String) dataSnapshot.child("pages_lang").

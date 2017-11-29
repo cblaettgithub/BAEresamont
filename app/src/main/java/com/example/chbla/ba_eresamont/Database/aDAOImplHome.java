@@ -24,6 +24,7 @@ public class aDAOImplHome extends aDAO {
         super(query, choice, buttonManager, hashMap, mlanguage);
     }
 
+    public  static final String LANGUAGE="1";
     @Override
     public void ReadDBData_Firebase(View view) {
         final WebView webView = view.findViewById(R.id.webView);
@@ -35,14 +36,14 @@ public class aDAOImplHome extends aDAO {
             Pages pages;
 
             @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 if (dataSnapshot.child("parent_id").exists() == false) {
-                    if (dataSnapshot.child("pages_lang").child(mlanguage).child("title").
+                    if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
                             getValue() != null) {
                         pages = dataSnapshot.getValue(Pages.class);
                         Log.w(LOG_TAG + ":ReadDBData Home", "out");
                         buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.GetLanguageID(pages,mlanguage ));
-                        //mCallback.onArticleSelected(buttonManager.getHashMap());
+                        mCallback.onArticleSelected(buttonManager.getHashMap());
                     }
                 }
             }

@@ -101,16 +101,23 @@ public class ButtonManager {
             linearLayout.removeViewAt(1);
 
         query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(pages.getId().toString()));
+        //DatabaseReference ref=query.getRef();
+        //query=ref;
+        //ref.getParent();
+        //query = ref;
         query.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-               ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap, mlang);
-               /*pagesArrayList.add(pages);
-                Collections.sort(pagesArrayList, new Comparator<Pages>(){
+                //for (DataSnapshot data :dataSnapshot.getChildren()) {
+                    ButtonCreator(dataSnapshot.getValue(Pages.class),  null,hashMap, mlang);
+                    //pagesArrayList.add(data.getValue(pages.getClass()));
+                //}
+                /*Collections.sort(pagesArrayList, new Comparator<Pages>(){
                     public int compare(Pages o1, Pages o2){
                         return (int) (o1.getId() - o2.getId());
                     }
                 });*/
+
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

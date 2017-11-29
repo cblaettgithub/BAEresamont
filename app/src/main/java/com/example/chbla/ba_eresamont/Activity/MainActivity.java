@@ -17,10 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.chbla.ba_eresamont.Classes.ReadDBHome;
-import com.example.chbla.ba_eresamont.Classes.ReadDBProgress;
-import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
+import com.example.chbla.ba_eresamont.Database.aDAO;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
 import java.util.ArrayList;
@@ -31,8 +29,7 @@ import java.util.TreeMap;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         FirstFragment.OnHeadlineSelectedListener,
-        ReadDBProgress.OnHeadlineSelectedListener,
-        ReadDBHome.OnHeadlineSelectedListener
+        aDAO.OnHeadlineSelectedListener
         {
 
     private DrawerLayout drawerLayout;
@@ -94,7 +91,6 @@ public class MainActivity extends AppCompatActivity
                  menushow.clear();
                  menushow.add(0, R.id.fragment_zero , 1,
                          "Home").setIcon(R.drawable.ic_menu_gallery);
-                 //hashMap.descendingKeySet();
                  Iterator iterator=hashMap.entrySet().iterator();
                      while(iterator.hasNext()){//neu
                          Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
