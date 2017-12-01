@@ -1,5 +1,6 @@
 package com.example.chbla.ba_eresamont.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -16,28 +17,33 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
-import com.example.chbla.ba_eresamont.Database.aDAO;
+
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        FirstFragment.OnHeadlineSelectedListener,
-        aDAO.OnHeadlineSelectedListener
+        FirstFragment.OnHeadlineSelectedListener
         {
-
     private DrawerLayout drawerLayout;
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
     private String mlanguage="1";//1 French //default
     private Integer mMenuID;
     private ArrayList<Pages> pagesArrayList;
+    private int mlevel;
+    public int getMlevel() {return mlevel;}
+    public void setMlevel(int mlevel) { this.mlevel = mlevel;}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +121,6 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }*/
     }
-
     private void Fragment_Man(String value, String mlanguage, int menuID) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = null;
@@ -125,6 +130,7 @@ public class MainActivity extends AppCompatActivity
         args.putString(FirstFragment.FRAGMENTNAME, value);
         args.putString(FirstFragment.LANGUAGE, mlanguage);
         args.putInt(FirstFragment.MENUID, menuID);
+        args.putInt(FirstFragment.LEVEL, mlevel);
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
     }
@@ -173,7 +179,8 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.English_settings:
                 mlanguage="3";
-                setHomeAtfirst();;
+                List<Fragment> fragmentList =getSupportFragmentManager().getFragments();
+                ReplaceFragmentContent(fragmentList.get(0));
                 break;
             case R.id.Italy_settings:
                 mlanguage="2";
@@ -181,9 +188,8 @@ public class MainActivity extends AppCompatActivity
                 break;
                 default:
                 mlanguage="1";
-                    setHomeAtfirst();;
+                 setHomeAtfirst();;
             break;
-
         }
         Log.w(LOG_TAG+":onOptionsItemSed",mlanguage);
         return true;
@@ -198,8 +204,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onArticleSelected(TreeMap ohashMap) {
+    public void onArticleSelected(TreeMap ohashMap, int level) {
         hashMap=ohashMap;
+        mlevel=level;
+        creatingMenus("MenuChange");
+    }
+    public void ReplaceFragmentContent(Fragment fragment)
+    {
+        View view =fragment.getView();
+        LinearLayout contentview = view.findViewById(R.id.outputlabel);
+        WebView webView =view.findViewById(R.id.webView);
+        webView.loadData("<p>Testdaten</p>", "text/html", "UTF-8");
+        hashMap.clear();
+        for(int i=0;i< contentview.getChildCount();i++)  {
+            Button button= (Button)contentview.getChildAt(i);
+            button.setText("test");
+            hashMap.put(String.valueOf(i),"test");
+        }
         creatingMenus("MenuChange");
     }
 }

@@ -14,13 +14,11 @@ public class CLanguageID {
     public CLanguageID(String mlang) {
         this.mlang = mlang;
     }
-
     public String GetLanguageID(Pages pages, String inputlang){
         for(int i=0;i<pages.getPages_lang().size();i++){
             if (( String.valueOf(pages.getPages_lang().get(i).getLanguage())).equals(inputlang))
                 mlang=Integer.toString(i);
         }
         return mlang;
-
     }
 }

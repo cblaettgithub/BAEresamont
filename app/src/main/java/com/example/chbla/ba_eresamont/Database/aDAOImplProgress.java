@@ -45,7 +45,7 @@ public class aDAOImplProgress extends aDAO {
                     //GetLanguageID(pages, mlanguage);
                     //buttonManager.ButtonCreator(pages, null, hashMap, mlang);
                     buttonManager.ButtonCreator(pages, pages, hashMap,
-                            cLanguageID.GetLanguageID(pages,mlanguage ));
+                            cLanguageID.GetLanguageID(pages,mlanguage ), null);
                     mCallback.onArticleSelected(buttonManager.getHashMap());
                 }
             }

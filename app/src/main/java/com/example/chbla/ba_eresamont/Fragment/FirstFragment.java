@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -35,10 +36,10 @@ import java.util.TreeMap;
 public class FirstFragment extends Fragment {
     OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
-        void onArticleSelected(TreeMap hashMap);
+        void onArticleSelected(TreeMap hashMap, int level);
     }
-    public void onListItemClick(ListView l, View v, TreeMap hashMap) {
-        mCallback.onArticleSelected(hashMap);
+    public void onListItemClick(ListView l, View v, TreeMap hashMap, int level) {
+        mCallback.onArticleSelected(hashMap, level);
     }
     private TreeMap hashMap;
     private ConnectFirebase connectFirebase;
@@ -59,6 +60,7 @@ public class FirstFragment extends Fragment {
     public static final String FRAGMENTNAME ="";     //language = 1 = french, 2 = italy, 3 = english
     public  static final String LANGUAGE="1";
     public  static final String MENUID="0";
+    public static final String LEVEL="0";
     private String LOG_TAG=FirstFragment.class.getSimpleName();
     private ButtonManager buttonManager;
     private LinearLayout linearLayout=null;
@@ -68,6 +70,7 @@ public class FirstFragment extends Fragment {
     private String mlang="3";//no value
     private Integer mMenuId;
     private static boolean mMainDetail;
+    private int level=0;
 
     @Override
     public void onAttach(Activity activity) {
@@ -87,14 +90,12 @@ public class FirstFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         setContext(container.getContext());
         Bundle bundle = getArguments();
-
         buttonManager= new ButtonManager(getContext(),
-                (LinearLayout)view.findViewById(R.id.outputlabel),(WebView) view.findViewById(R.id.webView));
+                (LinearLayout)view.findViewById(R.id.outputlabel),
+                (WebView) view.findViewById(R.id.webView), Integer.parseInt(bundle.get(LEVEL).toString()));
         connectFirebase= new ConnectFirebase();
         hashMap=new TreeMap();
-
-        Log.d(LOG_TAG+":onCreateView Fragment","" + bundle.getString(FRAGMENTNAME));
-        if (bundle != null){
+         if (bundle != null){
             GetDataFirebase( bundle.getString(FRAGMENTNAME),
                     bundle.getString(LANGUAGE), bundle.getInt(MENUID));
         }
@@ -121,7 +122,7 @@ public class FirstFragment extends Fragment {
             ReadDBData_Firebase(query, "home");
         }
         else{
-            if (mMainDetail==false){
+            if (mMainDetail==false){//wissen ob back button
                 Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
                 query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                 //idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlang);
@@ -138,12 +139,11 @@ public class FirstFragment extends Fragment {
             }
         }
         hashMap.clear();
-        mCallback.onArticleSelected(hashMap);
+        mCallback.onArticleSelected(hashMap, level);
         this.connectFirebase.close();
     }
 
     private void ReadDBData_Firebase(Query query, String choice) {
-
         final String select = choice;
         final WebView myWebView = view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
@@ -163,11 +163,11 @@ public class FirstFragment extends Fragment {
                                 pages = dataSnapshot.getValue(Pages.class);
                                 GetLanguageID(pages, mlanguage);
                                 Log.w(LOG_TAG + ":ReadDBData Home", "out");
-                                buttonManager.ButtonCreator(pages, pages, hashMap, mlang);
-                                mCallback.onArticleSelected(buttonManager.getHashMap());
+                                buttonManager.ButtonCreator(pages, pages, hashMap, mlang, mCallback);
+                                mCallback.onArticleSelected(buttonManager.getHashMap(), buttonManager.getMlevel());
                             }//evtl Aufruf in Klasse
                         }
-                        break;
+                         break;
                     case "progress":
                         if (dataSnapshot.child("pages_lang").child(LANGUAGE).
                                 child("translate").toString()!=""){
@@ -176,8 +176,8 @@ public class FirstFragment extends Fragment {
                             Log.w(LOG_TAG + ":ReadDBData Progres", temp);
                             Pages pages = dataSnapshot.getValue(Pages.class);
                             GetLanguageID(pages, mlanguage);
-                            buttonManager.ButtonCreator(pages, null, hashMap, mlang);
-                            mCallback.onArticleSelected(buttonManager.getHashMap());
+                            buttonManager.ButtonCreator(pages, null, hashMap, mlang, mCallback);
+                            mCallback.onArticleSelected(buttonManager.getHashMap(),buttonManager.getMlevel());
                         }
                         break;
                     default:
