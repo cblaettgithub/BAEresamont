@@ -36,10 +36,10 @@ import java.util.TreeMap;
 public class FirstFragment extends Fragment {
     OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
-        void onArticleSelected(TreeMap hashMap, int level);
+        void onArticleSelected(TreeMap hashMap);
     }
-    public void onListItemClick(ListView l, View v, TreeMap hashMap, int level) {
-        mCallback.onArticleSelected(hashMap, level);
+    public void onListItemClick(ListView l, View v, TreeMap hashMap) {
+        mCallback.onArticleSelected(hashMap);
     }
     private TreeMap hashMap;
     private ConnectFirebase connectFirebase;
@@ -92,7 +92,7 @@ public class FirstFragment extends Fragment {
         Bundle bundle = getArguments();
         buttonManager= new ButtonManager(getContext(),
                 (LinearLayout)view.findViewById(R.id.outputlabel),
-                (WebView) view.findViewById(R.id.webView), Integer.parseInt(bundle.get(LEVEL).toString()));
+                (WebView) view.findViewById(R.id.webView));
         connectFirebase= new ConnectFirebase();
         hashMap=new TreeMap();
          if (bundle != null){
@@ -139,7 +139,7 @@ public class FirstFragment extends Fragment {
             }
         }
         hashMap.clear();
-        mCallback.onArticleSelected(hashMap, level);
+        mCallback.onArticleSelected(hashMap);
         this.connectFirebase.close();
     }
 
@@ -164,7 +164,7 @@ public class FirstFragment extends Fragment {
                                 GetLanguageID(pages, mlanguage);
                                 Log.w(LOG_TAG + ":ReadDBData Home", "out");
                                 buttonManager.ButtonCreator(pages, pages, hashMap, mlang, mCallback);
-                                mCallback.onArticleSelected(buttonManager.getHashMap(), buttonManager.getMlevel());
+                                mCallback.onArticleSelected(buttonManager.getHashMap());
                             }//evtl Aufruf in Klasse
                         }
                          break;
@@ -177,7 +177,7 @@ public class FirstFragment extends Fragment {
                             Pages pages = dataSnapshot.getValue(Pages.class);
                             GetLanguageID(pages, mlanguage);
                             buttonManager.ButtonCreator(pages, null, hashMap, mlang, mCallback);
-                            mCallback.onArticleSelected(buttonManager.getHashMap(),buttonManager.getMlevel());
+                            mCallback.onArticleSelected(buttonManager.getHashMap());
                         }
                         break;
                     default:

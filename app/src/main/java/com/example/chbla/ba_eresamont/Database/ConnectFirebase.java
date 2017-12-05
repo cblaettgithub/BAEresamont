@@ -30,7 +30,7 @@ public class ConnectFirebase {
     public static final String LANGUAGE="1"; //0 French, 1 English, 2 Italy
     private FirebaseDatabase database=null;
     private static boolean isPersistenceEnabled = false;
-    private final String PAGEROOT="/Ba_2020/pages/";
+    private final String PAGEROOT="/Ba_2021/pages/";
     private DatabaseReference myRef;
     private String LOG_TAG=ConnectFirebase.class.getSimpleName();
     private TreeMap hashMap;
@@ -54,11 +54,6 @@ public class ConnectFirebase {
     }
     public DatabaseReference getDatabaseReference() {
         this.myRef = database.getReference(PAGEROOT);
-        myRef.keepSynced(true);
-        return myRef;
-    }
-    public DatabaseReference getDatabaseReference2() {
-        this.myRef = database.getReference("/Ba_2020/");
         myRef.keepSynced(true);
         return myRef;
     }

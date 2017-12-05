@@ -24,7 +24,7 @@ public abstract class aDAO   implements IDAO {
     static final String LANGUAGE="1";
 
     //members
-    Query query;
+    public Query query;
     String choice;
     ButtonManager buttonManager;
     TreeMap hashMap;

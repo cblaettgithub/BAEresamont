@@ -1,7 +1,7 @@
 package com.example.chbla.ba_eresamont.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -21,11 +21,21 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.chbla.ba_eresamont.Classes.CLanguageID;
+import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +54,9 @@ public class MainActivity extends AppCompatActivity
     private int mlevel;
     public int getMlevel() {return mlevel;}
     public void setMlevel(int mlevel) { this.mlevel = mlevel;}
+    private ConnectFirebase connectFirebase;
+    private int parent_id=0;
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +110,9 @@ public class MainActivity extends AppCompatActivity
                  menushow.clear();
                  menushow.add(0, R.id.fragment_zero , 1,
                          "Home").setIcon(R.drawable.ic_menu_gallery);
-                 Iterator iterator=hashMap.entrySet().iterator();
+                 Map sortedMap = new TreeMap(new ValueComparator(hashMap));
+                 sortedMap.putAll(hashMap);
+                 Iterator iterator=sortedMap.entrySet().iterator();
                      while(iterator.hasNext()){//neu
                          Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
                          if (!entry.getValue().equals("")){
@@ -172,23 +187,22 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Log.w(LOG_TAG+":onOptionsItemSed",Integer.toString(id));
+        List<Fragment> fragmentList;
         switch(id){
             case R.id.French_settings:
                 mlanguage="1";
-                setHomeAtfirst();;
+                fragmentGetter();
                 break;
             case R.id.English_settings:
                 mlanguage="3";
-                List<Fragment> fragmentList =getSupportFragmentManager().getFragments();
-                ReplaceFragmentContent(fragmentList.get(0));
+                fragmentGetter();
                 break;
             case R.id.Italy_settings:
                 mlanguage="2";
-                setHomeAtfirst();;
+                fragmentGetter();
                 break;
                 default:
                 mlanguage="1";
-                 setHomeAtfirst();;
             break;
         }
         Log.w(LOG_TAG+":onOptionsItemSed",mlanguage);
@@ -196,7 +210,14 @@ public class MainActivity extends AppCompatActivity
         //noinspection SimplifiableIfStatement
     }
 
-    @Override
+    private void fragmentGetter() {
+        List<Fragment> fragmentList;
+        fragmentList=getSupportFragmentManager().getFragments();
+        if (fragmentList.get(0)!=null)
+            ReplaceFragmentContent(fragmentList.get(0));
+    }
+
+            @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -204,23 +225,173 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onArticleSelected(TreeMap ohashMap, int level) {
+    public void onArticleSelected(TreeMap ohashMap) {
         hashMap=ohashMap;
-        mlevel=level;
         creatingMenus("MenuChange");
     }
     public void ReplaceFragmentContent(Fragment fragment)
     {
-        View view =fragment.getView();
-        LinearLayout contentview = view.findViewById(R.id.outputlabel);
-        WebView webView =view.findViewById(R.id.webView);
-        webView.loadData("<p>Testdaten</p>", "text/html", "UTF-8");
-        hashMap.clear();
-        for(int i=0;i< contentview.getChildCount();i++)  {
-            Button button= (Button)contentview.getChildAt(i);
-            button.setText("test");
-            hashMap.put(String.valueOf(i),"test");
+
+        final View view =fragment.getView();
+        LinearLayout buttons = view.findViewById(R.id.outputlabel);
+        LinearLayout line1 = view.findViewById(R.id.line1);
+        WebView contentView = (WebView)line1.getChildAt(0);
+
+        if (buttons.getChildCount()==0) { //  if (contentview.getChildCount()==0){
+            connectFirebase= new ConnectFirebase();
+            final DatabaseReference myRef = connectFirebase.getDatabaseReference();
+            Query query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(contentView.getTag().toString()));
+
+            query.addChildEventListener(new ChildEventListener() {
+                LinearLayout line1 = view.findViewById(R.id.line1);
+                WebView contentView = (WebView)line1.getChildAt(0);
+                CLanguageID cLanguageID= new CLanguageID(mlanguage);
+
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                    Pages pages = dataSnapshot.getValue(Pages.class);
+                    contentView.loadData(pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTranslate().toString(),"text/html", "UTF-8");
+                 }
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {                    }
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {                    }
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {                    }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {                    }
+            });
+
+            //contentView.loadData("<p>Testdaten</p><br><br>" +
+             //       "<br><br><br><br><p>Testdaten</p>", "text/html", "UTF-8");
+          }
+        else{
+            changeLanguage(buttons);
         }
-        creatingMenus("MenuChange");
+    }
+    public void changeLanguage(LinearLayout linearLayout){
+        final CLanguageID cLanguageID = new CLanguageID("3");
+        connectFirebase= new ConnectFirebase();
+        final DatabaseReference myRef = connectFirebase.getDatabaseReference();
+        Query query=myRef.orderByChild("pages_lang/0/title");
+        String parent_id="0";
+        final LinearLayout contentview=linearLayout;
+        hashMap.clear();
+        Button button= (Button)contentview.getChildAt(2);
+        if (button.getTag().toString()!="0")//wenn parent_id = 0, dann ist parent_id = null-> oberste stfue
+            parent_id=button.getTag().toString();        //sonst button in button
+        final ArrayList<Button> buttonArrayList=new ArrayList<>();
+
+        switch (parent_id){
+            case "0":
+                query.addChildEventListener(new ChildEventListener() {
+                    Pages pages;
+                    int i=0;
+
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+
+                        if (dataSnapshot.child("parent_id").exists() == false) {
+                            if (dataSnapshot.child("pages_lang").child("0").child("title").
+                                    getValue() != null) {
+                                pages = dataSnapshot.getValue(Pages.class);
+                                Button button= (Button)contentview.getChildAt(i);//error null
+                                button.setText(pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTitle());
+                                hashMap.put(String.valueOf(i),button.getText());
+                                buttonArrayList.add(button);
+                                i++;
+                            }
+                        }
+                        SortButtons(buttonArrayList);
+                        creatingMenus("MenuChange");//Menü updaten
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                    }
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {                    }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {                    }
+                });
+
+                break;
+            default:
+                DatabaseReference ref=myRef.getParent();
+                query=ref.orderByChild("/pages/");
+                query.addChildEventListener(new ChildEventListener() {
+                    int i=0;
+                    ArrayList<Button> buttonArrayList;
+
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                        Button button2= (Button)contentview.getChildAt(2);
+                        long parent_id;
+                        parent_id=Long.valueOf(button2.getTag().toString());
+                        buttonArrayList=new ArrayList<>();
+                        for (DataSnapshot data :dataSnapshot.getChildren()) {
+                            Pages pages1=data.getValue(Pages.class);
+                            if (pages1.getParent_id()!=null ) {
+                                if (pages1.getParent_id()== parent_id){
+                                   Button button= (Button)contentview.getChildAt(i);
+                                   if (pages1.getPages_lang()!=null)
+                                        button.setText(pages1.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages1,mlanguage))).getTitle());
+                                    hashMap.put(String.valueOf(i),button.getText());
+                                    i++;
+                                   buttonArrayList.add(button);
+                                }
+                            }
+                        }
+                        SortButtons(buttonArrayList);
+                        creatingMenus("MenuChange");
+                    }
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {                    }
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {                    }
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {                    }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {                    }
+                });
+                break;
+        }
+    }
+        private void SortButtons(ArrayList<Button> buttonArrayList) {
+            Map sortedMap = new TreeMap(new ValueComparator(hashMap));
+            sortedMap.putAll(hashMap);
+            int i=0;
+            Iterator iterator=sortedMap.entrySet().iterator();
+            while(iterator.hasNext()){//ne
+                Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
+                buttonArrayList.get(i).setText(entry.getValue());
+                i++;
+            }
+        }
+}
+class ValueComparator implements Comparator<String> {
+    Map map;
+    public ValueComparator(Map map) {
+        this.map = map;
+    }
+    public int compare(String keyA, String keyB) {
+        int result;
+        Comparable valueA = (Comparable) map.get(keyA);
+        Comparable valueB = (Comparable) map.get(keyB);
+        if (map.get(keyA).toString().contains(".")&&
+                map.get(keyB).toString().contains(".")){
+            int indexA =  map.get(keyA).toString().indexOf('.');
+            int indexB =  map.get(keyB).toString().indexOf('.');
+            int a=Integer.parseInt(map.get(keyA).toString().substring(0, indexA));
+            int b=Integer.parseInt(map.get(keyB).toString().substring(0, indexB));
+            result =a-b;
+        }
+        else{
+            result =valueA.compareTo(valueB);
+        }
+        return result;
     }
 }
