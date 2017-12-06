@@ -163,18 +163,23 @@ public class ButtonManager  {
         webView.setTag(pages.getId());
         String converted;
         String content="";
+        String neu;
         if (mlang.equals("3")){
             webView.loadData("<p> there is no content available", "text/html", "UTF-8");
         }
         else{
              //converted=contentTranslateProcessing(pages);
             // content=converted;
-            if (pages.getPages_lang().get(Integer.parseInt(mlang)).
-                    getPlaintext().equals(""))
+            /*if (pages.getPages_lang().get(Integer.parseInt(mlang)).
+                    getPlaintext().equals(""))*/
                 content=pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate();
-            else
-                content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext();
-            String neu=content.replaceAll(":", "&#8220;");
+           // else
+          //      content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext();*/
+
+            neu=content.replaceAll("style=", "style=\"");
+            neu=neu.replaceAll(";>", ";\">");
+            neu=neu.replaceAll("src=", "src=\"");
+            neu=neu.replaceAll("alt", "\" alt");
             webView.loadData( neu, "text/html", "UTF-8");
         }
     }
