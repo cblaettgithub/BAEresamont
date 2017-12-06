@@ -140,7 +140,7 @@ public class FirstFragment extends Fragment {
         }
         hashMap.clear();
         mCallback.onArticleSelected(hashMap);
-        this.connectFirebase.close();
+        //this.connectFirebase.close();
     }
 
     private void ReadDBData_Firebase(Query query, String choice) {

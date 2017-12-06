@@ -27,6 +27,7 @@ import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
+import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 /**
@@ -160,19 +161,21 @@ public class ButtonManager  {
         Log.w(LOG_TAG+":ButtShowContent:mlang:", mlang);
         mCallback.onArticleSelected(hashMap);//Menüs aktualisieren
         webView.setTag(pages.getId());
+        String converted;
+        String content="";
         if (mlang.equals("3")){
             webView.loadData("<p> there is no content available", "text/html", "UTF-8");
         }
         else{
-            //String converted=contentTranslateProcessing(pages);
-            String content;
+             //converted=contentTranslateProcessing(pages);
+            // content=converted;
             if (pages.getPages_lang().get(Integer.parseInt(mlang)).
                     getPlaintext().equals(""))
                 content=pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate();
             else
                 content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext();
-            //String neu=content.replaceAll("\n", URLEncoder.encode("\n"));
-            webView.loadData( content, "text/html", "UTF-8");
+            String neu=content.replaceAll(":", "&#8220;");
+            webView.loadData( neu, "text/html", "UTF-8");
         }
     }
      private String contentTranslateProcessing(Pages pages){
@@ -181,23 +184,20 @@ public class ButtonManager  {
 
         Document doc = Jsoup.parse(content);
         Elements all=doc.getAllElements();
-        Elements brs = doc.select("br");
-        Elements n2 = doc.select("'\n'");
-        String work;
+        String document=doc.text().replaceAll("\n" ,"");
+        String html;
 
         for(int i=0;i<all.size();i++){
+            //all.get(i).childNode(0).outerHtml().replaceAll("\n", "");
+            //TextNode textNode= (TextNode) all.get(i).childNode(0);
+            //textNode.text().replaceAll("\n", "");
             Element e = all.get(i);
-            work=e.outerHtml();
-            work.replaceAll("\n", "<br>");
-             Elements n=e.getElementsByAttributeValueMatching("","\n");
-        }
+            String work=e.text();
+            e.text(work.replaceAll("&#92;n", ""));
 
-        for (Element br:brs) {
-            Log.d(LOG_TAG, "ContentTrans:"+"br");
-            if (br.tagName().equals("br"))
-                Log.d(LOG_TAG, br.tagName()+""+ br.attr("abs:b"));
         }
-        return content;
+        html=doc.toString();
+         return html;
     }
     private static void print(String msg, Object... args) {
         System.out.println(String.format(msg, args));

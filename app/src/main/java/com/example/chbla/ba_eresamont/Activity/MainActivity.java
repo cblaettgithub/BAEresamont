@@ -359,18 +359,19 @@ public class MainActivity extends AppCompatActivity
                 });
                 break;
         }
+        //connectFirebase.close();
     }
-        private void SortButtons(ArrayList<Button> buttonArrayList) {
-            Map sortedMap = new TreeMap(new ValueComparator(hashMap));
-            sortedMap.putAll(hashMap);
-            int i=0;
-            Iterator iterator=sortedMap.entrySet().iterator();
-            while(iterator.hasNext()){//ne
-                Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
-                buttonArrayList.get(i).setText(entry.getValue());
-                i++;
-            }
+    private void SortButtons(ArrayList<Button> buttonArrayList) {
+        Map sortedMap = new TreeMap(new ValueComparator(hashMap));
+        sortedMap.putAll(hashMap);
+        int i=0;
+        Iterator iterator=sortedMap.entrySet().iterator();
+        while(iterator.hasNext()){//ne
+            Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
+            buttonArrayList.get(i).setText(entry.getValue());
+            i++;
         }
+    }
 }
 class ValueComparator implements Comparator<String> {
     Map map;

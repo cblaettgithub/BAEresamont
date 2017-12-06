@@ -30,7 +30,8 @@ public class ConnectFirebase {
     public static final String LANGUAGE="1"; //0 French, 1 English, 2 Italy
     private FirebaseDatabase database=null;
     private static boolean isPersistenceEnabled = false;
-    private final String PAGEROOT="/Ba_2021/pages/";
+
+    private final String PAGEROOT="/Ba_2020/pages/";//2020 neu
     private DatabaseReference myRef;
     private String LOG_TAG=ConnectFirebase.class.getSimpleName();
     private TreeMap hashMap;
