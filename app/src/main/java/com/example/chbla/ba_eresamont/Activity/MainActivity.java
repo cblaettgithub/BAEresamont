@@ -193,12 +193,12 @@ public class MainActivity extends AppCompatActivity
                 mlanguage="1";
                 fragmentGetter();
                 break;
-            case R.id.English_settings:
-                mlanguage="3";
-                fragmentGetter();
-                break;
             case R.id.Italy_settings:
                 mlanguage="2";
+                fragmentGetter();
+                break;
+            case R.id.English_settings:
+                mlanguage="3";
                 fragmentGetter();
                 break;
                 default:
@@ -249,9 +249,14 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                    String content="";
+                    String neu;
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    contentView.loadData(pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTranslate().toString(),"text/html", "UTF-8");
+                    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTranslate().toString();
+                    neu = setCorrectContent(content);
+                    contentView.loadData(neu, "text/html", "UTF-8");
                  }
+
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {                    }
                 @Override
@@ -268,6 +273,15 @@ public class MainActivity extends AppCompatActivity
         else{
             changeLanguage(buttons);
         }
+    }
+    @NonNull
+    private String setCorrectContent( String content) {
+        String neu;
+        neu=content.replaceAll("style=", "style=\"").toString();
+        neu=neu.replaceAll(";>", ";\">").toString();
+        neu=neu.replaceAll("src=", "src=\"").toString();
+        neu=neu.replaceAll("alt", "\" alt").toString();
+        return neu;
     }
     public void changeLanguage(LinearLayout linearLayout){
         final CLanguageID cLanguageID = new CLanguageID("3");

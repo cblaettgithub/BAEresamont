@@ -1,5 +1,6 @@
 package com.example.chbla.ba_eresamont.Classes;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -46,7 +47,7 @@ public class ButtonManager  {
     private ArrayList<Pages> pagesArrayList;
     ConnectFirebase connectFirebase=new ConnectFirebase();
     Query query=null;
-    private String mlang="3";//no value
+    private String mlang="1";//no value
     int i=1;
 
     public FirstFragment.OnHeadlineSelectedListener mCallback;
@@ -168,22 +169,24 @@ public class ButtonManager  {
             webView.loadData("<p> there is no content available", "text/html", "UTF-8");
         }
         else{
-             //converted=contentTranslateProcessing(pages);
-            // content=converted;
-            /*if (pages.getPages_lang().get(Integer.parseInt(mlang)).
-                    getPlaintext().equals(""))*/
-                content=pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate();
-           // else
-          //      content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext();*/
-
-            neu=content.replaceAll("style=", "style=\"");
-            neu=neu.replaceAll(";>", ";\">");
-            neu=neu.replaceAll("src=", "src=\"");
-            neu=neu.replaceAll("alt", "\" alt");
-            webView.loadData( neu, "text/html", "UTF-8");
+            content=pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString();
+      //      content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext();*/
+            neu = setCorrectContent(content);
+        webView.loadData( neu, "text/html", "UTF-8");
         }
     }
-     private String contentTranslateProcessing(Pages pages){
+
+    @NonNull
+    private String setCorrectContent(String content) {
+        String neu;
+        neu=content.replaceAll("style=", "style=\"").toString();
+        neu=neu.replaceAll(";>", ";\">").toString();
+        neu=neu.replaceAll("src=", "src=\"").toString();
+        neu=neu.replaceAll("alt", "\" alt").toString();
+        return neu;
+    }
+
+    private String contentTranslateProcessing(Pages pages){
         String content=pages.getPages_lang().get(Integer.parseInt(mlang)).
                 getTranslate();
 
