@@ -253,6 +253,8 @@ public class MainActivity extends AppCompatActivity
                     String neu;
                     Pages pages = dataSnapshot.getValue(Pages.class);
                     content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTranslate().toString();
+                    if (content=="")
+                        content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getPlaintext().toString();
                     neu = setCorrectContent(content);
                     contentView.loadData(neu, "text/html", "UTF-8");
                  }

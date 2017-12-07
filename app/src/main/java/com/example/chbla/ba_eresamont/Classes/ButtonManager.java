@@ -170,7 +170,8 @@ public class ButtonManager  {
         }
         else{
             content=pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString();
-      //      content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext();*/
+            if (content=="")
+                content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext().toString();
             neu = setCorrectContent(content);
         webView.loadData( neu, "text/html", "UTF-8");
         }
