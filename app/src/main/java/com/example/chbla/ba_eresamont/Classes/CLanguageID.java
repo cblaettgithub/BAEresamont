@@ -9,15 +9,13 @@ import com.example.chbla.ba_eresamont.Models.Pages;
  */
 
 public class CLanguageID {
-    private String mlang;
-
-    public CLanguageID(String mlang) {
-        this.mlang = mlang;
-    }
-    public String GetLanguageID(Pages pages, String inputlang){
+    private int mlang;//setted language 1 French, 2 Italian 3 Englisch
+    public CLanguageID(){};
+ //check the array of pages-lang which item of array has the number
+    public int GetLanguageID(Pages pages, int inputlang){
         for(int i=0;i<pages.getPages_lang().size();i++){
-            if (( String.valueOf(pages.getPages_lang().get(i).getLanguage())).equals(inputlang))
-                mlang=Integer.toString(i);
+            if (pages.getPages_lang().get(i).getLanguage()==inputlang)
+                mlang=i;
         }
         return mlang;
     }

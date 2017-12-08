@@ -17,18 +17,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.TreeMap;
 
 import org.jsoup.Jsoup;
-import org.jsoup.helper.Validate;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 /**
@@ -47,7 +43,7 @@ public class ButtonManager  {
     private ArrayList<Pages> pagesArrayList;
     ConnectFirebase connectFirebase=new ConnectFirebase();
     Query query=null;
-    private String mlang="1";//no value
+    private int arrayindex;//no value
     int i=1;
 
     public FirstFragment.OnHeadlineSelectedListener mCallback;
@@ -73,26 +69,26 @@ public class ButtonManager  {
     public Button ConfigButton(Pages pages) {
         String parent_id="0";
         Button button = new Button(this.getContex());
-        button.setText(pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle());//pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle()
+        button.setText(pages.getPages_lang().get(arrayindex).getTitle());//pages.getPages_lang().get(Integer.parseInt(arrayindex)).getTitle()
         button.setHeight(40);
-        button.setId((int) pages.getPages_lang().get(Integer.parseInt(mlang)).getId());// ((int) pages.getPages_lang().get(Integer.parseInt(mlang)).getId())
+        button.setId((int) pages.getPages_lang().get(arrayindex).getId());// ((int) pages.getPages_lang().get(Integer.parseInt(arrayindex)).getId())
         if (pages.getParent_id()!=null)
             parent_id=pages.getParent_id().toString();
         button.setTag(parent_id);//(Integer.parseInt(pages.getParent_id().toString()))
         return button;
     }
-    //check if value exist if not work with mlang = 3
-    public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap,
-                              String lang, FirstFragment.OnHeadlineSelectedListener mCallback) {
-       this.mlang=lang;
+    //check if value exist if not work with arrayindex = 3
+    public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap,//language will we give
+                              long lang, FirstFragment.OnHeadlineSelectedListener mCallback) {
+       this.arrayindex =(int)lang;//Sprache wird mitgegeben respr korrekter arrayindex
        this.mCallback=mCallback;
-       Log.d(LOG_TAG, "ButtonCreator"+pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle());
-       if (!pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle().equals("")){
+       Log.d(LOG_TAG, "ButtonCreator"+pages.getPages_lang().get(arrayindex).getTitle());
+       if (!pages.getPages_lang().get(arrayindex).getTitle().equals("")){
             Button button = this.ConfigButton(pages);
             this.pages=pages;
             this.hashMap=hashMap;
             Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
-            hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle());
+            hashMap.put(pages.getId().toString(), pages.getPages_lang().get(arrayindex).getTitle());
 
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -140,8 +136,8 @@ public class ButtonManager  {
                 Collections.sort(pagesArrayList, new Sortbyroll());
                 hashMap.clear();
                 for(int i=0;i<pagesArrayList.size();i++){
-                    ButtonCreator(pagesArrayList.get(i),  null,hashMap, mlang, mCallback);
-                    hashMap.put(pages.getId().toString(), pages.getPages_lang().get(Integer.parseInt(mlang)).getTitle());
+                    ButtonCreator(pagesArrayList.get(i),  null,hashMap, arrayindex, mCallback);
+                    hashMap.put(pages.getId().toString(), pages.getPages_lang().get(arrayindex).getTitle());
                 }
             }
             @Override
@@ -161,15 +157,14 @@ public class ButtonManager  {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-        Log.w(LOG_TAG+":ButtShowContent:mlang:", mlang);
         mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
         webView.setTag(pages.getId());
         String converted;
         String content="";
         String neu;
-        content=pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString();
+        content=pages.getPages_lang().get(arrayindex).getTranslate().toString();
         //if (content=="")
-         //   content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext().toString();
+         //   content=pages.getPages_lang().get(Integer.parseInt(arrayindex)).getPlaintext().toString();
         neu = setCorrectContent(content);
         webView.loadData( neu, "text/html", "UTF-8");
     }
@@ -185,7 +180,7 @@ public class ButtonManager  {
     }
 
     private String contentTranslateProcessing(Pages pages){
-        String content=pages.getPages_lang().get(Integer.parseInt(mlang)).
+        String content=pages.getPages_lang().get(arrayindex).
                 getTranslate();
 
         Document doc = Jsoup.parse(content);

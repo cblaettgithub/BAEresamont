@@ -20,7 +20,7 @@ import java.util.TreeMap;
  */
 
 public class aDAOImplHome extends aDAO {
-    public aDAOImplHome(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, String mlanguage) {
+    public aDAOImplHome(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, int mlanguage) {
         super(query, choice, buttonManager, hashMap, mlanguage);
     }
 

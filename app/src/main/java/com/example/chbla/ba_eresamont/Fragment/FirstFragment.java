@@ -50,17 +50,13 @@ public class FirstFragment extends Fragment {
     public void setView(View view) {
         this.view = view;
     }
-    public static final String FRAGMENTNAME ="";     //language = 1 = french, 2 = italy, 3 = english
-    public  static final String LANGUAGE="1";
-    public  static final String MENUID="0";
-    public static final String LEVEL="0";
     private String LOG_TAG=FirstFragment.class.getSimpleName();
     private ButtonManager buttonManager;
     private LinearLayout linearLayout=null;
     private WebView webView;
     private Pages pages;
-    private String mlanguage;
-    private String mlang="3";//no value
+    private int mlang;
+    private static String LANGUAGE="0";
     private Integer mMenuId;
     private static boolean mMainDetail;
     private int level=0;
@@ -97,16 +93,16 @@ public class FirstFragment extends Fragment {
         connectFirebase= new ConnectFirebase();
         hashMap=new TreeMap();
          if (bundle != null){
-            GetDataFirebase( bundle.getString(FRAGMENTNAME),
-                    bundle.getString(LANGUAGE), bundle.getInt(MENUID));
+            GetDataFirebase( bundle.getString("Fragmentname"),
+                    bundle.getLong("Language"), bundle.getInt("MenuID"));
         }
         return view;
         //return inflater.inflate(R.layout.fragment_first, container, false);
     }
-    private void GetDataFirebase(String choice, String lang, int MenuId) {
+    private void GetDataFirebase(String choice, long lang, int MenuId) {
         final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
         Query query=null;
-        mlanguage=lang;
+        mlang=(int)lang;
         mMenuId=MenuId;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice+"mID:"+mMenuId);
 
@@ -149,7 +145,7 @@ public class FirstFragment extends Fragment {
         final WebView myWebView = view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        CLanguageID cLanguageID = new CLanguageID("3");
+        final CLanguageID cLanguageID = new CLanguageID();
 
         query.addChildEventListener(new ChildEventListener() {
             String temp;
@@ -163,11 +159,10 @@ public class FirstFragment extends Fragment {
                                     getValue() != null) {
                                 pages = dataSnapshot.getValue(Pages.class);
                                 //test fr entfernen
-                                GetLanguageID(pages, mlanguage);
                                 if (pages.getId().toString().equals("89") ||pages.getId().toString().equals("129"))//89 reasomant, 129 news
-                                    buttonManager.ButtonCreator(pages, null, hashMap, mlang, mCallback);
+                                    buttonManager.ButtonCreator(pages, null, hashMap, (cLanguageID.GetLanguageID(pages,mlang)), mCallback);
                                 else
-                                    buttonManager.ButtonCreator(pages, pages, hashMap, mlang, mCallback);
+                                    buttonManager.ButtonCreator(pages, pages, hashMap, (cLanguageID.GetLanguageID(pages,mlang)), mCallback);
                                 mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
                                 }//evtl Aufruf in Klasse
                         }
@@ -178,8 +173,7 @@ public class FirstFragment extends Fragment {
                             temp = (String) dataSnapshot.child("pages_lang").
                                     child(LANGUAGE).child("title").getValue();
                             Pages pages = dataSnapshot.getValue(Pages.class);
-                            GetLanguageID(pages, mlanguage);
-                            buttonManager.ButtonCreator(pages, null, hashMap, mlang, mCallback);
+                            buttonManager.ButtonCreator(pages, null, hashMap, (cLanguageID.GetLanguageID(pages,mlang)), mCallback);
                             mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
                         }
                         break;
@@ -200,13 +194,5 @@ public class FirstFragment extends Fragment {
             }            ;
         });
     }
-    //mlang stands for the destination row
-    public void GetLanguageID(Pages pages, String inputlang){
-        Log.w(LOG_TAG+":GetLanguageID:Input", inputlang);
-        for(int i=0;i<pages.getPages_lang().size();i++){
-            if (( String.valueOf(pages.getPages_lang().get(i).getLanguage())).equals(inputlang))
-                mlang=Integer.toString(i);
-        }
-        Log.w(LOG_TAG+":GetLanguageID:", mlang);
-    }
+
 }

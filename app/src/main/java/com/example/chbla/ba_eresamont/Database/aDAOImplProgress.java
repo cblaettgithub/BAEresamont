@@ -20,7 +20,7 @@ import java.util.TreeMap;
  */
 
 public class aDAOImplProgress extends aDAO {
-    public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, String mlanguage) {
+    public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, int mlanguage) {
         super(query, choice, buttonManager, hashMap, mlanguage);
     }
 

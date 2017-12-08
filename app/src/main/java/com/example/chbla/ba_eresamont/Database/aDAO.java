@@ -17,15 +17,14 @@ import java.util.TreeMap;
 
 public abstract class aDAO   implements IDAO {
     String LOG_TAG=aDAO.class.getSimpleName();
-    CLanguageID cLanguageID = new CLanguageID("3");
-    static final String LANGUAGE="1";
+    CLanguageID cLanguageID = new CLanguageID();
 
     //members
     public Query query;
     String choice;
     ButtonManager buttonManager;
     TreeMap hashMap;
-    String mlang;
+    int mlang;
 
     public OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
@@ -47,7 +46,7 @@ public abstract class aDAO   implements IDAO {
         }
     }
 
-    public aDAO(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, String mlanguage) {
+    public aDAO(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, int mlanguage) {
         this.query = query;
         this.choice = choice;
         this.buttonManager = buttonManager;

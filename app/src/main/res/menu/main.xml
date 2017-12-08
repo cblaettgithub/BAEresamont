@@ -7,13 +7,13 @@
         android:title="French"
         app:showAsAction="never" />
     <item
-        android:id="@+id/English_settings"
-        android:orderInCategory="100"
-        android:title="English"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/Italy_settings"
         android:orderInCategory="100"
         android:title="Italian"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/English_settings"
+        android:orderInCategory="100"
+        android:title="English"
         app:showAsAction="never" />
 </menu>
