@@ -111,13 +111,15 @@ public class MainActivity extends AppCompatActivity
                  menushow.add(0, R.id.fragment_zero , 1,
                          "Home").setIcon(R.drawable.ic_menu_gallery);
                  Map sortedMap = new TreeMap(new ValueComparator(hashMap));
-                 sortedMap.putAll(hashMap);
-                 Iterator iterator=sortedMap.entrySet().iterator();
+                 if (sortedMap!=null){
+                     sortedMap.putAll(hashMap);
+                     Iterator iterator=sortedMap.entrySet().iterator();
                      while(iterator.hasNext()){//neu
                          Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
                          if (!entry.getValue().equals("")){
-                         menushow.add(0, Integer.parseInt(entry.getKey()) , 1,
-                                 entry.getValue()).setIcon(R.drawable.ic_menu_gallery);}
+                             menushow.add(0, Integer.parseInt(entry.getKey()) , 1,
+                                     entry.getValue()).setIcon(R.drawable.ic_menu_gallery);}
+                    }
                  }
                  break;
             default:
@@ -231,7 +233,6 @@ public class MainActivity extends AppCompatActivity
     }
     public void ReplaceFragmentContent(Fragment fragment)
     {
-
         final View view =fragment.getView();
         LinearLayout buttons = view.findViewById(R.id.outputlabel);
         LinearLayout line1 = view.findViewById(R.id.line1);
@@ -253,8 +254,8 @@ public class MainActivity extends AppCompatActivity
                     String neu;
                     Pages pages = dataSnapshot.getValue(Pages.class);
                     content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTranslate().toString();
-                    if (content=="")
-                        content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getPlaintext().toString();
+                    //if (content=="")
+                    //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getPlaintext().toString();
                     neu = setCorrectContent(content);
                     contentView.loadData(neu, "text/html", "UTF-8");
                  }
@@ -311,11 +312,13 @@ public class MainActivity extends AppCompatActivity
                             if (dataSnapshot.child("pages_lang").child("0").child("title").
                                     getValue() != null) {
                                 pages = dataSnapshot.getValue(Pages.class);
-                                Button button= (Button)contentview.getChildAt(i);//error null
-                                button.setText(pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTitle());
-                                hashMap.put(String.valueOf(i),button.getText());
-                                buttonArrayList.add(button);
-                                i++;
+                                if (pages!=null){
+                                    Button button= (Button)contentview.getChildAt(i);//error null
+                                    button.setText(pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTitle());
+                                    hashMap.put(String.valueOf(i),button.getText());
+                                    buttonArrayList.add(button);
+                                    i++;
+                                }
                             }
                         }
                         SortButtons(buttonArrayList);

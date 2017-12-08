@@ -114,8 +114,11 @@ public class ButtonManager  {
         for(int i=0;i<linearLayout.getChildCount();i++)
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
-        if(linearLayout.getChildCount()>1)
+        if(linearLayout.getChildCount()>1){
+            linearLayout.removeViewAt(2);
             linearLayout.removeViewAt(1);
+        }
+
         // 2 ok query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(pages.getId().toString()));
         DatabaseReference ref=myRef.getParent();
         query=ref.orderByChild("/pages/");
@@ -165,16 +168,11 @@ public class ButtonManager  {
         String converted;
         String content="";
         String neu;
-        if (mlang.equals("3")){
-            webView.loadData("<p> there is no content available", "text/html", "UTF-8");
-        }
-        else{
-            content=pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString();
-            if (content=="")
-                content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext().toString();
-            neu = setCorrectContent(content);
+        content=pages.getPages_lang().get(Integer.parseInt(mlang)).getTranslate().toString();
+        //if (content=="")
+         //   content=pages.getPages_lang().get(Integer.parseInt(mlang)).getPlaintext().toString();
+        neu = setCorrectContent(content);
         webView.loadData( neu, "text/html", "UTF-8");
-        }
     }
 
     @NonNull

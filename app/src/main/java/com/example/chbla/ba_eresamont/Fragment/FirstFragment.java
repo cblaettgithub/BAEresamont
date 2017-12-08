@@ -161,11 +161,14 @@ public class FirstFragment extends Fragment {
                             if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
                                     getValue() != null) {
                                 pages = dataSnapshot.getValue(Pages.class);
+                                //test fr entfernen
                                 GetLanguageID(pages, mlanguage);
-                                Log.w(LOG_TAG + ":ReadDBData Home", "out");
-                                buttonManager.ButtonCreator(pages, pages, hashMap, mlang, mCallback);
+                                if (pages.getId().toString().equals("89") ||pages.getId().toString().equals("129"))//89 reasomant, 129 news
+                                    buttonManager.ButtonCreator(pages, null, hashMap, mlang, mCallback);
+                                else
+                                    buttonManager.ButtonCreator(pages, pages, hashMap, mlang, mCallback);
                                 mCallback.onArticleSelected(buttonManager.getHashMap());
-                            }//evtl Aufruf in Klasse
+                                }//evtl Aufruf in Klasse
                         }
                          break;
                     case "progress":
@@ -173,7 +176,6 @@ public class FirstFragment extends Fragment {
                                 child("translate").toString()!=""){
                             temp = (String) dataSnapshot.child("pages_lang").
                                     child(LANGUAGE).child("title").getValue();
-                            Log.w(LOG_TAG + ":ReadDBData Progres", temp);
                             Pages pages = dataSnapshot.getValue(Pages.class);
                             GetLanguageID(pages, mlanguage);
                             buttonManager.ButtonCreator(pages, null, hashMap, mlang, mCallback);
