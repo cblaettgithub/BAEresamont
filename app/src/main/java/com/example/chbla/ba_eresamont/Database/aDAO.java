@@ -1,17 +1,14 @@
 package com.example.chbla.ba_eresamont.Database;
 
 import android.app.Activity;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ListView;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
 import com.example.chbla.ba_eresamont.Classes.CLanguageID;
-import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Interface.IDAO;
 import com.google.firebase.database.Query;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
@@ -28,7 +25,7 @@ public abstract class aDAO   implements IDAO {
     String choice;
     ButtonManager buttonManager;
     TreeMap hashMap;
-    String mlanguage;
+    String mlang;
 
     public OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
@@ -55,6 +52,6 @@ public abstract class aDAO   implements IDAO {
         this.choice = choice;
         this.buttonManager = buttonManager;
         this.hashMap = hashMap;
-        this.mlanguage = mlanguage;
+        this.mlang = mlanguage;
     }
 }

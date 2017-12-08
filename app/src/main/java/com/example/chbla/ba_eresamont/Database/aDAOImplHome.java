@@ -42,7 +42,7 @@ public class aDAOImplHome extends aDAO {
                             getValue() != null) {
                         pages = dataSnapshot.getValue(Pages.class);
                         Log.w(LOG_TAG + ":ReadDBData Home", "out");
-                        buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.GetLanguageID(pages,mlanguage ), null);
+                        buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.GetLanguageID(pages, mlang), null);
                         mCallback.onArticleSelected(buttonManager.getHashMap());
                     }
                 }

@@ -42,10 +42,10 @@ public class aDAOImplProgress extends aDAO {
                             child(LANGUAGE).child("title").getValue();
                     Log.w(LOG_TAG + ":ReadDBData Progres", temp);
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    //GetLanguageID(pages, mlanguage);
+                    //GetLanguageID(pages, mlang);
                     //buttonManager.ButtonCreator(pages, null, hashMap, mlang);
                     buttonManager.ButtonCreator(pages, pages, hashMap,
-                            cLanguageID.GetLanguageID(pages,mlanguage ), null);
+                            cLanguageID.GetLanguageID(pages, mlang), null);
                     mCallback.onArticleSelected(buttonManager.getHashMap());
                 }
             }

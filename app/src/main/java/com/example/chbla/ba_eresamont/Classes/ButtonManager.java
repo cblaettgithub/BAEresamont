@@ -115,7 +115,6 @@ public class ButtonManager  {
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
         if(linearLayout.getChildCount()>1){
-            linearLayout.removeViewAt(2);
             linearLayout.removeViewAt(1);
         }
 

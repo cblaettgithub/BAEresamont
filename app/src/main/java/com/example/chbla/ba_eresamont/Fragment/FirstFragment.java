@@ -113,34 +113,33 @@ public class FirstFragment extends Fragment {
         linearLayout.removeAllViews();
         IDAO idao;
 
-        if (choice =="home"){ //Startbildaufruf//Initialsierung
-            mMainDetail=false;
-            Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
-            query=myRef.orderByChild("pages_lang/0/title");
-            //idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlang);
-            //idao.ReadDBData_Firebase(view);
-            ReadDBData_Firebase(query, "home");
-        }
-        else{
-            if (mMainDetail==false){//wissen ob back button
-                Log.w(LOG_TAG+":GetDataFirebase:else:", choice);
-                query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-                //idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlang);
+        switch (choice){
+            case "home":
+                mMainDetail=false;
+                Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
+                query=myRef.orderByChild("pages_lang/0/title");
+                //idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlang);
                 //idao.ReadDBData_Firebase(view);
-                 ReadDBData_Firebase(query, "progress");
-                mMainDetail=true;
-            }
-           else{//Aufruf von linkem Menü
-                Log.w(LOG_TAG+":GetDataFirebase:true:", choice);
+                ReadDBData_Firebase(query, "home");
+                break;
+            case "progress":
+                if (choice=="progress"){//wissen ob back button
+                    query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
+                    //idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlang);
+                    //idao.ReadDBData_Firebase(view);
+                    ReadDBData_Firebase(query, "progress");
+                    mMainDetail=true;
+                }
+                break;
+            default:
                 query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplOne(query,"",null,hashMap,mlang);
                 idao.ReadDBData_Firebase(view);
-                //ReadDBData_FirebaseOneItem(query);
-            }
+                break;
         }
         hashMap.clear();
         mCallback.onArticleSelected(hashMap);
-        this.connectFirebase.close();
+        //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
 
     private void ReadDBData_Firebase(Query query, String choice) {

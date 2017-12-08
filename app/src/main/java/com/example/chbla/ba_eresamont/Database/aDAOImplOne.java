@@ -8,6 +8,8 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
+
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -31,17 +33,15 @@ public class aDAOImplOne extends aDAO {
        webSettings.setJavaScriptEnabled(true);
 
        this.query.addChildEventListener(new ChildEventListener() {
-            String temp;
+            String content, neu;
             Pages pages;
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                for (DataSnapshot single : dataSnapshot.getChildren()) {
                     Pages pages=dataSnapshot.getValue(Pages.class);
-                    String temp = pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage ))).
-                            getTranslate();
-                    String neu=temp.replaceAll("(\r\n|\n)", "<br />");
+                    content = pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlang))).getTranslate().toString();
+                    neu = setCorrectContent(content);
                     webView.loadData(neu, "text/html", "UTF-8");
-                }
+
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -57,5 +57,14 @@ public class aDAOImplOne extends aDAO {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+    @NonNull
+    private String setCorrectContent(String content) {
+        String neu;
+        neu=content.replaceAll("style=", "style=\"").toString();
+        neu=neu.replaceAll(";>", ";\">").toString();
+        neu=neu.replaceAll("src=", "src=\"").toString();
+        neu=neu.replaceAll("alt", "\" alt").toString();
+        return neu;
     }
 }
