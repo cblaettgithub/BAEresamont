@@ -162,7 +162,7 @@ public class ButtonManager  {
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
         Log.w(LOG_TAG+":ButtShowContent:mlang:", mlang);
-        mCallback.onArticleSelected(hashMap);//Menüs aktualisieren
+        mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
         webView.setTag(pages.getId());
         String converted;
         String content="";

@@ -34,13 +34,6 @@ import java.util.TreeMap;
  * Created by chbla on 31.10.2017.
  */
 public class FirstFragment extends Fragment {
-    OnHeadlineSelectedListener mCallback;
-    public interface OnHeadlineSelectedListener {
-        void onArticleSelected(TreeMap hashMap);
-    }
-    public void onListItemClick(ListView l, View v, TreeMap hashMap) {
-        mCallback.onArticleSelected(hashMap);
-    }
     private TreeMap hashMap;
     private ConnectFirebase connectFirebase;
     private DatabaseReference databaseReference;
@@ -71,6 +64,14 @@ public class FirstFragment extends Fragment {
     private Integer mMenuId;
     private static boolean mMainDetail;
     private int level=0;
+
+    OnHeadlineSelectedListener mCallback;
+    public interface OnHeadlineSelectedListener {
+        void onArticleSelected(TreeMap hashMap, String choice);
+    }
+    public void onListItemClick(ListView l, View v, TreeMap hashMap, String choice) {
+        mCallback.onArticleSelected(hashMap, choice);
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -121,24 +122,25 @@ public class FirstFragment extends Fragment {
                 //idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlang);
                 //idao.ReadDBData_Firebase(view);
                 ReadDBData_Firebase(query, "home");
+                mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             case "progress":
-                if (choice=="progress"){//wissen ob back button
                     query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                     //idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlang);
                     //idao.ReadDBData_Firebase(view);
                     ReadDBData_Firebase(query, "progress");
                     mMainDetail=true;
-                }
+                mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             default:
                 query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplOne(query,"",null,hashMap,mlang);
                 idao.ReadDBData_Firebase(view);
+                mCallback.onArticleSelected(hashMap,"");
                 break;
         }
         hashMap.clear();
-        mCallback.onArticleSelected(hashMap);
+        //mCallback.onArticleSelected(hashMap,"MenuChange");
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
 
@@ -166,7 +168,7 @@ public class FirstFragment extends Fragment {
                                     buttonManager.ButtonCreator(pages, null, hashMap, mlang, mCallback);
                                 else
                                     buttonManager.ButtonCreator(pages, pages, hashMap, mlang, mCallback);
-                                mCallback.onArticleSelected(buttonManager.getHashMap());
+                                mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
                                 }//evtl Aufruf in Klasse
                         }
                          break;
@@ -178,7 +180,7 @@ public class FirstFragment extends Fragment {
                             Pages pages = dataSnapshot.getValue(Pages.class);
                             GetLanguageID(pages, mlanguage);
                             buttonManager.ButtonCreator(pages, null, hashMap, mlang, mCallback);
-                            mCallback.onArticleSelected(buttonManager.getHashMap());
+                            mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
                         }
                         break;
                     default:

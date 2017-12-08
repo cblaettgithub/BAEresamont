@@ -57,6 +57,8 @@ public class MainActivity extends AppCompatActivity
     private ConnectFirebase connectFirebase;
     private int parent_id=0;
     private WebView webView;
+    private boolean started=false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +93,10 @@ public class MainActivity extends AppCompatActivity
                 "Home").setIcon(R.drawable.ic_menu_gallery);
 
         navigationView.invalidate();
-        setHomeAtfirst();
-
+        if (!started){
+            setHomeAtfirst();
+            started=true;
+        }
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
              @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -131,12 +135,21 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Log.d("backpressed","*******************backpressed");
-        Fragment_Man("1", mlanguage, 0);
-        /*if (drawer.isDrawerOpen(GravityCompat.START)) {
+        //Fragment_Man("1", mlanguage, 0);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }*/
+            return;
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount() >0){
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            setHomeAtfirst();
+        }
+        if (getSupportFragmentManager().getBackStackEntryCount() >1)        {
+            Fragment fragment=getSupportFragmentManager().getFragments().get(0);
+            Fragment_Man("89", "test", 89);
+            getSupportFragmentManager().popBackStack();
+        }
+        //super.onBackPressed();
     }
     private void Fragment_Man(String value, String mlanguage, int menuID) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -149,7 +162,9 @@ public class MainActivity extends AppCompatActivity
         args.putInt(FirstFragment.MENUID, menuID);
         args.putInt(FirstFragment.LEVEL, mlevel);
         fragment.setArguments(args);
-        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+
+        fragmentManager.beginTransaction().replace(R.id.container, fragment)
+                .addToBackStack("tag").commit();
     }
 
     public void setHomeAtfirst(){
@@ -161,7 +176,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void FragmentManager(MenuItem menuItem) {
-        Log.d(LOG_TAG+":navigationItem","*****"+menuItem.getItemId()+":"+menuItem.getTitle());
         switch (menuItem.getItemId()){
             case R.id.fragment_zero:
                 Fragment_Man("home", mlanguage, menuItem.getItemId());
@@ -215,8 +229,9 @@ public class MainActivity extends AppCompatActivity
     private void fragmentGetter() {
         List<Fragment> fragmentList;
         fragmentList=getSupportFragmentManager().getFragments();
-        if (fragmentList.get(0)!=null)
+        if (fragmentList.get(0)!=null){
             ReplaceFragmentContent(fragmentList.get(0));
+        }
     }
 
             @Override
@@ -227,9 +242,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onArticleSelected(TreeMap ohashMap) {
+    public void onArticleSelected(TreeMap ohashMap, String choice) {
         hashMap=ohashMap;
-        creatingMenus("MenuChange");
+        creatingMenus(choice);
     }
     public void ReplaceFragmentContent(Fragment fragment)
     {
@@ -237,11 +252,17 @@ public class MainActivity extends AppCompatActivity
         LinearLayout buttons = view.findViewById(R.id.outputlabel);
         LinearLayout line1 = view.findViewById(R.id.line1);
         WebView contentView = (WebView)line1.getChildAt(0);
-
+        Bundle bundle;
         if (buttons.getChildCount()==0) { //  if (contentview.getChildCount()==0){
             connectFirebase= new ConnectFirebase();
             final DatabaseReference myRef = connectFirebase.getDatabaseReference();
-            Query query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(contentView.getTag().toString()));
+            bundle = fragment.getArguments();
+            //int id=Integer.parseInt(bundle.getString(""));
+            Query query;
+            if (contentView.getTag()==null)//Aufruf vom linken Menü
+                 query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(bundle.getString("")));
+            else
+                 query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(contentView.getTag().toString()));
 
             query.addChildEventListener(new ChildEventListener() {
                 LinearLayout line1 = view.findViewById(R.id.line1);
