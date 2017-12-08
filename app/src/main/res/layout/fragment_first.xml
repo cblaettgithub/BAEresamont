@@ -15,7 +15,7 @@
     <LinearLayout
         android:id="@+id/line1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom"
         android:orientation="vertical">              
 
@@ -26,11 +26,14 @@
             android:layout_weight="1">
              </WebView>
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/outputlabel"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"></LinearLayout>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/outputlabel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"></LinearLayout>
+    </ScrollView>
 
 </FrameLayout>
