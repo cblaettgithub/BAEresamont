@@ -42,9 +42,13 @@ public class ButtonManager  {
     private WebView webView;
     private ArrayList<Pages> pagesArrayList;
     ConnectFirebase connectFirebase=new ConnectFirebase();
+    CLanguageID cLanguageID = new CLanguageID();
     Query query=null;
-    private int arrayindex;//no value
+    private long mlanguageID;//no value
     int i=1;
+    public void setMlanguageID(long mlanguageID) {
+        this.mlanguageID = mlanguageID;
+    }
 
     public FirstFragment.OnHeadlineSelectedListener mCallback;
     final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
@@ -69,26 +73,24 @@ public class ButtonManager  {
     public Button ConfigButton(Pages pages) {
         String parent_id="0";
         Button button = new Button(this.getContex());
-        button.setText(pages.getPages_lang().get(arrayindex).getTitle());//pages.getPages_lang().get(Integer.parseInt(arrayindex)).getTitle()
+        button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());//pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getTitle()
         button.setHeight(40);
-        button.setId((int) pages.getPages_lang().get(arrayindex).getId());// ((int) pages.getPages_lang().get(Integer.parseInt(arrayindex)).getId())
+        button.setId((int) pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getId());// ((int) pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getId())
         if (pages.getParent_id()!=null)
             parent_id=pages.getParent_id().toString();
         button.setTag(parent_id);//(Integer.parseInt(pages.getParent_id().toString()))
         return button;
     }
-    //check if value exist if not work with arrayindex = 3
+    //check if value exist if not work with mlanguageID = 3
     public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap,//language will we give
-                              long lang, FirstFragment.OnHeadlineSelectedListener mCallback) {
-       this.arrayindex =(int)lang;//Sprache wird mitgegeben respr korrekter arrayindex
+                              long mlanguageID, FirstFragment.OnHeadlineSelectedListener mCallback) {
+       this.mlanguageID =mlanguageID;//Sprache wird mitgegeben respr korrekter mlanguageID
        this.mCallback=mCallback;
-       Log.d(LOG_TAG, "ButtonCreator"+pages.getPages_lang().get(arrayindex).getTitle());
-       if (!pages.getPages_lang().get(arrayindex).getTitle().equals("")){
+        if (!pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle().equals("")){
             Button button = this.ConfigButton(pages);
             this.pages=pages;
             this.hashMap=hashMap;
-            Log.w(LOG_TAG+":ButtonCreator:", pages.getId().toString());
-            hashMap.put(pages.getId().toString(), pages.getPages_lang().get(arrayindex).getTitle());
+            hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
 
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
@@ -136,8 +138,8 @@ public class ButtonManager  {
                 Collections.sort(pagesArrayList, new Sortbyroll());
                 hashMap.clear();
                 for(int i=0;i<pagesArrayList.size();i++){
-                    ButtonCreator(pagesArrayList.get(i),  null,hashMap, arrayindex, mCallback);
-                    hashMap.put(pages.getId().toString(), pages.getPages_lang().get(arrayindex).getTitle());
+                    ButtonCreator(pagesArrayList.get(i),  null,hashMap, mlanguageID, mCallback);
+                    hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
                 }
             }
             @Override
@@ -149,9 +151,6 @@ public class ButtonManager  {
             @Override
             public void onCancelled(DatabaseError databaseError) {            }
         });
-        for(int i=0;i<pagesArrayList.size();i++)
-            Log.d(LOG_TAG, "Totalpagearray"+pagesArrayList.get(i).getPages_lang().get(0).getTitle());
-
     }
     private void ButtonShowContent(Pages pages){
         WebSettings webSettings = webView.getSettings();
@@ -162,9 +161,9 @@ public class ButtonManager  {
         String converted;
         String content="";
         String neu;
-        content=pages.getPages_lang().get(arrayindex).getTranslate().toString();
+        content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
         //if (content=="")
-         //   content=pages.getPages_lang().get(Integer.parseInt(arrayindex)).getPlaintext().toString();
+         //   content=pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getPlaintext().toString();
         neu = setCorrectContent(content);
         webView.loadData( neu, "text/html", "UTF-8");
     }
@@ -180,8 +179,7 @@ public class ButtonManager  {
     }
 
     private String contentTranslateProcessing(Pages pages){
-        String content=pages.getPages_lang().get(arrayindex).
-                getTranslate();
+        String content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate();
 
         Document doc = Jsoup.parse(content);
         Elements all=doc.getAllElements();

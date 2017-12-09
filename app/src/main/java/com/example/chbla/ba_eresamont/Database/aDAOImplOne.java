@@ -22,7 +22,7 @@ import java.util.TreeMap;
  */
 
 public class aDAOImplOne extends aDAO {
-    public aDAOImplOne(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, int mlanguage) {
+    public aDAOImplOne(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
         super(query, choice, buttonManager, hashMap, mlanguage);
     }
 
@@ -38,7 +38,7 @@ public class aDAOImplOne extends aDAO {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Pages pages=dataSnapshot.getValue(Pages.class);
-                    content = pages.getPages_lang().get(cLanguageID.GetLanguageID(pages,mlang)).getTranslate().toString();
+                    content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanuageId)).getTranslate().toString();
                     neu = setCorrectContent(content);
                     webView.loadData(neu, "text/html", "UTF-8");
 

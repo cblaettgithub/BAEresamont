@@ -1,7 +1,5 @@
 package com.example.chbla.ba_eresamont.Classes;
 
-import android.util.Log;
-
 import com.example.chbla.ba_eresamont.Models.Pages;
 
 /**
@@ -9,14 +7,14 @@ import com.example.chbla.ba_eresamont.Models.Pages;
  */
 
 public class CLanguageID {
-    private int mlang;//setted language 1 French, 2 Italian 3 Englisch
+    private int mArrayIndex;//setted language 1 French, 2 Italian 3 Englisch
     public CLanguageID(){};
  //check the array of pages-lang which item of array has the number
-    public int GetLanguageID(Pages pages, int inputlang){
+    public int getArrayIndex(Pages pages, long languageID){
         for(int i=0;i<pages.getPages_lang().size();i++){
-            if ((int)pages.getPages_lang().get(i).getLanguage()==inputlang)
-                mlang=i;
+            if (pages.getPages_lang().get(i).getLanguage()==languageID)
+                mArrayIndex =i;
         }
-        return mlang;
+        return mArrayIndex;
     }
 }

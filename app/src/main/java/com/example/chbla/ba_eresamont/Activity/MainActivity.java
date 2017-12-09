@@ -1,7 +1,6 @@
 package com.example.chbla.ba_eresamont.Activity;
 
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -17,10 +16,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.example.chbla.ba_eresamont.Classes.ButtonManager;
 import com.example.chbla.ba_eresamont.Classes.CLanguageID;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
@@ -32,8 +33,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -48,15 +49,13 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawerLayout;
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
-    private long mlanguage=1;//1 French //default
+    private long mlanguageID;//1 French //default
     private Integer mMenuID;
     private ArrayList<Pages> pagesArrayList;
-    private int mlevel;
     private ConnectFirebase connectFirebase;
     private int parent_id=0;
     private WebView webView;
     private boolean started=false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,7 +130,7 @@ public class MainActivity extends AppCompatActivity
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Log.d("backpressed","*******************backpressed");
-        //Fragment_Man("1", mlanguage, 0);
+        //Fragment_Man("1", mlanguageID, 0);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
             return;
@@ -156,14 +155,14 @@ public class MainActivity extends AppCompatActivity
         args.putString("Fragmentname", value);
         args.putLong("Language", mlanguage);
         args.putInt("MenuID", menuID);
-        fragment.setArguments(args);
+       fragment.setArguments(args);
 
         fragmentManager.beginTransaction().replace(R.id.container, fragment)
                 .addToBackStack(null).commit();
     }
 
     public void setHomeAtfirst(){
-        Fragment_Man("home", mlanguage, 0);
+        Fragment_Man("home", mlanguageID, 0);
     }
     private void navigationItem(MenuItem menuItem)
     {
@@ -173,10 +172,10 @@ public class MainActivity extends AppCompatActivity
     private void FragmentManager(MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.fragment_zero:
-                Fragment_Man("home", mlanguage, menuItem.getItemId());
+                Fragment_Man("home", mlanguageID, menuItem.getItemId());
                 break;
             default:
-                Fragment_Man(Integer.toString(menuItem.getItemId()), mlanguage, menuItem.getItemId());
+                Fragment_Man(Integer.toString(menuItem.getItemId()), mlanguageID, menuItem.getItemId());
                 break;
         }
         menuItem.setChecked(true);
@@ -197,38 +196,35 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        Log.w(LOG_TAG+":onOptionsItemSed",Integer.toString(id));
-        List<Fragment> fragmentList;
         switch(id){
             case R.id.French_settings:
-                mlanguage=1;
+                mlanguageID =1;
                 fragmentGetter();
                 break;
             case R.id.Italy_settings:
-                mlanguage=2;
-                fragmentGetter();
+               mlanguageID=2;
+               fragmentGetter();
                 break;
             case R.id.English_settings:
-                mlanguage=3;
+                mlanguageID =3;
                 fragmentGetter();
                 break;
                 default:
-                mlanguage=1;
             break;
         }
         return true;
         //noinspection SimplifiableIfStatement
     }
-
     private void fragmentGetter() {
         List<Fragment> fragmentList;
         fragmentList=getSupportFragmentManager().getFragments();
+
         if (fragmentList.get(0)!=null){
-            ReplaceFragmentContent(fragmentList.get(0));
+           FirstFragment fragment=(FirstFragment)fragmentList.get(0);
+           fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
+           ReplaceFragmentContent(fragment);
         }
     }
-
-
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
     {//buttons start changelanguage button
      //webview start this
@@ -258,9 +254,9 @@ public class MainActivity extends AppCompatActivity
                     String content="";
                     String neu;
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    content=pages.getPages_lang().get(cLanguageID.GetLanguageID(pages,(int)mlanguage)).getTranslate().toString();
+                    content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
                     //if (content=="")
-                    //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getPlaintext().toString();
+                    //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.getArrayIndex(pages,mlanguageID))).getPlaintext().toString();
                     neu = setCorrectContent(content);
                     contentView.loadData(neu, "text/html", "UTF-8");
                  }
@@ -274,10 +270,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onCancelled(DatabaseError databaseError) {                    }
             });
-
-            //contentView.loadData("<p>Testdaten</p><br><br>" +
-             //       "<br><br><br><br><p>Testdaten</p>", "text/html", "UTF-8");
-          }
+           }
         else{
             changeLanguage(buttons);
         }
@@ -299,8 +292,8 @@ public class MainActivity extends AppCompatActivity
         switch (parent_id){
             //we start again the frameset with new language.
             case "0":
-                setHomeAtfirst();
-               /* query.addChildEventListener(new ChildEventListener() {
+                //setHomeAtfirst();
+                query.addChildEventListener(new ChildEventListener() {
                     Pages pages;
                     int i=0;
 
@@ -310,9 +303,10 @@ public class MainActivity extends AppCompatActivity
                             if (dataSnapshot.child("pages_lang").child("0").child("title").
                                     getValue() != null) {
                                 pages = dataSnapshot.getValue(Pages.class);
+                                Log.d(LOG_TAG, "Sprache 0:"+mlanguageID);
                                 if (pages!=null){
                                     Button button= (Button)contentview.getChildAt(i);//error null
-                                    button.setText(pages.getPages_lang().get(Integer.parseInt(cLanguageID.GetLanguageID(pages,mlanguage))).getTitle());
+                                    button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
                                     hashMap.put(String.valueOf(i),button.getText());
                                     buttonArrayList.add(button);
                                     i++;
@@ -331,7 +325,7 @@ public class MainActivity extends AppCompatActivity
                     public void onChildMoved(DataSnapshot dataSnapshot, String s) {                    }
                     @Override
                     public void onCancelled(DatabaseError databaseError) {                    }
-                });*/
+                });
                 break;
             default:
                 DatabaseReference ref=myRef.getParent();
@@ -343,16 +337,18 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                         Button button2= (Button)contentview.getChildAt(2);
-                        long parent_id;
-                        parent_id=Long.valueOf(button2.getTag().toString());
+                        long parent_id=Long.valueOf(button2.getTag().toString());
                         buttonArrayList=new ArrayList<>();
                         for (DataSnapshot data :dataSnapshot.getChildren()) {
                             Pages pages1=data.getValue(Pages.class);
                             if (pages1.getParent_id()!=null ) {
                                 if (pages1.getParent_id()== parent_id){
+                                   Log.d(LOG_TAG, "Sprache 1:"+mlanguageID);
                                    Button button= (Button)contentview.getChildAt(i);
-                                   if (pages1.getPages_lang()!=null)
-                                        button.setText(pages1.getPages_lang().get(cLanguageID.GetLanguageID(pages1,(int)mlanguage)).getTitle());
+                                   if (pages1.getPages_lang()!=null){
+                                       button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
+
+                                   }
                                     hashMap.put(String.valueOf(i),button.getText());
                                     i++;
                                    buttonArrayList.add(button);
@@ -375,6 +371,7 @@ public class MainActivity extends AppCompatActivity
         }
         //connectFirebase.close();
     }
+
     private void SortButtons(ArrayList<Button> buttonArrayList) {
         Map sortedMap = new TreeMap(new ValueComparator(hashMap));
         sortedMap.putAll(hashMap);

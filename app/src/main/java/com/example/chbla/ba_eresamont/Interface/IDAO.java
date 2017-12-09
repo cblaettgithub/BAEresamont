@@ -11,5 +11,4 @@ import android.webkit.WebView;
 public interface IDAO {
     void ReadDBData_Firebase(View view);
 
-    void onAttach(Activity activity);
 }

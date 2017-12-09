@@ -18,13 +18,11 @@ import java.util.TreeMap;
 public abstract class aDAO   implements IDAO {
     String LOG_TAG=aDAO.class.getSimpleName();
     CLanguageID cLanguageID = new CLanguageID();
-
-    //members
     public Query query;
     String choice;
     ButtonManager buttonManager;
     TreeMap hashMap;
-    int mlang;
+    long mlanuageId;
 
     public OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
@@ -33,24 +31,13 @@ public abstract class aDAO   implements IDAO {
     public void onListItemClick(ListView l, View v, TreeMap hashMap) {
         mCallback.onArticleSelected(hashMap);
     }
-    @Override
-    public void onAttach(Activity activity) {
-        //super.onAttach(activity);
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            mCallback = (aDAO.OnHeadlineSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
 
-    public aDAO(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, int mlanguage) {
+
+    public aDAO(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
         this.query = query;
         this.choice = choice;
         this.buttonManager = buttonManager;
         this.hashMap = hashMap;
-        this.mlang = mlanguage;
+        this.mlanuageId = mlanguage;
     }
 }

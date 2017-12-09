@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -55,11 +54,20 @@ public class FirstFragment extends Fragment {
     private LinearLayout linearLayout=null;
     private WebView webView;
     private Pages pages;
-    private int mlang;
+    public long mlanguageId;
     private static String LANGUAGE="0";
     private Integer mMenuId;
     private static boolean mMainDetail;
-    private int level=0;
+    public ButtonManager getButtonManager() {
+        return buttonManager;
+    }
+    public long getMlanguageId() {
+        return mlanguageId;
+    }
+    public void setMlanguageId(long mlanguageId) {
+        this.mlanguageId = mlanguageId;
+        this.buttonManager.setMlanguageID(mlanguageId);
+    }
 
     OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
@@ -68,6 +76,7 @@ public class FirstFragment extends Fragment {
     public void onListItemClick(ListView l, View v, TreeMap hashMap, String choice) {
         mCallback.onArticleSelected(hashMap, choice);
     }
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -87,6 +96,7 @@ public class FirstFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         setContext(container.getContext());
         Bundle bundle = getArguments();
+
         buttonManager= new ButtonManager(getContext(),
                 (LinearLayout)view.findViewById(R.id.outputlabel),
                 (WebView) view.findViewById(R.id.webView));
@@ -99,10 +109,10 @@ public class FirstFragment extends Fragment {
         return view;
         //return inflater.inflate(R.layout.fragment_first, container, false);
     }
-    private void GetDataFirebase(String choice, long lang, int MenuId) {
+    public void GetDataFirebase(String choice, long lang, int MenuId) {
         final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
         Query query=null;
-        mlang=(int)lang;
+        mlanguageId =lang;
         mMenuId=MenuId;
         Log.d(LOG_TAG+":Start:GetdataFirebase", choice+"mID:"+mMenuId);
 
@@ -115,14 +125,14 @@ public class FirstFragment extends Fragment {
                 mMainDetail=false;
                 Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
                 query=myRef.orderByChild("pages_lang/0/title");
-                //idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlang);
+                //idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId);
                 //idao.ReadDBData_Firebase(view);
                 ReadDBData_Firebase(query, "home");
                 mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             case "progress":
                     query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-                    //idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlang);
+                    //idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId);
                     //idao.ReadDBData_Firebase(view);
                     ReadDBData_Firebase(query, "progress");
                     mMainDetail=true;
@@ -130,7 +140,7 @@ public class FirstFragment extends Fragment {
                 break;
             default:
                 query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
-                idao = new aDAOImplOne(query,"",null,hashMap,mlang);
+                idao = new aDAOImplOne(query,"",null,hashMap, mlanguageId);
                 idao.ReadDBData_Firebase(view);
                 mCallback.onArticleSelected(hashMap,"");
                 break;
@@ -160,9 +170,9 @@ public class FirstFragment extends Fragment {
                                 pages = dataSnapshot.getValue(Pages.class);
                                 //test fr entfernen
                                 if (pages.getId().toString().equals("89") ||pages.getId().toString().equals("129"))//89 reasomant, 129 news
-                                    buttonManager.ButtonCreator(pages, null, hashMap, (cLanguageID.GetLanguageID(pages,mlang)), mCallback);
+                                    buttonManager.ButtonCreator(pages, null, hashMap, mlanguageId, mCallback);
                                 else
-                                    buttonManager.ButtonCreator(pages, pages, hashMap, (cLanguageID.GetLanguageID(pages,mlang)), mCallback);
+                                    buttonManager.ButtonCreator(pages, pages, hashMap, mlanguageId, mCallback);
                                 mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
                                 }//evtl Aufruf in Klasse
                         }
@@ -173,7 +183,7 @@ public class FirstFragment extends Fragment {
                             temp = (String) dataSnapshot.child("pages_lang").
                                     child(LANGUAGE).child("title").getValue();
                             Pages pages = dataSnapshot.getValue(Pages.class);
-                            buttonManager.ButtonCreator(pages, null, hashMap, (cLanguageID.GetLanguageID(pages,mlang)), mCallback);
+                            buttonManager.ButtonCreator(pages, null, hashMap, mlanguageId, mCallback);
                             mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
                         }
                         break;
