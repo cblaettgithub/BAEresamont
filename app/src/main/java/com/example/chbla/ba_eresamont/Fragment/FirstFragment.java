@@ -16,7 +16,9 @@ import android.widget.ListView;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
 import com.example.chbla.ba_eresamont.Classes.CLanguageID;
+import com.example.chbla.ba_eresamont.Database.aDAOImplHome;
 import com.example.chbla.ba_eresamont.Database.aDAOImplOne;
+import com.example.chbla.ba_eresamont.Database.aDAOImplProgress;
 import com.example.chbla.ba_eresamont.Interface.IDAO;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Pages;
@@ -114,7 +116,6 @@ public class FirstFragment extends Fragment {
         Query query=null;
         mlanguageId =lang;
         mMenuId=MenuId;
-        Log.d(LOG_TAG+":Start:GetdataFirebase", choice+"mID:"+mMenuId);
 
         LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         linearLayout.removeAllViews();
@@ -123,34 +124,30 @@ public class FirstFragment extends Fragment {
         switch (choice){
             case "home":
                 mMainDetail=false;
-                Log.w(LOG_TAG+":GetDataFirebase:home:", choice);
                 query=myRef.orderByChild("pages_lang/0/title");
-                //idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId);
-                //idao.ReadDBData_Firebase(view);
-                ReadDBData_Firebase(query, "home");
+                idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId);
+                idao.ReadDBData_Firebase(view, mCallback);//ReadDBData_Firebase(query, "home");
                 mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             case "progress":
-                    query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-                    //idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId);
-                    //idao.ReadDBData_Firebase(view);
-                    ReadDBData_Firebase(query, "progress");
-                    mMainDetail=true;
+                query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
+                idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId);
+                idao.ReadDBData_Firebase(view, mCallback);
+                //ReadDBData_Firebase(query, "progress");  //mMainDetail=true;
                 mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             default:
                 query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplOne(query,"",null,hashMap, mlanguageId);
-                idao.ReadDBData_Firebase(view);
+                idao.ReadDBData_Firebase(view, null);
                 mCallback.onArticleSelected(hashMap,"");
                 break;
         }
         hashMap.clear();
-        //mCallback.onArticleSelected(hashMap,"MenuChange");
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
 
-    private void ReadDBData_Firebase(Query query, String choice) {
+   /* private void ReadDBData_Firebase(Query query, String choice) {
         final String select = choice;
         final WebView myWebView = view.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
@@ -168,13 +165,12 @@ public class FirstFragment extends Fragment {
                             if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
                                     getValue() != null) {
                                 pages = dataSnapshot.getValue(Pages.class);
-                                //test fr entfernen
                                 if (pages.getId().toString().equals("89") ||pages.getId().toString().equals("129"))//89 reasomant, 129 news
                                     buttonManager.ButtonCreator(pages, null, hashMap, mlanguageId, mCallback);
                                 else
                                     buttonManager.ButtonCreator(pages, pages, hashMap, mlanguageId, mCallback);
                                 mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
-                                }//evtl Aufruf in Klasse
+                                }
                         }
                          break;
                     case "progress":
@@ -203,6 +199,6 @@ public class FirstFragment extends Fragment {
                 Log.w(LOG_TAG, "Failed to read value.", error.toException());
             }            ;
         });
-    }
+    }*/
 
 }

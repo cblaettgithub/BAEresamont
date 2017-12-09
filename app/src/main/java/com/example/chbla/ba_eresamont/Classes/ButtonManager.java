@@ -116,8 +116,7 @@ public class ButtonManager  {
             linearLayout.removeViewAt(1);
         }
 
-        // 2 ok query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(pages.getId().toString()));
-        DatabaseReference ref=myRef.getParent();
+         DatabaseReference ref=myRef.getParent();
         query=ref.orderByChild("/pages/");
         parent_id = Integer.parseInt(pages.getId().toString());
         Log.d(LOG_TAG, "Output Parent-id:"+i);
@@ -162,8 +161,6 @@ public class ButtonManager  {
         String content="";
         String neu;
         content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
-        //if (content=="")
-         //   content=pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getPlaintext().toString();
         neu = setCorrectContent(content);
         webView.loadData( neu, "text/html", "UTF-8");
     }

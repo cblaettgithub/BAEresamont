@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -36,6 +37,8 @@ import com.google.firebase.database.Query;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -155,7 +158,7 @@ public class MainActivity extends AppCompatActivity
         args.putString("Fragmentname", value);
         args.putLong("Language", mlanguage);
         args.putInt("MenuID", menuID);
-       fragment.setArguments(args);
+        fragment.setArguments(args);
 
         fragmentManager.beginTransaction().replace(R.id.container, fragment)
                 .addToBackStack(null).commit();
@@ -192,9 +195,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         switch(id){
             case R.id.French_settings:
@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity
             //int id=Integer.parseInt(bundle.getString(""));
             Query query;
             if (contentView.getTag()==null)//Aufruf vom linken Menü
-                 query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(bundle.getString("")));
+                 query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(bundle.getString("Fragmentname")));
             else
                  query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(contentView.getTag().toString()));
 
@@ -270,6 +270,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onCancelled(DatabaseError databaseError) {                    }
             });
+            creatingMenus("MenuChange");//Menü updaten
            }
         else{
             changeLanguage(buttons);
@@ -284,7 +285,7 @@ public class MainActivity extends AppCompatActivity
         String parent_id="0";
         final LinearLayout contentview=linearLayout;
         hashMap.clear();
-        Button button= (Button)contentview.getChildAt(2);
+        final Button button= (Button)contentview.getChildAt(2);
         if (button.getTag().toString()!="0")//wenn parent_id = 0, dann ist parent_id = null-> oberste stfue
             parent_id=button.getTag().toString();        //sonst button in button
         final ArrayList<Button> buttonArrayList=new ArrayList<>();
@@ -313,7 +314,7 @@ public class MainActivity extends AppCompatActivity
                                 }
                             }
                         }
-                        SortButtons(buttonArrayList);
+                        //SortButtons(buttonArrayList);
                         creatingMenus("MenuChange");//Menü updaten
                     }
                     @Override
@@ -339,23 +340,27 @@ public class MainActivity extends AppCompatActivity
                         Button button2= (Button)contentview.getChildAt(2);
                         long parent_id=Long.valueOf(button2.getTag().toString());
                         buttonArrayList=new ArrayList<>();
+                        Button button;
                         for (DataSnapshot data :dataSnapshot.getChildren()) {
                             Pages pages1=data.getValue(Pages.class);
                             if (pages1.getParent_id()!=null ) {
                                 if (pages1.getParent_id()== parent_id){
-                                   Log.d(LOG_TAG, "Sprache 1:"+mlanguageID);
-                                   Button button= (Button)contentview.getChildAt(i);
-                                   if (pages1.getPages_lang()!=null){
+                                    button= new Button(getApplicationContext());
+                                    button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
+                                    buttonArrayList.add(button);
+                                    //((Button)contentview.getChildAt(i)).setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
+                                   /*if (pages1.getPages_lang()!=null){
                                        button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
-
-                                   }
+                                   }*/
                                     hashMap.put(String.valueOf(i),button.getText());
                                     i++;
-                                   buttonArrayList.add(button);
                                 }
                             }
                         }
-                        SortButtons(buttonArrayList);
+                       SortButtons(buttonArrayList);
+                       for(int i=0;i<buttonArrayList.size();i++){
+                            ((Button)contentview.getChildAt(i)).setText(buttonArrayList.get(i).getText());
+                        }
                         creatingMenus("MenuChange");
                     }
                     @Override
@@ -373,7 +378,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void SortButtons(ArrayList<Button> buttonArrayList) {
-        Map sortedMap = new TreeMap(new ValueComparator(hashMap));
+
+        Collections collections=null;
+        collections.sort(buttonArrayList, new ButtonsComparator());
+        /*Map sortedMap = new TreeMap(new ValueComparator(hashMap));
         sortedMap.putAll(hashMap);
         int i=0;
         Iterator iterator=sortedMap.entrySet().iterator();
@@ -381,7 +389,7 @@ public class MainActivity extends AppCompatActivity
             Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
             buttonArrayList.get(i).setText(entry.getValue());
             i++;
-        }
+        }*/
     }
 
         @Override
@@ -429,3 +437,24 @@ class ValueComparator implements Comparator<String> {
         return result;
     }
 }
+class ButtonsComparator implements Comparator<Button> {
+
+    public ButtonsComparator(){};
+    public int compare(Button o1, Button o2) {
+        int result;
+        String title1 = o1.getText().toString();
+        String title2 = o2.getText().toString();
+        if ( title1.toString().contains(".")&& title2.toString().contains(".")){
+            int indexA = title1.toString().indexOf('.');
+            int indexB = title2.toString().indexOf('.');
+            int a=Integer.parseInt(title1.substring(0, indexA));
+            int b=Integer.parseInt(title2.substring(0, indexB));
+            result= a-b;
+        }
+        else{
+            result= title1.compareTo(title2);
+        }
+        return result;
+    }
+}
+

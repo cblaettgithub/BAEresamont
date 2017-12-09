@@ -2,6 +2,7 @@ package com.example.chbla.ba_eresamont.Database;
 
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
+import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
@@ -27,7 +28,7 @@ public class aDAOImplOne extends aDAO {
     }
 
     @Override
-    public void ReadDBData_Firebase(View view) {
+    public void ReadDBData_Firebase(View view,FirstFragment.OnHeadlineSelectedListener Callback) {
        final WebView webView = view.findViewById(R.id.webView);
        WebSettings webSettings = webView.getSettings();
        webSettings.setJavaScriptEnabled(true);

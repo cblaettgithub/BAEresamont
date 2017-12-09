@@ -6,6 +6,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
+import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
@@ -20,16 +21,17 @@ import java.util.TreeMap;
  */
 
 public class aDAOImplHome extends aDAO {
-    public aDAOImplHome(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, int mlanguage) {
+    public aDAOImplHome(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
         super(query, choice, buttonManager, hashMap, mlanguage);
     }
 
     public  static final String LANGUAGE="1";
     @Override
-    public void ReadDBData_Firebase(View view) {
+    public void ReadDBData_Firebase(View view, FirstFragment.OnHeadlineSelectedListener Callback) {
         final WebView webView = view.findViewById(R.id.webView);
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        final FirstFragment.OnHeadlineSelectedListener mCallback=Callback;
 
         query.addChildEventListener(new ChildEventListener() {
             String temp;
@@ -41,9 +43,12 @@ public class aDAOImplHome extends aDAO {
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
                             getValue() != null) {
                         pages = dataSnapshot.getValue(Pages.class);
-                        Log.w(LOG_TAG + ":ReadDBData Home", "out");
-                        buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
-                        mCallback.onArticleSelected(buttonManager.getHashMap());
+                        if (pages.getId().toString().equals("89") ||pages.getId().toString().equals("129"))//89 reasomant, 129 news
+                            buttonManager.ButtonCreator(pages, null, hashMap, mlanuageId, mCallback);
+                        else
+                            buttonManager.ButtonCreator(pages, pages, hashMap, mlanuageId, mCallback);
+                        mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
+
                     }
                 }
             }

@@ -6,6 +6,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
+import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
@@ -20,16 +21,17 @@ import java.util.TreeMap;
  */
 
 public class aDAOImplProgress extends aDAO {
-    public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, int mlanguage) {
+    public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
         super(query, choice, buttonManager, hashMap, mlanguage);
     }
 
     public  static final String LANGUAGE="1";
     @Override
-    public void ReadDBData_Firebase(View view) {
+    public void ReadDBData_Firebase(View view,FirstFragment.OnHeadlineSelectedListener Callback) {
        final WebView webView = view.findViewById(R.id.webView);
        WebSettings webSettings = webView.getSettings();
        webSettings.setJavaScriptEnabled(true);
+       final FirstFragment.OnHeadlineSelectedListener mCallback=Callback;
 
        this.query.addChildEventListener(new ChildEventListener() {
             String temp;
@@ -40,13 +42,10 @@ public class aDAOImplProgress extends aDAO {
                         child("translate").toString()!=""){
                     temp = (String) dataSnapshot.child("pages_lang").
                             child(LANGUAGE).child("title").getValue();
-                    Log.w(LOG_TAG + ":ReadDBData Progres", temp);
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    //getArrayIndex(pages, mlanuageId);
-                    //buttonManager.ButtonCreator(pages, null, hashMap, mlanuageId);
                     buttonManager.ButtonCreator(pages, pages, hashMap,
                             cLanguageID.getArrayIndex(pages, mlanuageId), null);
-                    mCallback.onArticleSelected(buttonManager.getHashMap());
+                    mCallback.onArticleSelected(buttonManager.getHashMap(),"");
                 }
             }
             @Override
