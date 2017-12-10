@@ -79,7 +79,6 @@ public class FirstFragment extends Fragment {
         mCallback.onArticleSelected(hashMap, choice);
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -120,15 +119,15 @@ public class FirstFragment extends Fragment {
         //LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         //linearLayout.removeAllViews();
         IDAO idao;
-
+        hashMap.clear();
         switch (choice){
-            case "home":
+            case "home"://show all topmenues
                 query=myRef.orderByChild("pages_lang/0/title");
                 idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);//ReadDBData_Firebase(query, "home");
                 mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
-            case "progress":
+            case "progress"://show under menue
                 query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId, true);
                 idao.ReadDBData_Firebase(view, mCallback);
@@ -143,11 +142,11 @@ public class FirstFragment extends Fragment {
                     query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                     idao = new aDAOImplProgress(query, "", buttonManager, hashMap, mlanguageId, false);
                     idao.ReadDBData_Firebase(view, mCallback);
+                    mCallback.onArticleSelected(hashMap, "MenuChange");
                  }
-                mCallback.onArticleSelected(hashMap, "MenuChange");
                 break;
         }
-        hashMap.clear();
+
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
 

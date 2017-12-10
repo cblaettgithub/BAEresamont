@@ -40,11 +40,14 @@ public class aDAOImplOne extends aDAO {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Pages pages=dataSnapshot.getValue(Pages.class);
-                    content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanuageId)).getTranslate().toString();
-                    neu = setCorrectContent(content);
-                    webView.loadData(neu, "text/html", "UTF-8");
-                    Log.d(LOG_TAG, "aDAoImpOne");
-                    pages = dataSnapshot.getValue(Pages.class);
+                    if (pages!=null){
+                        content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanuageId)).getTranslate().toString();
+                        neu = setCorrectContent(content);
+                        webView.loadData(neu, "text/html", "UTF-8");
+                        Log.d(LOG_TAG, "aDAoImpOne");
+
+                    }
+
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

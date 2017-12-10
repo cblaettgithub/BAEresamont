@@ -152,19 +152,20 @@ public class ButtonManager  {
             public void onCancelled(DatabaseError databaseError) {            }
         });
     }
-    private void ButtonShowContent(Pages pages){
+    private void ButtonShowContent(Pages pages){//problem hashmap nicht aktualisert
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-        if (mCallback!=null)//wies mcallback null ?
-            mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
-        webView.setTag(pages.getId());
+          webView.setTag(pages.getId());
         String converted;
         String content="";
         String neu;
         content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
         neu = setCorrectContent(content);
         webView.loadData( neu, "text/html", "UTF-8");
+        if (mCallback!=null)//wies mcallback null ?
+            mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
+
     }
 
     @NonNull

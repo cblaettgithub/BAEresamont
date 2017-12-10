@@ -48,8 +48,7 @@ import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        FirstFragment.OnHeadlineSelectedListener
-        {
+        FirstFragment.OnHeadlineSelectedListener     {
     private DrawerLayout drawerLayout;
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
@@ -60,6 +59,11 @@ public class MainActivity extends AppCompatActivity
     private int parent_id=0;
     private WebView webView;
     private boolean started=false;
+    private long parentidChangelanguage;
+    public long getParentidChangelanguage() {
+        return parentidChangelanguage;    }
+    public void setParentidChangelanguage(long parentidChangelanguage) {
+        this.parentidChangelanguage = parentidChangelanguage;    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -234,8 +238,18 @@ public class MainActivity extends AppCompatActivity
         LinearLayout line1 = view.findViewById(R.id.line1);
         WebView contentView = (WebView)line1.getChildAt(0);
         Bundle bundle;
+        ChangeLanuage changeLanuage;
+        NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
+        changeLanuage= new ChangeLanuage(hashMap, mlanguageID, getApplication(),navigationView);
+        if (buttons.getChildAt(2)!=null){
+            Log.d(LOG_TAG, "Replace1 parentid:"+buttons.getChildAt(2).getTag().toString());
+            this.setParentidChangelanguage(Long.parseLong(buttons.getChildAt(2).getTag().toString()));
+            Log.d(LOG_TAG, "Method1 parentid:"+this.getParentidChangelanguage());
+        }
+        //parentid weiss ich über buttontag
+
         if (buttons.getChildCount()==0) { //  if (contentview.getChildCount()==0){
-            connectFirebase= new ConnectFirebase();
+            connectFirebase= new ConnectFirebase();//nur ein content wechseln
             final DatabaseReference myRef = connectFirebase.getDatabaseReference();
             bundle = fragment.getArguments();
             //int id=Integer.parseInt(bundle.getString(""));
@@ -271,134 +285,19 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onCancelled(DatabaseError databaseError) {                    }
             });
-            creatingMenus("MenuChange");//Menü updaten
+            Log.d(LOG_TAG, "Method parentid2:"+getParentidChangelanguage());
+
+            changeLanuage.refrehMenuLanuager(getParentidChangelanguage());//um die Sprachen im Menü zu wechseln
+            hashMap=changeLanuage.getHashMap();
+            //creatingMenus("MenuChange");//Menü updaten
            }
         else{
-            changeLanguage(buttons);
+            changeLanuage.changeLanguage(buttons);
+            //creatingMenus("MenuChange");//Menü updaten
+            //changeLanguage(buttons);
         }
     }
 
-    public void changeLanguage(LinearLayout linearLayout){
-        final CLanguageID cLanguageID = new CLanguageID();
-        connectFirebase= new ConnectFirebase();
-        final DatabaseReference myRef = connectFirebase.getDatabaseReference();
-        Query query=myRef.orderByChild("pages_lang/0/title");
-        String parent_id="0";
-        final LinearLayout contentview=linearLayout;
-        hashMap.clear();
-        final Button button= (Button)contentview.getChildAt(2);
-        if (button.getTag().toString()!="0")//wenn parent_id = 0, dann ist parent_id = null-> oberste stfue
-            parent_id=button.getTag().toString();        //sonst button in button
-        final ArrayList<Button> buttonArrayList=new ArrayList<>();
-
-        switch (parent_id){
-            //we start again the frameset with new language.
-            case "0":
-                //setHomeAtfirst();
-                query.addChildEventListener(new ChildEventListener() {
-                    Pages pages;
-                    int i=0;
-
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                        if (dataSnapshot.child("parent_id").exists() == false) {
-                            if (dataSnapshot.child("pages_lang").child("0").child("title").
-                                    getValue() != null)         {
-                                pages = dataSnapshot.getValue(Pages.class);
-                                Log.d(LOG_TAG, "Sprache 0:"+mlanguageID);
-                                Button button;
-                                if (pages!=null){
-                                    button= new Button(getApplicationContext());
-                                    //Button button= (Button)contentview.getChildAt(i);//error null
-                                    button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
-                                    hashMap.put(String.valueOf(i),button.getText());
-                                    buttonArrayList.add(button);
-                                    i++;
-                                }
-                            }
-                        }
-                        SortButtons(buttonArrayList);
-                        for(int i=0;i<buttonArrayList.size();i++){
-                            ((Button)contentview.getChildAt(i)).setText(buttonArrayList.get(i).getText());
-                        }
-                        //SortButtons(buttonArrayList);
-                        creatingMenus("MenuChange");//Menü updaten
-                    }
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    }
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {                    }
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {                    }
-                });
-                break;
-            default:
-                DatabaseReference ref=myRef.getParent();
-                query=ref.orderByChild("/pages/");
-                query.addChildEventListener(new ChildEventListener() {
-                    int i=0;
-                    ArrayList<Button> buttonArrayList;
-
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                        Button button2= (Button)contentview.getChildAt(2);
-                        long parent_id=Long.valueOf(button2.getTag().toString());
-                        buttonArrayList=new ArrayList<>();
-                        Button button;
-                        for (DataSnapshot data :dataSnapshot.getChildren()) {
-                            Pages pages1=data.getValue(Pages.class);
-                            if (pages1.getParent_id()!=null ) {
-                                if (pages1.getParent_id()== parent_id){
-                                    button= new Button(getApplicationContext());
-                                    button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
-                                    buttonArrayList.add(button);
-                                    //((Button)contentview.getChildAt(i)).setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
-                                   /*if (pages1.getPages_lang()!=null){
-                                       button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
-                                   }*/
-                                    //hashMap.put(String.valueOf(i),button.getText());old 10.12.2017
-                                    i++;
-                                }
-                            }
-                        }
-                       SortButtons(buttonArrayList);
-                       for(int i=0;i<buttonArrayList.size();i++){
-                           hashMap.put(String.valueOf(i),buttonArrayList.get(i).getText());
-                            ((Button)contentview.getChildAt(i)).setText(buttonArrayList.get(i).getText());
-                        }
-                        creatingMenus("MenuChange");
-                    }
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {                    }
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {                    }
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {                    }
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {                    }
-                });
-                break;
-        }
-        //connectFirebase.close();
-    }
-
-
-    private void SortButtons(ArrayList<Button> buttonArrayList) {
-        Collections collections=null;
-        collections.sort(buttonArrayList, new ButtonsComparator());
-        /*Map sortedMap = new TreeMap(new ValueComparator(hashMap));
-        sortedMap.putAll(hashMap);
-        int i=0;
-        Iterator iterator=sortedMap.entrySet().iterator();
-        while(iterator.hasNext()){//ne
-            Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
-            buttonArrayList.get(i).setText(entry.getValue());
-            i++;
-        }*/
-    }
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
