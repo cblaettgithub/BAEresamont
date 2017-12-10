@@ -99,16 +99,15 @@ public class ButtonManager  {
                         ButtonShowContent(pages);
                     }
                     else{//create button in button
-                        SubButton(pages, hashMap);
+                        SubButton(pages);
                     }
                 }
             });
             linearLayout.addView(button);
           // String text=((Button) ((android.view.View[])linearLayout.findViewWithTag("button"))[1]).getText() ;
-
        }
     }
-    private void SubButton(final Pages pages, final TreeMap hashMap) {
+    private void SubButton(final Pages pages) {
         final int parent_id;
         for(int i=0;i<linearLayout.getChildCount();i++)
             linearLayout.removeViewAt(i);
@@ -123,9 +122,12 @@ public class ButtonManager  {
         Log.d(LOG_TAG, "Output Parent-id:"+i);
         //ref.getParent();
         //query = ref;
+       //hashMap.clear();
+        hashMap.put(pages.getId().toString(), pages.getId().toString());
 
         query.addChildEventListener(new ChildEventListener() {
             @Override
+
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 for (DataSnapshot data :dataSnapshot.getChildren()) {
                    // if (data.getValue(Pages.class).getParent_id().equals(i))
@@ -157,7 +159,7 @@ public class ButtonManager  {
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
           webView.setTag(pages.getId());
-        String converted;
+
         String content="";
         String neu;
         content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();

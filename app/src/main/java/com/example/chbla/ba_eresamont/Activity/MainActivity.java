@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity
                     }
                  }
                  break;
-            default:
+            default://Menü bleibt gleich Aufruf mit mcallback..hashmap choice ""
                 break;
         }
     }
@@ -227,7 +227,8 @@ public class MainActivity extends AppCompatActivity
         if (fragmentList.get(0)!=null){
            FirstFragment fragment=(FirstFragment)fragmentList.get(0);
            fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
-           ReplaceFragmentContent(fragment);
+           fragment.setHashMap(hashMap);
+            ReplaceFragmentContent(fragment);
         }
     }
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons

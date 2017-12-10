@@ -70,7 +70,9 @@ public class FirstFragment extends Fragment {
         this.mlanguageId = mlanguageId;
         this.buttonManager.setMlanguageID(mlanguageId);
     }
-
+    public void setHashMap(TreeMap hashMap) {
+        this.hashMap = hashMap;
+    }
     OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
         void onArticleSelected(TreeMap hashMap, String choice);
@@ -97,12 +99,14 @@ public class FirstFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_first, container, false);
         setContext(container.getContext());
         Bundle bundle = getArguments();
-
+        if (hashMap==null)//beim ersten Mal
+            hashMap=new TreeMap();
+        //hashMap=new TreeMap();alte
         buttonManager= new ButtonManager(getContext(),
                 (LinearLayout)view.findViewById(R.id.outputlabel),
                 (WebView) view.findViewById(R.id.webView));
         connectFirebase= new ConnectFirebase();
-        hashMap=new TreeMap();
+
          if (bundle != null){
             GetDataFirebase( bundle.getString("Fragmentname"),
                     bundle.getLong("Language"), bundle.getInt("MenuID"));
@@ -115,11 +119,11 @@ public class FirstFragment extends Fragment {
         Query query=null;
         mlanguageId =lang;
         mMenuId=MenuId;
+        hashMap.put("10", "10");
 
         //LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         //linearLayout.removeAllViews();
         IDAO idao;
-        hashMap.clear();
         switch (choice){
             case "home"://show all topmenues
                 query=myRef.orderByChild("pages_lang/0/title");
@@ -133,6 +137,7 @@ public class FirstFragment extends Fragment {
                 idao.ReadDBData_Firebase(view, mCallback);
                 //ReadDBData_Firebase(query, "progress");  //mMainDetail=true;
                 mCallback.onArticleSelected(hashMap,"MenuChange");
+                //hashMap.clear();
                 break;
             default://linkes menü
                 query = myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
@@ -142,10 +147,11 @@ public class FirstFragment extends Fragment {
                     query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                     idao = new aDAOImplProgress(query, "", buttonManager, hashMap, mlanguageId, false);
                     idao.ReadDBData_Firebase(view, mCallback);
-                    mCallback.onArticleSelected(hashMap, "MenuChange");
+                    mCallback.onArticleSelected(hashMap, "");
                  }
                 break;
         }
+        //hashMap.clear();
 
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
