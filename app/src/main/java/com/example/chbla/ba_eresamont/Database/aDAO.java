@@ -23,12 +23,14 @@ public abstract class aDAO   implements IDAO {
     ButtonManager buttonManager;
     TreeMap hashMap;
     long mlanuageId;
+    boolean monetwopages;
 
-    public aDAO(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
+    public aDAO(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage, boolean onetwopage) {
         this.query = query;
         this.choice = choice;
         this.buttonManager = buttonManager;
         this.hashMap = hashMap;
         this.mlanuageId = mlanguage;
+        this.monetwopages=onetwopage;
     }
 }

@@ -156,7 +156,8 @@ public class ButtonManager  {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-        mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
+        if (mCallback!=null)//wies mcallback null ?
+            mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
         webView.setTag(pages.getId());
         String converted;
         String content="";

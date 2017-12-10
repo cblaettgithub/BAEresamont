@@ -24,8 +24,8 @@ import java.util.TreeMap;
  */
 
 public class aDAOImplOne extends aDAO {
-    public aDAOImplOne(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
-        super(query, choice, buttonManager, hashMap, mlanguage);
+    public aDAOImplOne(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage, boolean onetwopage) {
+        super(query, choice, buttonManager, hashMap, mlanguage, onetwopage);
     }
 
     @Override

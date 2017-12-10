@@ -124,27 +124,27 @@ public class FirstFragment extends Fragment {
         switch (choice){
             case "home":
                 query=myRef.orderByChild("pages_lang/0/title");
-                idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId);
+                idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);//ReadDBData_Firebase(query, "home");
                 mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             case "progress":
                 query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-                idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId);
+                idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId, true);
                 idao.ReadDBData_Firebase(view, mCallback);
                 //ReadDBData_Firebase(query, "progress");  //mMainDetail=true;
                 mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             default://linkes menü
                 query = myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
-                idao = new aDAOImplOne(query, "", buttonManager, hashMap, mlanguageId);
+                idao = new aDAOImplOne(query, "", buttonManager, hashMap, mlanguageId, false);
                 idao.ReadDBData_Firebase(view, null);
                 if (choice!="progress") {
                     query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-                    idao = new aDAOImplProgress(query, "", buttonManager, hashMap, mlanguageId);
+                    idao = new aDAOImplProgress(query, "", buttonManager, hashMap, mlanguageId, false);
                     idao.ReadDBData_Firebase(view, mCallback);
-                    mCallback.onArticleSelected(hashMap, "");
-                }
+                 }
+                mCallback.onArticleSelected(hashMap, "MenuChange");
                 break;
         }
         hashMap.clear();

@@ -21,11 +21,11 @@ import java.util.TreeMap;
  */
 
 public class aDAOImplHome extends aDAO {
-    public aDAOImplHome(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
-        super(query, choice, buttonManager, hashMap, mlanguage);
+    public  static final String LANGUAGE="1";
+    public aDAOImplHome(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage, boolean onetwopage) {
+        super(query, choice, buttonManager, hashMap, mlanguage, onetwopage);
     }
 
-    public  static final String LANGUAGE="1";
     @Override
     public void ReadDBData_Firebase(View view, FirstFragment.OnHeadlineSelectedListener Callback) {
         final WebView webView = view.findViewById(R.id.webView);

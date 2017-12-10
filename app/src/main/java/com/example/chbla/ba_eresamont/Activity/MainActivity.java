@@ -359,13 +359,14 @@ public class MainActivity extends AppCompatActivity
                                    /*if (pages1.getPages_lang()!=null){
                                        button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
                                    }*/
-                                    hashMap.put(String.valueOf(i),button.getText());
+                                    //hashMap.put(String.valueOf(i),button.getText());old 10.12.2017
                                     i++;
                                 }
                             }
                         }
                        SortButtons(buttonArrayList);
                        for(int i=0;i<buttonArrayList.size();i++){
+                           hashMap.put(String.valueOf(i),buttonArrayList.get(i).getText());
                             ((Button)contentview.getChildAt(i)).setText(buttonArrayList.get(i).getText());
                         }
                         creatingMenus("MenuChange");

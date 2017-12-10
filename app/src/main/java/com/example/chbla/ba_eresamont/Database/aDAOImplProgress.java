@@ -21,11 +21,13 @@ import java.util.TreeMap;
  */
 
 public class aDAOImplProgress extends aDAO {
-    public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
-        super(query, choice, buttonManager, hashMap, mlanguage);
-    }
 
     public  static final String LANGUAGE="1";
+
+    public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage, boolean onetwopage) {
+        super(query, choice, buttonManager, hashMap, mlanguage, onetwopage);
+    }
+
     @Override
     public void ReadDBData_Firebase(View view,FirstFragment.OnHeadlineSelectedListener Callback) {
        final WebView webView = view.findViewById(R.id.webView);
@@ -43,8 +45,10 @@ public class aDAOImplProgress extends aDAO {
                     temp = (String) dataSnapshot.child("pages_lang").
                             child(LANGUAGE).child("title").getValue();
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    buttonManager.ButtonCreator(pages, pages, hashMap,
-                            cLanguageID.getArrayIndex(pages, mlanuageId), null);
+                    if(monetwopages)//true zwei pages für buttonmangager, else nur one pages
+                        buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
+                    else
+                        buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
                     mCallback.onArticleSelected(buttonManager.getHashMap(),"");
                 }
             }
