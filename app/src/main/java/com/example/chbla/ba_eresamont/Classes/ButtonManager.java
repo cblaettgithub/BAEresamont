@@ -74,6 +74,7 @@ public class ButtonManager  {
         String parent_id="0";
         Button button = new Button(this.getContex());
         button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());//pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getTitle()
+        Log.d(LOG_TAG, "Output Page_Content:" +button.getText().toString());
         button.setHeight(40);
         button.setId((int) pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getId());// ((int) pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getId())
         if (pages.getParent_id()!=null)
@@ -116,7 +117,7 @@ public class ButtonManager  {
             linearLayout.removeViewAt(1);
         }
 
-         DatabaseReference ref=myRef.getParent();
+        DatabaseReference ref=myRef.getParent();
         query=ref.orderByChild("/pages/");
         parent_id = Integer.parseInt(pages.getId().toString());
         Log.d(LOG_TAG, "Output Parent-id:"+i);
@@ -195,30 +196,7 @@ public class ButtonManager  {
         html=doc.toString();
          return html;
     }
-    private static void print(String msg, Object... args) {
-        System.out.println(String.format(msg, args));
-    }
 
 }
- class Sortbyroll implements Comparator<Pages>
-{
-    @Override
-    public int compare(Pages o1, Pages o2) {
-        int result;
-        String title1 = o1.getPages_lang().get(0).getTitle();
-        String title2 = o2.getPages_lang().get(0).getTitle();
-        if ( title1.toString().contains(".")&& title2.toString().contains(".")){
-            int indexA = title1.toString().indexOf('.');
-            int indexB = title2.toString().indexOf('.');
-            int a=Integer.parseInt(title1.substring(0, indexA));
-            int b=Integer.parseInt(title2.substring(0, indexB));
-            result= a-b;
-        }
-        else{
-            result= title1.compareTo(title2);
-        }
 
-        return result;
-    }
-  }
 

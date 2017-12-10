@@ -11,6 +11,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -42,7 +43,8 @@ public class aDAOImplOne extends aDAO {
                     content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanuageId)).getTranslate().toString();
                     neu = setCorrectContent(content);
                     webView.loadData(neu, "text/html", "UTF-8");
-
+                    Log.d(LOG_TAG, "aDAoImpOne");
+                    pages = dataSnapshot.getValue(Pages.class);
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

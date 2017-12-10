@@ -41,14 +41,13 @@ public class aDAOImplHome extends aDAO {
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 if (dataSnapshot.child("parent_id").exists() == false) {
                     if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
-                            getValue() != null) {
+                            getValue() != null)               {
                         pages = dataSnapshot.getValue(Pages.class);
                         if (pages.getId().toString().equals("89") ||pages.getId().toString().equals("129"))//89 reasomant, 129 news
                             buttonManager.ButtonCreator(pages, null, hashMap, mlanuageId, mCallback);
                         else
                             buttonManager.ButtonCreator(pages, pages, hashMap, mlanuageId, mCallback);
-                        mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
-
+                           mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
                     }
                 }
             }
@@ -57,7 +56,6 @@ public class aDAOImplHome extends aDAO {
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {

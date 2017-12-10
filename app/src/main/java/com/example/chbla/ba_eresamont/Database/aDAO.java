@@ -24,15 +24,6 @@ public abstract class aDAO   implements IDAO {
     TreeMap hashMap;
     long mlanuageId;
 
-    /*public OnHeadlineSelectedListener mCallback;
-    public interface OnHeadlineSelectedListener {
-        void onArticleSelected(TreeMap hashMap);
-    }
-    public void onListItemClick(ListView l, View v, TreeMap hashMap) {
-        mCallback.onArticleSelected(hashMap);
-    }*/
-
-
     public aDAO(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage) {
         this.query = query;
         this.choice = choice;

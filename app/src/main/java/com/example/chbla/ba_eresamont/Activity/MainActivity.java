@@ -21,6 +21,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import com.example.chbla.ba_eresamont.Classes.*;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
 import com.example.chbla.ba_eresamont.Classes.CLanguageID;
@@ -302,17 +303,23 @@ public class MainActivity extends AppCompatActivity
                     public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                         if (dataSnapshot.child("parent_id").exists() == false) {
                             if (dataSnapshot.child("pages_lang").child("0").child("title").
-                                    getValue() != null) {
+                                    getValue() != null)         {
                                 pages = dataSnapshot.getValue(Pages.class);
                                 Log.d(LOG_TAG, "Sprache 0:"+mlanguageID);
+                                Button button;
                                 if (pages!=null){
-                                    Button button= (Button)contentview.getChildAt(i);//error null
+                                    button= new Button(getApplicationContext());
+                                    //Button button= (Button)contentview.getChildAt(i);//error null
                                     button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
                                     hashMap.put(String.valueOf(i),button.getText());
                                     buttonArrayList.add(button);
                                     i++;
                                 }
                             }
+                        }
+                        SortButtons(buttonArrayList);
+                        for(int i=0;i<buttonArrayList.size();i++){
+                            ((Button)contentview.getChildAt(i)).setText(buttonArrayList.get(i).getText());
                         }
                         //SortButtons(buttonArrayList);
                         creatingMenus("MenuChange");//Menü updaten
@@ -377,8 +384,8 @@ public class MainActivity extends AppCompatActivity
         //connectFirebase.close();
     }
 
-    private void SortButtons(ArrayList<Button> buttonArrayList) {
 
+    private void SortButtons(ArrayList<Button> buttonArrayList) {
         Collections collections=null;
         collections.sort(buttonArrayList, new ButtonsComparator());
         /*Map sortedMap = new TreeMap(new ValueComparator(hashMap));
@@ -391,70 +398,26 @@ public class MainActivity extends AppCompatActivity
             i++;
         }*/
     }
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            drawer.closeDrawer(GravityCompat.START);
-            return true;
-        }
-
-        @Override
-        public void onArticleSelected(TreeMap ohashMap, String choice) {
-            hashMap=ohashMap;
-            creatingMenus(choice);
-        }
-        @NonNull
-        private String setCorrectContent( String content) {
-            String neu;
-            neu=content.replaceAll("style=", "style=\"").toString();
-            neu=neu.replaceAll(";>", ";\">").toString();
-            neu=neu.replaceAll("src=", "src=\"").toString();
-            neu=neu.replaceAll("alt", "\" alt").toString();
-            return neu;
-        }
-}
-class ValueComparator implements Comparator<String> {
-    Map map;
-    public ValueComparator(Map map) {
-        this.map = map;
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
-    public int compare(String keyA, String keyB) {
-        int result;
-        Comparable valueA = (Comparable) map.get(keyA);
-        Comparable valueB = (Comparable) map.get(keyB);
-        if (map.get(keyA).toString().contains(".")&&
-                map.get(keyB).toString().contains(".")){
-            int indexA =  map.get(keyA).toString().indexOf('.');
-            int indexB =  map.get(keyB).toString().indexOf('.');
-            int a=Integer.parseInt(map.get(keyA).toString().substring(0, indexA));
-            int b=Integer.parseInt(map.get(keyB).toString().substring(0, indexB));
-            result =a-b;
-        }
-        else{
-            result =valueA.compareTo(valueB);
-        }
-        return result;
-    }
-}
-class ButtonsComparator implements Comparator<Button> {
 
-    public ButtonsComparator(){};
-    public int compare(Button o1, Button o2) {
-        int result;
-        String title1 = o1.getText().toString();
-        String title2 = o2.getText().toString();
-        if ( title1.toString().contains(".")&& title2.toString().contains(".")){
-            int indexA = title1.toString().indexOf('.');
-            int indexB = title2.toString().indexOf('.');
-            int a=Integer.parseInt(title1.substring(0, indexA));
-            int b=Integer.parseInt(title2.substring(0, indexB));
-            result= a-b;
-        }
-        else{
-            result= title1.compareTo(title2);
-        }
-        return result;
+    @Override
+    public void onArticleSelected(TreeMap ohashMap, String choice) {
+        hashMap=ohashMap;
+        creatingMenus(choice);
+    }
+    @NonNull
+    private String setCorrectContent( String content) {
+        String neu;
+        neu=content.replaceAll("style=", "style=\"").toString();
+        neu=neu.replaceAll(";>", ";\">").toString();
+        neu=neu.replaceAll("src=", "src=\"").toString();
+        neu=neu.replaceAll("alt", "\" alt").toString();
+        return neu;
     }
 }
 

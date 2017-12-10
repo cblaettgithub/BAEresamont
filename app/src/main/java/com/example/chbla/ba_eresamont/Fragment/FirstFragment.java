@@ -117,13 +117,12 @@ public class FirstFragment extends Fragment {
         mlanguageId =lang;
         mMenuId=MenuId;
 
-        LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
-        linearLayout.removeAllViews();
+        //LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
+        //linearLayout.removeAllViews();
         IDAO idao;
 
         switch (choice){
             case "home":
-                mMainDetail=false;
                 query=myRef.orderByChild("pages_lang/0/title");
                 idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId);
                 idao.ReadDBData_Firebase(view, mCallback);//ReadDBData_Firebase(query, "home");
@@ -136,11 +135,16 @@ public class FirstFragment extends Fragment {
                 //ReadDBData_Firebase(query, "progress");  //mMainDetail=true;
                 mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
-            default:
-                query=myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
-                idao = new aDAOImplOne(query,"",null,hashMap, mlanguageId);
+            default://linkes menü
+                query = myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
+                idao = new aDAOImplOne(query, "", buttonManager, hashMap, mlanguageId);
                 idao.ReadDBData_Firebase(view, null);
-                mCallback.onArticleSelected(hashMap,"");
+                if (choice!="progress") {
+                    query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
+                    idao = new aDAOImplProgress(query, "", buttonManager, hashMap, mlanguageId);
+                    idao.ReadDBData_Firebase(view, mCallback);
+                    mCallback.onArticleSelected(hashMap, "");
+                }
                 break;
         }
         hashMap.clear();
