@@ -119,7 +119,6 @@ public class FirstFragment extends Fragment {
         Query query=null;
         mlanguageId =lang;
         mMenuId=MenuId;
-        hashMap.put("10", "10");
 
         //LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
         //linearLayout.removeAllViews();
