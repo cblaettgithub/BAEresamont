@@ -1,103 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.chbla.ba_eresamont.Activity.GoogleSingActivity">
+    android:fillViewport="true">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" android:background="#ffffff">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <!--  Header  Starts-->
+        <LinearLayout android:id="@+id/header"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/textView2"
+            android:paddingTop="5dip"
+            android:paddingBottom="5dip">
+            <!-- Logo Start-->
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="100px"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginBottom="346dp"
-                android:layout_marginTop="700px"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="TextView"
-                tools:text="More Information about Health and Sickness, Tipps for Walking, Hiking, Mountains, Heart, Conditions" />
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@color/colorPrimary"
+                    android:lineSpacingExtra="8sp"
+                    android:text="e-Resamont"
+                    android:textAlignment="center"
+                    android:textColor="@color/common_google_signin_btn_text_dark_pressed"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dip"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/hesso_header" />
+            </LinearLayout>
+
+            <!-- Logo Ends -->
         </LinearLayout>
+        <!--  Header Ends -->
+        <!-- Footer Start -->
+        <LinearLayout
+            android:id="@+id/footer"
+            android:layout_width="fill_parent"
+            android:layout_height="70dip"
+            android:layout_alignParentBottom="true">
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/logohessovalaisfooter" />
+        </LinearLayout>
+        <!-- Footer Ends -->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="match_parent"
-            android:layout_height="314dp"
-            android:layout_marginTop="70px"
-            app:srcCompat="@drawable/bellevue_0014" />
-
-    </LinearLayout>
-
-    <LinearLayout
+        <!-- Login Form -->
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="horizontal">
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/status_textview"
-            android:layout_width="match_parent"
-            android:layout_height="40px"
-            android:layout_marginBottom="100px"
-            android:layout_marginLeft="100px"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:textSize="14sp"
-            android:theme="@style/AlertDialog.AppCompat"
-            android:title="Welcome to BA Erasomont"
-            android:visibility="visible"
-            tools:text="e-Res@mont Information" />
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="600px"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/signOutButton"
-            android:layout_width="600px"
             android:layout_height="wrap_content"
-            android:text="Sign Out"
-            android:title="Sign out"
-            tools:text="Sign Out" />
+            android:padding="10dip"
+            android:layout_below="@id/header">
+            <!--  Email Label -->
+            <TextView android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#372c24"
+                android:text="Email"/>
+            <EditText android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="20dip"
+                android:singleLine="true"/>
+            <!--  Password Label -->
+            <TextView android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#372c24"
+                android:text="Password"/>
+            <EditText android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dip"
+                android:singleLine="true"
+                android:password="true"/>
+            <!-- Login button -->
+            <com.google.android.gms.common.SignInButton
+                android:id="@+id/sign_in_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/signOutButton"
+                tools:text="Sign Out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sign Out"
+                android:title="Sign out" />
 
-    <include
-        layout="@layout/app_bar_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity=""
-        android:visibility="visible" />
+            <TextView
+                android:id="@+id/status_textview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="14sp"
+                android:visibility="visible" />
+            <!-- Link to Registration Screen -->
+            <TextView
+                android:id="@+id/link_to_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dip"
+                android:layout_marginTop="40dip"
+                android:gravity="center"
+                android:text="More Information about Reasomont ?"
+                android:textColor="#0b84aa"
+                android:textSize="20dip" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/logohessovalaisfooter"
-        app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+        </LinearLayout>
+        <!-- Login Form Ends -->
+    </RelativeLayout>
+</ScrollView>
 
-</FrameLayout>
