@@ -268,7 +268,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                     String content="";
-                    String neu;
+                    String neu="";
                     Pages pages = dataSnapshot.getValue(Pages.class);
                     content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
                     //if (content=="")
@@ -276,7 +276,9 @@ public class MainActivity extends AppCompatActivity
 
                     neu = setCorrectContent(content);
                     contentView.loadData(neu, "text/html", "UTF-8");
-                 }
+                    if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113)
+                        contentView.reload();
+                }
 
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {                    }
@@ -314,7 +316,7 @@ public class MainActivity extends AppCompatActivity
     }
     @NonNull
     private String setCorrectContent( String content) {
-        String neu;
+        String neu="";
         neu=content.replaceAll("style=", "style=\"").toString();
         neu=neu.replaceAll(";>", ";\">").toString();
         neu=neu.replaceAll("src=", "src=\"").toString();
