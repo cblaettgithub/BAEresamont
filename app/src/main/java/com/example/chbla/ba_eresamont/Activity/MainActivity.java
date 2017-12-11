@@ -273,6 +273,7 @@ public class MainActivity extends AppCompatActivity
                     content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
                     //if (content=="")
                     //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.getArrayIndex(pages,mlanguageID))).getPlaintext().toString();
+
                     neu = setCorrectContent(content);
                     contentView.loadData(neu, "text/html", "UTF-8");
                  }
