@@ -35,7 +35,7 @@ public class aDAOImplOne extends aDAO {
        webSettings.setJavaScriptEnabled(true);
 
        this.query.addChildEventListener(new ChildEventListener() {
-            String content, neu;
+            String content="", neu="";
             Pages pages;
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {

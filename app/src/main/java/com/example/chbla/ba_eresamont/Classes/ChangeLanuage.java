@@ -70,7 +70,7 @@ public class ChangeLanuage {
         switch (parent_id) {//Liste anzeigen
             //we start again the frameset with new language.
             case "0":
-                //setHomeAtfirst();
+
                 query.addChildEventListener(new ChildEventListener() {
                     Pages pages;
                     int i = 0;
@@ -87,7 +87,7 @@ public class ChangeLanuage {
                                     button = new Button(getContext());
                                     //Button button= (Button)contentview.getChildAt(i);//error null
                                     button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
-                                    hashMap.put(String.valueOf(i), button.getText());
+                                    hashMap.put(String.valueOf(pages.getId().toString()), button.getText());
                                     buttonArrayList.add(button);
                                     i++;
                                 }
@@ -135,6 +135,7 @@ public class ChangeLanuage {
                                 if (pages1.getParent_id() == parent_id) {
                                     button = new Button(getContext());
                                     button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
+                                    button.setId(Integer.parseInt(pages1.getId().toString()));
                                     buttonArrayList.add(button);
                                     //((Button)contentview.getChildAt(i)).setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
                                    /*if (pages1.getPages_lang()!=null){
@@ -147,7 +148,7 @@ public class ChangeLanuage {
                         }
                         SortButtons(buttonArrayList);
                         for (int i = 0; i < buttonArrayList.size(); i++) {
-                            hashMap.put(String.valueOf(i), buttonArrayList.get(i).getText());
+                            hashMap.put(String.valueOf(buttonArrayList.get(i).getId()), buttonArrayList.get(i).getText());//neu 12.12.2017
                             ((Button) contentview.getChildAt(i)).setText(buttonArrayList.get(i).getText());
                         }
                         creatingMenuLeft.creatingMenus("MenuChange", hashMap);  //creatingMenus("MenuChange");
@@ -184,13 +185,13 @@ public class ChangeLanuage {
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                     Pages pages1 = dataSnapshot.getValue(Pages.class);
                     if (pages1!=null) {
-                        hashMap.put(String.valueOf(i), pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
+                        hashMap.put(pages1.getId().toString(), pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
                         Log.d("ChangelangMenue", pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
                         i++;
                         StringArrayList.add(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
                     }
-                for(int i=0;i<StringArrayList.size();i++)
-                    hashMap.put(String.valueOf(i), StringArrayList.get(i));
+                //for(int i=0;i<StringArrayList.size();i++)
+                //    hashMap.put(String.valueOf(i), StringArrayList.get(i));
                 creatingMenuLeft.creatingMenus("MenuChange", hashMap);
             }
             @Override
