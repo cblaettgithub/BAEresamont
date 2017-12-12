@@ -233,15 +233,16 @@ public class MainActivity extends AppCompatActivity
     }
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
     {//buttons start changelanguage button
-     //webview start this
+
         final View view =fragment.getView();
         LinearLayout buttons = view.findViewById(R.id.outputlabel);
         LinearLayout line1 = view.findViewById(R.id.line1);
         WebView contentView = (WebView)line1.getChildAt(0);
         Bundle bundle;
-        ChangeLanuage changeLanuage;
+        final ChangeLanuage changeLanuage;
         NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
         changeLanuage= new ChangeLanuage(hashMap, mlanguageID, getApplication(),navigationView);
+
         if (buttons.getChildAt(2)!=null){
             Log.d(LOG_TAG, "Replace1 parentid:"+buttons.getChildAt(2).getTag().toString());
             this.setParentidChangelanguage(Long.parseLong(buttons.getChildAt(2).getTag().toString()));
@@ -260,10 +261,12 @@ public class MainActivity extends AppCompatActivity
             else
                  query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(contentView.getTag().toString()));
 
+
             query.addChildEventListener(new ChildEventListener() {
                 LinearLayout line1 = view.findViewById(R.id.line1);
                 WebView contentView = (WebView)line1.getChildAt(0);
                 CLanguageID cLanguageID= new CLanguageID();
+
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
@@ -273,11 +276,11 @@ public class MainActivity extends AppCompatActivity
                     content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
                     //if (content=="")
                     //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.getArrayIndex(pages,mlanguageID))).getPlaintext().toString();
-
                     neu = setCorrectContent(content);
                     contentView.loadData(neu, "text/html", "UTF-8");
                     if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113)
                         contentView.reload();
+                    changeLanuage.refrehMenuLanuager(pages.getParent_id());//um die Sprachen im Menü zu wechseln
                 }
 
                 @Override
@@ -291,7 +294,7 @@ public class MainActivity extends AppCompatActivity
             });
             Log.d(LOG_TAG, "Method parentid2:"+getParentidChangelanguage());
 
-            changeLanuage.refrehMenuLanuager(getParentidChangelanguage());//um die Sprachen im Menü zu wechseln
+            //changeLanuage.refrehMenuLanuager(getParentidChangelanguage());//um die Sprachen im Menü zu wechseln
             hashMap=changeLanuage.getHashMap();
             //creatingMenus("MenuChange");//Menü updaten
            }
