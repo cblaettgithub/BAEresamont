@@ -45,9 +45,7 @@ public class aDAOImplOne extends aDAO {
                         neu = setCorrectContent(content);
                         webView.loadData(neu, "text/html", "UTF-8");
                         Log.d(LOG_TAG, "aDAoImpOne");
-
                     }
-
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

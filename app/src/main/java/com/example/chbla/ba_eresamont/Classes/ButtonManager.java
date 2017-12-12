@@ -46,15 +46,22 @@ public class ButtonManager  {
     Query query=null;
     private long mlanguageID;//no value
     int i=1;
+    private String aDaoName;
+    public void setaDaoName(String aDaoName) {
+        this.aDaoName = aDaoName;
+    }
+    public String getaDaoName() {
+        return aDaoName;
+    }
     public void setMlanguageID(long mlanguageID) {
         this.mlanguageID = mlanguageID;
     }
-
     public FirstFragment.OnHeadlineSelectedListener mCallback;
     final DatabaseReference myRef = this.connectFirebase.getDatabaseReference();
     public WebView getWebView() {
         return webView;
     }
+    final ArrayList<Button> buttonArrayList = new ArrayList<>();
 
     public ButtonManager(Context contex, LinearLayout linearLayout, WebView webView) {
         this.contex = contex;
@@ -87,6 +94,8 @@ public class ButtonManager  {
                               long mlanguageID, FirstFragment.OnHeadlineSelectedListener mCallback) {
        this.mlanguageID =mlanguageID;//Sprache wird mitgegeben respr korrekter mlanguageID
        this.mCallback=mCallback;
+
+        Collections collections = null;
         if (!pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle().equals("")){
             Button button = this.ConfigButton(pages);
             this.pages=pages;
@@ -103,18 +112,21 @@ public class ButtonManager  {
                     }
                 }
             });
+            if (aDaoName=="leftStart")  //after add, probleme i also want to sort from left menu
+                buttonArrayList.add(button);
             linearLayout.addView(button);
-          // String text=((Button) ((android.view.View[])linearLayout.findViewWithTag("button"))[1]).getText() ;
-       }
+        }
+
     }
     private void SubButton(final Pages pages) {
         final int parent_id;
-        for(int i=0;i<linearLayout.getChildCount();i++)
+        /*for(int i=0;i<linearLayout.getChildCount();i++)
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
         if(linearLayout.getChildCount()>1){
             linearLayout.removeViewAt(1);
-        }
+        }*/
+        linearLayout.removeAllViewsInLayout();;
 
         DatabaseReference ref=myRef.getParent();
         query=ref.orderByChild("/pages/");
@@ -153,6 +165,12 @@ public class ButtonManager  {
             @Override
             public void onCancelled(DatabaseError databaseError) {            }
         });
+    }
+    public void sortButtonsProgress(){
+        Collections.sort(buttonArrayList, new ButtonsComparator());
+        linearLayout.removeAllViewsInLayout();;
+        for(int i=0;i<buttonArrayList.size();i++)
+            linearLayout.addView(buttonArrayList.get(i));
     }
     private void ButtonShowContent(Pages pages){//problem hashmap nicht aktualisert
         WebSettings webSettings = webView.getSettings();

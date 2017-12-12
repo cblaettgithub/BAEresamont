@@ -41,7 +41,7 @@ public class aDAOImplProgress extends aDAO {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 if (dataSnapshot.child("pages_lang").child(LANGUAGE).
-                        child("translate").toString()!=""){
+                        child("translate").toString()!="" && dataSnapshot.child("parent_id")!=null){
                     temp = (String) dataSnapshot.child("pages_lang").
                             child(LANGUAGE).child("title").getValue();
                     Pages pages = dataSnapshot.getValue(Pages.class);
@@ -49,8 +49,13 @@ public class aDAOImplProgress extends aDAO {
                         buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
                     else
                         buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
-                    mCallback.onArticleSelected(buttonManager.getHashMap(),"");
+                   mCallback.onArticleSelected(buttonManager.getHashMap(),"");
                 }
+                if (buttonManager.getaDaoName()=="leftStart"){///after add, problem, loop with class
+                    buttonManager.sortButtonsProgress();//Am Ende die Buttons sortieren
+                    buttonManager.setaDaoName("");
+                }
+
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

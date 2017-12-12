@@ -120,9 +120,7 @@ public class FirstFragment extends Fragment {
         mlanguageId =lang;
         mMenuId=MenuId;
 
-        //LinearLayout linearLayout = view.findViewById(R.id.outputlabel);
-        //linearLayout.removeAllViews();
-        IDAO idao;
+         IDAO idao;
         switch (choice){
             case "home"://show all topmenues
                 query=myRef.orderByChild("pages_lang/0/title");
@@ -143,6 +141,7 @@ public class FirstFragment extends Fragment {
                 idao = new aDAOImplOne(query, "", buttonManager, hashMap, mlanguageId, false);
                 idao.ReadDBData_Firebase(view, null);
                 if (choice!="progress") {
+                    buttonManager.setaDaoName("leftStart");
                     query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                     idao = new aDAOImplProgress(query, "", buttonManager, hashMap, mlanguageId, false);
                     idao.ReadDBData_Firebase(view, mCallback);
