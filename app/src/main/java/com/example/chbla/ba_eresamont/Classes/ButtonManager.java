@@ -112,31 +112,31 @@ public class ButtonManager  {
                     }
                 }
             });
-            if (aDaoName=="leftStart")  //after add, probleme i also want to sort from left menu
+            /*if (aDaoName=="leftStart")  //after add, probleme i also want to sort from left menu
                 buttonArrayList.add(button);
+            else*/
             linearLayout.addView(button);
         }
 
     }
     private void SubButton(final Pages pages) {
         final int parent_id;
-        /*for(int i=0;i<linearLayout.getChildCount();i++)
+        for(int i=0;i<linearLayout.getChildCount()+1;i++)
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
         if(linearLayout.getChildCount()>1){
             linearLayout.removeViewAt(1);
-        }*/
-        linearLayout.removeAllViewsInLayout();;
-
+            linearLayout.removeViewAt(0);
+        }
+        //linearLayout.removeAllViewsInLayout();;
         DatabaseReference ref=myRef.getParent();
         query=ref.orderByChild("/pages/");
         parent_id = Integer.parseInt(pages.getId().toString());
         Log.d(LOG_TAG, "Output Parent-id:"+i);
         //ref.getParent();
         //query = ref;
-       //hashMap.clear();
-        hashMap.put(pages.getId().toString(), pages.getId().toString());
-
+       hashMap.clear();
+        ///hashMap.put(pages.getId().toString(), pages.getId().toString());
         query.addChildEventListener(new ChildEventListener() {
             @Override
 
@@ -144,7 +144,7 @@ public class ButtonManager  {
                 for (DataSnapshot data :dataSnapshot.getChildren()) {
                    // if (data.getValue(Pages.class).getParent_id().equals(i))
                     Pages pages1=data.getValue(Pages.class);
-                    if (pages1.getParent_id()!=null) {
+                    if (pages1.getParent_id()!=null ) {
                         if (Integer.parseInt(pages1.getParent_id().toString()) == parent_id)
                             pagesArrayList.add(data.getValue(pages.getClass()));
                     }
@@ -183,6 +183,7 @@ public class ButtonManager  {
         content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
         neu = setCorrectContent(content);
         webView.loadData( neu, "text/html", "UTF-8");
+
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
 

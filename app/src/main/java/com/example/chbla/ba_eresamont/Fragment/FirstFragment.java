@@ -126,14 +126,14 @@ public class FirstFragment extends Fragment {
                 query=myRef.orderByChild("pages_lang/0/title");
                 idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);//ReadDBData_Firebase(query, "home");
-                mCallback.onArticleSelected(hashMap,"MenuChange");
+                //mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             case "progress"://show under menue
                 query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId, true);
                 idao.ReadDBData_Firebase(view, mCallback);
                 //ReadDBData_Firebase(query, "progress");  //mMainDetail=true;
-                mCallback.onArticleSelected(hashMap,"MenuChange");
+                //mCallback.onArticleSelected(hashMap,"MenuChange");
                 //hashMap.clear();
                 break;
             default://linkes menü
@@ -145,11 +145,14 @@ public class FirstFragment extends Fragment {
                     query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                     idao = new aDAOImplProgress(query, "", buttonManager, hashMap, mlanguageId, false);
                     idao.ReadDBData_Firebase(view, mCallback);
-                    mCallback.onArticleSelected(hashMap, "");
+                    /*if (buttonManager.getaDaoName()=="leftStart"){///after add, problem, loop with class
+                        buttonManager.sortButtonsProgress();//Am Ende die Buttons sortieren
+                        buttonManager.setaDaoName("");
+                    }*/
+                    //mCallback.onArticleSelected(hashMap, "");
                  }
                 break;
         }
-        //hashMap.clear();
 
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }

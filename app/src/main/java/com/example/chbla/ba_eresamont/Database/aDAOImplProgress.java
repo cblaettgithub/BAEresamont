@@ -51,10 +51,7 @@ public class aDAOImplProgress extends aDAO {
                         buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
                    mCallback.onArticleSelected(buttonManager.getHashMap(),"");
                 }
-                if (buttonManager.getaDaoName()=="leftStart"){///after add, problem, loop with class
-                    buttonManager.sortButtonsProgress();//Am Ende die Buttons sortieren
-                    buttonManager.setaDaoName("");
-                }
+
 
             }
             @Override
