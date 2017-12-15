@@ -178,26 +178,23 @@ public class ButtonManager  {
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
 
-
         String content="";
         String neu, neuumgesetzt="";
         content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
+        webView.setTag(pages.getId());
         if (pages.getParent_id()==87){//only boite a outil
-            webView.setTag(pages.getId());
+
             webView.setInitialScale(1);
             webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);
             webView.getSettings().setJavaScriptEnabled(true);
         }
-
         //neu = new ContentCorrecter(content).setDefaultWidth();
 
         webView.loadData( content, "text/html", "UTF-8");
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
     }
-
-
 
     private String contentTranslateProcessing(Pages pages){
         String content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate();

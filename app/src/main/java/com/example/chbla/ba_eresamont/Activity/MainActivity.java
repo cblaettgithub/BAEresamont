@@ -261,12 +261,10 @@ public class MainActivity extends AppCompatActivity
             else
                  query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(contentView.getTag().toString()));
 
-
             query.addChildEventListener(new ChildEventListener() {
                 LinearLayout line1 = view.findViewById(R.id.line1);
                 WebView contentView = (WebView)line1.getChildAt(0);
                 CLanguageID cLanguageID= new CLanguageID();
-
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
@@ -274,18 +272,21 @@ public class MainActivity extends AppCompatActivity
                     String neu="";
                     Pages pages = dataSnapshot.getValue(Pages.class);
                     content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
-                    if (pages.getParent_id()==87){//only boite a outil
-                        contentView.setTag(pages.getId());
+                    //if (content=="")
+                    //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.getArrayIndex(pages,mlanguageID))).getPlaintext().toString();
+                    //neu = setCorrectContent(content);
+                    //contentView.setTag(pages.getId());
+                    if (pages.getParent_id()==87){
                         contentView.setInitialScale(1);
                         contentView.getSettings().setLoadWithOverviewMode(true);
                         contentView.getSettings().setUseWideViewPort(true);
                         contentView.getSettings().setJavaScriptEnabled(true);
                     }
-                    //if (content=="")
-                    //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.getArrayIndex(pages,mlanguageID))).getPlaintext().toString();
-                    //neu = new ContentCorrecter(content).setCorrectContent();
+
                     contentView.loadData(content, "text/html", "UTF-8");
-                    if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113)//lake louis quiz, algoatirh, checklist telemedicine
+                    if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113||
+                    pages.getId()==33 || pages.getId()==34 || pages.getId()==103||pages.getId()==118||
+                    pages.getId()==122 || pages.getId()==107 || pages.getId()==91 ||pages.getId()==109)
                         contentView.reload();
                     if (pages.getParent_id()!=null)
                            changeLanuage.refrehMenuLanuager(pages.getParent_id());//um die Sprachen im Menü zu wechseln
@@ -319,6 +320,7 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
     @Override
     public void onArticleSelected(TreeMap ohashMap, String choice) {
         hashMap=ohashMap;
