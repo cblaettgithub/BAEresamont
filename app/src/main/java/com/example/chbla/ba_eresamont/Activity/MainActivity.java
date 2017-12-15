@@ -274,13 +274,21 @@ public class MainActivity extends AppCompatActivity
                     String neu="";
                     Pages pages = dataSnapshot.getValue(Pages.class);
                     content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
+                    if (pages.getParent_id()==87){//only boite a outil
+                        contentView.setTag(pages.getId());
+                        contentView.setInitialScale(1);
+                        contentView.getSettings().setLoadWithOverviewMode(true);
+                        contentView.getSettings().setUseWideViewPort(true);
+                        contentView.getSettings().setJavaScriptEnabled(true);
+                    }
                     //if (content=="")
                     //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.getArrayIndex(pages,mlanguageID))).getPlaintext().toString();
-                    neu = setCorrectContent(content);
-                    contentView.loadData(neu, "text/html", "UTF-8");
-                    if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113)
+                    //neu = new ContentCorrecter(content).setCorrectContent();
+                    contentView.loadData(content, "text/html", "UTF-8");
+                    if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113)//lake louis quiz, algoatirh, checklist telemedicine
                         contentView.reload();
-                    changeLanuage.refrehMenuLanuager(pages.getParent_id());//um die Sprachen im Menü zu wechseln
+                    if (pages.getParent_id()!=null)
+                           changeLanuage.refrehMenuLanuager(pages.getParent_id());//um die Sprachen im Menü zu wechseln
                 }
 
                 @Override
@@ -311,20 +319,11 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
     @Override
     public void onArticleSelected(TreeMap ohashMap, String choice) {
         hashMap=ohashMap;
         creatingMenus(choice);
     }
-    @NonNull
-    private String setCorrectContent( String content) {
-        String neu="";
-        neu=content.replaceAll("style=", "style=\"").toString();
-        neu=neu.replaceAll(";>", ";\">").toString();
-        neu=neu.replaceAll("src=", "src=\"").toString();
-        neu=neu.replaceAll("alt", "\" alt").toString();
-        return neu;
-    }
+
 }
 

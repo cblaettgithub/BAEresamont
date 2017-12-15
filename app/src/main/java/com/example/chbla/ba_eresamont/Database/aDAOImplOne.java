@@ -42,8 +42,15 @@ public class aDAOImplOne extends aDAO {
                     Pages pages=dataSnapshot.getValue(Pages.class);
                     if (pages!=null){
                         content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanuageId)).getTranslate().toString();
-                        neu = setCorrectContent(content);
-                        webView.loadData(neu, "text/html", "UTF-8");
+                        //neu = setCorrectContent(content);
+                        if (pages.getParent_id()==87){//only boite a outil
+                            webView.setTag(pages.getId());
+                            webView.setInitialScale(1);
+                            webView.getSettings().setLoadWithOverviewMode(true);
+                            webView.getSettings().setUseWideViewPort(true);
+                            webView.getSettings().setJavaScriptEnabled(true);
+                        }
+                        webView.loadData(content, "text/html", "UTF-8");
                         Log.d(LOG_TAG, "aDAoImpOne");
                     }
             }
@@ -62,13 +69,5 @@ public class aDAOImplOne extends aDAO {
             }
         });
     }
-    @NonNull
-    private String setCorrectContent(String content) {
-        String neu;
-        neu=content.replaceAll("style=", "style=\"").toString();
-        neu=neu.replaceAll(";>", ";\">").toString();
-        neu=neu.replaceAll("src=", "src=\"").toString();
-        neu=neu.replaceAll("alt", "\" alt").toString();
-        return neu;
-    }
+
 }

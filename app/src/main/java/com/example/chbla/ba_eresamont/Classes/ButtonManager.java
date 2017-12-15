@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -176,28 +177,27 @@ public class ButtonManager  {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-          webView.setTag(pages.getId());
+
 
         String content="";
-        String neu;
+        String neu, neuumgesetzt="";
         content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
-        neu = setCorrectContent(content);
-        webView.loadData( neu, "text/html", "UTF-8");
+        if (pages.getParent_id()==87){//only boite a outil
+            webView.setTag(pages.getId());
+            webView.setInitialScale(1);
+            webView.getSettings().setLoadWithOverviewMode(true);
+            webView.getSettings().setUseWideViewPort(true);
+            webView.getSettings().setJavaScriptEnabled(true);
+        }
 
+        //neu = new ContentCorrecter(content).setDefaultWidth();
+
+        webView.loadData( content, "text/html", "UTF-8");
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
-
     }
 
-    @NonNull
-    private String setCorrectContent(String content) {
-        String neu;
-        neu=content.replaceAll("style=", "style=\"").toString();
-        neu=neu.replaceAll(";>", ";\">").toString();
-        neu=neu.replaceAll("src=", "src=\"").toString();
-        neu=neu.replaceAll("alt", "\" alt").toString();
-        return neu;
-    }
+
 
     private String contentTranslateProcessing(Pages pages){
         String content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate();

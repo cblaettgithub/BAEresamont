@@ -52,7 +52,6 @@ public class aDAOImplProgress extends aDAO {
                    mCallback.onArticleSelected(buttonManager.getHashMap(),"");
                 }
 
-
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
