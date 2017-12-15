@@ -1,6 +1,5 @@
 package com.example.chbla.ba_eresamont.Classes;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -17,16 +16,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.TreeMap;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 /**
  * Created by chbla on 22.11.2017.
@@ -183,38 +175,17 @@ public class ButtonManager  {
         content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
         webView.setTag(pages.getId());
         if (pages.getParent_id()==87){//only boite a outil
-
             webView.setInitialScale(1);
             webView.getSettings().setLoadWithOverviewMode(true);
             webView.getSettings().setUseWideViewPort(true);
             webView.getSettings().setJavaScriptEnabled(true);
         }
-        //neu = new ContentCorrecter(content).setDefaultWidth();
-
+        content=new ContentCorrecter(content).contentEscapeProcessing();
+        if (pages.getId()==100)
+                content=new ContentCorrecter(content).removeComments();
         webView.loadData( content, "text/html", "UTF-8");
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
-    }
-
-    private String contentTranslateProcessing(Pages pages){
-        String content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate();
-
-        Document doc = Jsoup.parse(content);
-        Elements all=doc.getAllElements();
-        String document=doc.text().replaceAll("\n" ,"");
-        String html;
-
-        for(int i=0;i<all.size();i++){
-            //all.get(i).childNode(0).outerHtml().replaceAll("\n", "");
-            //TextNode textNode= (TextNode) all.get(i).childNode(0);
-            //textNode.text().replaceAll("\n", "");
-            Element e = all.get(i);
-            String work=e.text();
-            e.text(work.replaceAll("&#92;n", ""));
-
-        }
-        html=doc.toString();
-         return html;
     }
 
 }

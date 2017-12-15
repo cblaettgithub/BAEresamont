@@ -16,14 +16,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import com.example.chbla.ba_eresamont.Classes.*;
 
-import com.example.chbla.ba_eresamont.Classes.ButtonManager;
 import com.example.chbla.ba_eresamont.Classes.CLanguageID;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
@@ -36,11 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
 
-import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -276,13 +268,15 @@ public class MainActivity extends AppCompatActivity
                     //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.getArrayIndex(pages,mlanguageID))).getPlaintext().toString();
                     //neu = setCorrectContent(content);
                     //contentView.setTag(pages.getId());
+                    content=new ContentCorrecter(content).contentEscapeProcessing();
                     if (pages.getParent_id()==87){
                         contentView.setInitialScale(1);
                         contentView.getSettings().setLoadWithOverviewMode(true);
                         contentView.getSettings().setUseWideViewPort(true);
                         contentView.getSettings().setJavaScriptEnabled(true);
                     }
-
+                    if (pages.getId()==100)
+                        content=new ContentCorrecter(content).removeComments();
                     contentView.loadData(content, "text/html", "UTF-8");
                     if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113||
                     pages.getId()==33 || pages.getId()==34 || pages.getId()==103||pages.getId()==118||

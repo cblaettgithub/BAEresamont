@@ -2,6 +2,7 @@ package com.example.chbla.ba_eresamont.Database;
 
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
+import com.example.chbla.ba_eresamont.Classes.ContentCorrecter;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
@@ -10,7 +11,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -50,6 +50,9 @@ public class aDAOImplOne extends aDAO {
                             webView.getSettings().setUseWideViewPort(true);
                             webView.getSettings().setJavaScriptEnabled(true);
                         }
+                        if (pages.getId()==100)
+                            content=new ContentCorrecter(content).removeComments();
+                        content=new ContentCorrecter(content).contentEscapeProcessing();
                         webView.loadData(content, "text/html", "UTF-8");
                         Log.d(LOG_TAG, "aDAoImpOne");
                     }
