@@ -46,7 +46,6 @@ public class ChangeLanuage {
         return context;    }
     CreatingMenuLeft creatingMenuLeft;
 
-
     public ChangeLanuage(TreeMap hashMap, long mlanguageID, Context context,NavigationView navigationView) {
         this.hashMap = hashMap;
         this.mlanguageID = mlanguageID;
@@ -70,19 +69,15 @@ public class ChangeLanuage {
         switch (parent_id) {//Liste anzeigen
             //we start again the frameset with new language.
             case "0":
-
                 query.addChildEventListener(new ChildEventListener() {
                     Pages pages;
                     int i = 0;
-
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                         if (dataSnapshot.child("parent_id").exists() == false) {
                             if (dataSnapshot.child("pages_lang").child("0").child("title").
                                     getValue() != null) {
-                                pages = dataSnapshot.getValue(Pages.class);
-                                Log.d(LOG_TAG, "Sprache 0:" + mlanguageID);
-                                Button button;
+                                pages = dataSnapshot.getValue(Pages.class);                                 Button button;
                                 if (pages != null) {
                                     button = new Button(getContext());
                                     //Button button= (Button)contentview.getChildAt(i);//error null
@@ -98,7 +93,6 @@ public class ChangeLanuage {
                             ((Button) contentview.getChildAt(i)).setText(buttonArrayList.get(i).getText());
                         }
                         creatingMenuLeft.creatingMenus("MenuChange", hashMap);
-
                         //SortButtons(buttonArrayList);
                         //creatingMenus("MenuChange");//Menü updaten
                     }

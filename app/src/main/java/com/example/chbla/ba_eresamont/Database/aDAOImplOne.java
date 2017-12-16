@@ -43,12 +43,11 @@ public class aDAOImplOne extends aDAO {
                     if (pages!=null){
                         content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanuageId)).getTranslate().toString();
                         //neu = setCorrectContent(content);
-                        if (pages.getParent_id()==87){//only boite a outil
-                            webView.setTag(pages.getId());
+                        webView.setTag(pages.getId());
+                        if (pages.getId()==87){//only boite a outil
                             webView.setInitialScale(1);
                             webView.getSettings().setLoadWithOverviewMode(true);
                             webView.getSettings().setUseWideViewPort(true);
-                            webView.getSettings().setJavaScriptEnabled(true);
                         }
                         if (pages.getId()==100)
                             content=new ContentCorrecter(content).removeComments();
