@@ -143,7 +143,6 @@ public class ButtonManager  {
                     ButtonCreator(pagesArrayList.get(i),  null,hashMap, mlanguageID, mCallback);
                     //hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
                 }
-
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {            }
@@ -166,23 +165,11 @@ public class ButtonManager  {
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
 
-        String content="";
-        String neu, neuumgesetzt="";
-        content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
-        webView.setTag(pages.getId());
-        if (pages.getParent_id()==87){//only boite a outil
-            webView.setInitialScale(1);
-            webView.getSettings().setLoadWithOverviewMode(true);
-            webView.getSettings().setUseWideViewPort(true);
-            webView.getSettings().setJavaScriptEnabled(true);
-        }
-        content=new ContentCorrecter(content).contentEscapeProcessing();
-        if (pages.getId()==100)
-                content=new ContentCorrecter(content).removeComments();
-        webView.loadData( content, "text/html", "UTF-8");
+        new ShowContentApp().showContentApp(pages, webView, mlanguageID);
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
     }
+
 
 }
 

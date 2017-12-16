@@ -260,14 +260,12 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+
                     String content="";
                     String neu="";
                     Pages pages = dataSnapshot.getValue(Pages.class);
+                    //new ShowContentApp().showContentApp(pages, webView, mlanguageID); ;
                     content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
-                    //if (content=="")
-                    //    content=pages.getPages_lang().get(Integer.parseInt(cLanguageID.getArrayIndex(pages,mlanguageID))).getPlaintext().toString();
-                    //neu = setCorrectContent(content);
-                    //contentView.setTag(pages.getId());
                     content=new ContentCorrecter(content).contentEscapeProcessing();
                     if (pages.getParent_id()==87){
                         contentView.setInitialScale(1);
@@ -278,10 +276,10 @@ public class MainActivity extends AppCompatActivity
                     if (pages.getId()==100)
                         content=new ContentCorrecter(content).removeComments();
                     contentView.loadData(content, "text/html", "UTF-8");
-                    if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113||
-                    pages.getId()==33 || pages.getId()==34 || pages.getId()==103||pages.getId()==118||
-                    pages.getId()==122 || pages.getId()==107 || pages.getId()==91 ||pages.getId()==109)
+                    if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113)
                         contentView.reload();
+                    /*pages.getId()==33 || pages.getId()==34 || pages.getId()==103||pages.getId()==118||
+                    pages.getId()==122 || pages.getId()==107 || pages.getId()==91 ||pages.getId()==109*/
                     if (pages.getParent_id()!=null)
                            changeLanuage.refrehMenuLanuager(pages.getParent_id());//um die Sprachen im Menü zu wechseln
                 }

@@ -3,6 +3,7 @@ package com.example.chbla.ba_eresamont.Database;
 
 import com.example.chbla.ba_eresamont.Classes.ButtonManager;
 import com.example.chbla.ba_eresamont.Classes.ContentCorrecter;
+import com.example.chbla.ba_eresamont.Classes.ShowContentApp;
 import com.example.chbla.ba_eresamont.Fragment.FirstFragment;
 import com.example.chbla.ba_eresamont.Models.Pages;
 import com.example.chbla.ba_eresamont.R;
@@ -40,30 +41,14 @@ public class aDAOImplOne extends aDAO {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Pages pages=dataSnapshot.getValue(Pages.class);
-                    if (pages!=null){
-                        content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanuageId)).getTranslate().toString();
-                        //neu = setCorrectContent(content);
-                        webView.setTag(pages.getId());
-                        if (pages.getParent_id()!=null){
-                            if (pages.getParent_id()==87){//only boite a outil
-                                webView.setInitialScale(1);
-                                webView.getSettings().setLoadWithOverviewMode(true);
-                                webView.getSettings().setUseWideViewPort(true);
-                            }
-                        }
-                        if (pages.getId()==100)
-                            content=new ContentCorrecter(content).removeComments();
-                        content=new ContentCorrecter(content).contentEscapeProcessing();
-                        webView.loadData(content, "text/html", "UTF-8");
-                        Log.d(LOG_TAG, "aDAoImpOne");
-                    }
+                new ShowContentApp().showContentApp(pages, webView, mlanuageId); ;
             }
-            @Override
+
+           @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
             }
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
             }
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
@@ -73,4 +58,6 @@ public class aDAOImplOne extends aDAO {
             }
         });
     }
+
+
 }
