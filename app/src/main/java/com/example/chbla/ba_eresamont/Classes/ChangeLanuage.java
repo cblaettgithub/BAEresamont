@@ -200,10 +200,7 @@ public class ChangeLanuage {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-
-
         });
-
     }
     private void SortButtons (ArrayList < Button > buttonArrayList) {
         Collections collections = null;
