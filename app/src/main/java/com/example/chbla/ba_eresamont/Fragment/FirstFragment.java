@@ -153,7 +153,6 @@ public class FirstFragment extends Fragment {
                  }
                 break;
         }
-
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
 

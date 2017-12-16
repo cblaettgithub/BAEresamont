@@ -38,6 +38,7 @@ public class aDAOImplProgress extends aDAO {
        this.query.addChildEventListener(new ChildEventListener() {
             String temp;
             Pages pages;
+            String choice="";
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 if (dataSnapshot.child("pages_lang").child(LANGUAGE).
@@ -45,13 +46,17 @@ public class aDAOImplProgress extends aDAO {
                     temp = (String) dataSnapshot.child("pages_lang").
                             child(LANGUAGE).child("title").getValue();
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    if(monetwopages)//true zwei pages für buttonmangager, else nur one pages
+                    if(monetwopages){
+                        //true zwei pages für buttonmangager(menue + submenue), else nur one pages
                         buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
-                    else
+                    }
+                    else{
                         buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
-                   mCallback.onArticleSelected(buttonManager.getHashMap(),"");
+                        buttonManager.sortButtonsProgress();
+                        choice="MenuChange";
+                    }
+                   mCallback.onArticleSelected(buttonManager.getHashMap(),choice);
                 }
-
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

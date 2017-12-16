@@ -87,14 +87,12 @@ public class ButtonManager  {
                               long mlanguageID, FirstFragment.OnHeadlineSelectedListener mCallback) {
        this.mlanguageID =mlanguageID;//Sprache wird mitgegeben respr korrekter mlanguageID
        this.mCallback=mCallback;
-
         Collections collections = null;
         if (!pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle().equals("")){
             Button button = this.ConfigButton(pages);
             this.pages=pages;
             this.hashMap=hashMap;
             hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
-
             button.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     if (pages2==null ){
@@ -105,11 +103,13 @@ public class ButtonManager  {
                     }
                 }
             });
-            /*if (aDaoName=="leftStart")  //after add, probleme i also want to sort from left menu
+            if (aDaoName=="leftStart")  //after add, probleme i also want to sort from left menu
                 buttonArrayList.add(button);
-            else*/
-            linearLayout.addView(button);
+            else
+                linearLayout.addView(button);
         }
+        for(int i=0;i<pagesArrayList.size();i++)
+            hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
 
     }
     private void SubButton(final Pages pages) {
@@ -125,11 +125,6 @@ public class ButtonManager  {
         DatabaseReference ref=myRef.getParent();
         query=ref.orderByChild("/pages/");
         parent_id = Integer.parseInt(pages.getId().toString());
-        Log.d(LOG_TAG, "Output Parent-id:"+i);
-        //ref.getParent();
-        //query = ref;
-       hashMap.clear();
-        ///hashMap.put(pages.getId().toString(), pages.getId().toString());
         query.addChildEventListener(new ChildEventListener() {
             @Override
 
@@ -146,8 +141,9 @@ public class ButtonManager  {
                 hashMap.clear();
                 for(int i=0;i<pagesArrayList.size();i++){
                     ButtonCreator(pagesArrayList.get(i),  null,hashMap, mlanguageID, mCallback);
-                    hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
+                    //hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
                 }
+
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {            }
