@@ -1,6 +1,5 @@
 package com.example.chbla.ba_eresamont.Database;
 
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -20,11 +19,11 @@ import java.util.TreeMap;
  * Created by chbla on 27.11.2017.
  */
 
-public class aDAOImplProgress extends aDAO {
+public class aDAOImplProgressSort extends aDAO {
 
     public  static final String LANGUAGE="1";
 
-    public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage, boolean onetwopage) {
+    public aDAOImplProgressSort(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage, boolean onetwopage) {
         super(query, choice, buttonManager, hashMap, mlanguage, onetwopage);
     }
 
@@ -38,6 +37,7 @@ public class aDAOImplProgress extends aDAO {
        this.query.addChildEventListener(new ChildEventListener() {
             String temp;
             Pages pages;
+
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 if (dataSnapshot.child("pages_lang").child(LANGUAGE).
@@ -45,8 +45,9 @@ public class aDAOImplProgress extends aDAO {
                     temp = (String) dataSnapshot.child("pages_lang").
                             child(LANGUAGE).child("title").getValue();
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
-                   mCallback.onArticleSelected(buttonManager.getHashMap(),"");
+                    buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
+                    buttonManager.sortButtonsProgress();
+                   mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
                 }
             }
             @Override

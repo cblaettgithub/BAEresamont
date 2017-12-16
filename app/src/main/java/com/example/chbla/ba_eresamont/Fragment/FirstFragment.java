@@ -19,6 +19,7 @@ import com.example.chbla.ba_eresamont.Classes.CLanguageID;
 import com.example.chbla.ba_eresamont.Database.aDAOImplHome;
 import com.example.chbla.ba_eresamont.Database.aDAOImplOne;
 import com.example.chbla.ba_eresamont.Database.aDAOImplProgress;
+import com.example.chbla.ba_eresamont.Database.aDAOImplProgressSort;
 import com.example.chbla.ba_eresamont.Interface.IDAO;
 import com.example.chbla.ba_eresamont.Database.ConnectFirebase;
 import com.example.chbla.ba_eresamont.Models.Pages;
@@ -130,26 +131,18 @@ public class FirstFragment extends Fragment {
                 break;
             case "progress"://show under menue
                 query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-                idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId, true);
+                idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);
-                //ReadDBData_Firebase(query, "progress");  //mMainDetail=true;
-                //mCallback.onArticleSelected(hashMap,"MenuChange");
-                //hashMap.clear();
                 break;
             default://linkes menü
                 query = myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplOne(query, "", buttonManager, hashMap, mlanguageId, false);
                 idao.ReadDBData_Firebase(view, null);
                 if (choice!="progress") {
-                    buttonManager.setaDaoName("leftStart");
+                    buttonManager.setaDaoName("leftStart");//alternative neue aDaoImpleklasse
                     query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
-                    idao = new aDAOImplProgress(query, "", buttonManager, hashMap, mlanguageId, false);
+                    idao = new aDAOImplProgressSort(query, "", buttonManager, hashMap, mlanguageId, false);
                     idao.ReadDBData_Firebase(view, mCallback);
-                    /*if (buttonManager.getaDaoName()=="leftStart"){///after add, problem, loop with class
-                        buttonManager.sortButtonsProgress();//Am Ende die Buttons sortieren
-                        buttonManager.setaDaoName("");
-                    }*/
-                    //mCallback.onArticleSelected(hashMap, "");
                  }
                 break;
         }
