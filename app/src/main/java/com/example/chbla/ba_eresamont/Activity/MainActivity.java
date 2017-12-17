@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity
            FirstFragment fragment=(FirstFragment)fragmentList.get(0);
            fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
            fragment.setHashMap(hashMap);
-            ReplaceFragmentContent(fragment);
+           ReplaceFragmentContent(fragment);
         }
     }
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
@@ -235,23 +235,19 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
         changeLanuage= new ChangeLanuage(hashMap, mlanguageID, getApplication(),navigationView);
 
-        if (buttons.getChildAt(2)!=null){
-            Log.d(LOG_TAG, "Replace1 parentid:"+buttons.getChildAt(2).getTag().toString());
-            this.setParentidChangelanguage(Long.parseLong(buttons.getChildAt(2).getTag().toString()));
-            Log.d(LOG_TAG, "Method1 parentid:"+this.getParentidChangelanguage());
-        }
         //parentid weiss ich über buttontag
-
         if (buttons.getChildCount()==0) { //  if (contentview.getChildCount()==0){
             connectFirebase= new ConnectFirebase();//nur ein content wechseln
             final DatabaseReference myRef = connectFirebase.getDatabaseReference();
             bundle = fragment.getArguments();
-            //int id=Integer.parseInt(bundle.getString(""));
             Query query;
-            if (contentView.getTag()==null)//Aufruf vom linken Menü
-                 query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(bundle.getString("Fragmentname")));
+            String parentchoice;
+
+            if(contentView.getTag()!=null)//Aufruf vom linken Menü
+                parentchoice=contentView.getTag().toString();
             else
-                 query=myRef.orderByChild(("id")).equalTo(Integer.parseInt(contentView.getTag().toString()));
+                parentchoice=bundle.getString("Fragmentname");
+            query= myRef.orderByChild(("id")).equalTo(Integer.parseInt(parentchoice));
 
             query.addChildEventListener(new ChildEventListener() {
                 LinearLayout line1 = view.findViewById(R.id.line1);
@@ -260,26 +256,8 @@ public class MainActivity extends AppCompatActivity
 
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-
-                    String content="";
-                    String neu="";
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    //new ShowContentApp().showContentApp(pages, webView, mlanguageID); ;
-                    content=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
-                    content=new ContentCorrecter(content).contentEscapeProcessing();
-                    if (pages.getParent_id()==87){
-                        contentView.setInitialScale(1);
-                        contentView.getSettings().setLoadWithOverviewMode(true);
-                        contentView.getSettings().setUseWideViewPort(true);
-                        contentView.getSettings().setJavaScriptEnabled(true);
-                    }
-                    if (pages.getId()==100)
-                        content=new ContentCorrecter(content).removeComments();
-                    contentView.loadData(content, "text/html", "UTF-8");
-                    if (pages.getId()==95 || pages.getId()==100 || pages.getId()==113)
-                        contentView.reload();
-                    /*pages.getId()==33 || pages.getId()==34 || pages.getId()==103||pages.getId()==118||
-                    pages.getId()==122 || pages.getId()==107 || pages.getId()==91 ||pages.getId()==109*/
+                    new ShowContentApp().showContentApp(pages, contentView, mlanguageID, false); ;
                     if (pages.getParent_id()!=null)
                            changeLanuage.refrehMenuLanuager(pages.getParent_id());//um die Sprachen im Menü zu wechseln
                 }
@@ -293,17 +271,12 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onCancelled(DatabaseError databaseError) {                    }
             });
-            Log.d(LOG_TAG, "Method parentid2:"+getParentidChangelanguage());
-
-            //changeLanuage.refrehMenuLanuager(getParentidChangelanguage());//um die Sprachen im Menü zu wechseln
             hashMap=changeLanuage.getHashMap();
             //creatingMenus("MenuChange");//Menü updaten
            }
         else{
             changeLanuage.changeLanguage(buttons);
-            //creatingMenus("MenuChange");//Menü updaten
-            //changeLanguage(buttons);
-        }
+       }
     }
 
     @Override

@@ -41,7 +41,7 @@ public class aDAOImplOne extends aDAO {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Pages pages=dataSnapshot.getValue(Pages.class);
-                new ShowContentApp().showContentApp(pages, webView, mlanuageId); ;
+                new ShowContentApp().showContentApp(pages, webView, mlanuageId, true); ;
             }
 
            @Override

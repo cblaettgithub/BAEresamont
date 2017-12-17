@@ -73,6 +73,8 @@ public class ButtonManager  {
     public Button ConfigButton(Pages pages) {
         String parent_id="0";
         Button button = new Button(this.getContex());
+        button.setShadowLayer(2, 1, 1, 60);
+
         button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());//pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getTitle()
         Log.d(LOG_TAG, "Output Page_Content:" +button.getText().toString());
         button.setHeight(40);
@@ -165,7 +167,7 @@ public class ButtonManager  {
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
 
-        new ShowContentApp().showContentApp(pages, webView, mlanguageID);
+        new ShowContentApp().showContentApp(pages, webView, mlanguageID, true);
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
     }
