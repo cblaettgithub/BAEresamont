@@ -16,4 +16,9 @@
         android:orderInCategory="100"
         android:title="English"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/Chat"
+        android:orderInCategory="100"
+        android:title="Chat"
+        app:showAsAction="never" />
 </menu>

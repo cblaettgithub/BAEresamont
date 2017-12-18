@@ -134,12 +134,12 @@ public class FirstFragment extends Fragment {
                 idao = new aDAOImplProgress(query,"",buttonManager,hashMap,mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);
                 break;
-            default://linkes menü
+            default://left menue start
                 query = myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplOne(query, "", buttonManager, hashMap, mlanguageId, false);
                 idao.ReadDBData_Firebase(view, null);
                 if (choice!="progress") {
-                    buttonManager.setaDaoName("leftStart");//alternative neue aDaoImpleklasse
+                    buttonManager.setaDaoName("leftStart");
                     query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));
                     idao = new aDAOImplProgressSort(query, "", buttonManager, hashMap, mlanguageId, false);
                     idao.ReadDBData_Firebase(view, mCallback);

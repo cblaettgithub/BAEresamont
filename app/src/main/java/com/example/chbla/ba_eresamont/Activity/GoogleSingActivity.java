@@ -2,6 +2,7 @@ package com.example.chbla.ba_eresamont.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -44,6 +45,13 @@ public class GoogleSingActivity extends AppCompatActivity implements
     private static final String TAG="SignInActivity";
     private static final int RC_SIGN_IN=9001;
     private Intent intent;
+    GoogleSignInAccount account;
+    public GoogleSignInAccount getAccount() {
+        return account;
+    }
+    public void setAccount(GoogleSignInAccount account) {
+        this.account = account;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +100,17 @@ public class GoogleSingActivity extends AppCompatActivity implements
             handleSignInResult(result);
             }
         }
+
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:"+result.isSuccess());
         if (result.isSuccess()){
             GoogleSignInAccount account=result.getSignInAccount();
-            statusTextView.setText(("hello, "+account.getDisplayName()));
+            setAccount(account);
+            statusTextView.setText(("Guten Tag, "+account.getDisplayName()));
             intent = new Intent(getApplicationContext(), MainActivity.class);
+            /*intent = new Intent(getApplicationContext(), ChatActivity.class);
+            intent.putExtra("User", account.getDisplayName());*/
             startActivity(intent);
-
         }else{
             statusTextView.setText(("Error, "+"User or Password wrong"));
         }
@@ -117,6 +128,7 @@ public class GoogleSingActivity extends AppCompatActivity implements
     public void onConnectionFailed(ConnectionResult connectionResult){
         Log.d(TAG, "onConnectionFailed:"+connectionResult);
     }
+    public void chat(){
 
-
+    }
 }

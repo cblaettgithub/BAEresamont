@@ -35,15 +35,11 @@ public class aDAOImplProgressSort extends aDAO {
        final FirstFragment.OnHeadlineSelectedListener mCallback=Callback;
 
        this.query.addChildEventListener(new ChildEventListener() {
-            String temp;
             Pages pages;
-
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 if (dataSnapshot.child("pages_lang").child(LANGUAGE).
                         child("translate").toString()!="" && dataSnapshot.child("parent_id")!=null){
-                    temp = (String) dataSnapshot.child("pages_lang").
-                            child(LANGUAGE).child("title").getValue();
                     Pages pages = dataSnapshot.getValue(Pages.class);
                     buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
                     buttonManager.sortButtonsProgress();

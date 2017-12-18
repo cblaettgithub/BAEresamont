@@ -1,5 +1,6 @@
 package com.example.chbla.ba_eresamont.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -162,6 +163,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void setHomeAtfirst(){
+        if (mlanguageID==0)
+            mlanguageID=1;
         Fragment_Man("home", mlanguageID, 0);
     }
     private void navigationItem(MenuItem menuItem)
@@ -206,6 +209,10 @@ public class MainActivity extends AppCompatActivity
                 mlanguageID =3;
                 fragmentGetter();
                 break;
+            case R.id.Chat:
+                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                intent.putExtra("User", "Christoph Blättler");
+                startActivity(intent);
                 default:
             break;
         }

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.example.chbla.ba_eresamont"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -30,8 +30,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.6.0'
     compile 'com.google.android.gms:play-services-auth:11.6.0'
     compile 'org.jsoup:jsoup:1.11.2'
-
-
+    compile 'com.firebaseui:firebase-ui:0.6.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
