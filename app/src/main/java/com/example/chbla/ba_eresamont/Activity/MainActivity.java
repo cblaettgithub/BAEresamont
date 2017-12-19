@@ -53,6 +53,13 @@ public class MainActivity extends AppCompatActivity
     private WebView webView;
     private boolean started=false;
     private long parentidChangelanguage;
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    private String username;
     public long getParentidChangelanguage() {
         return parentidChangelanguage;    }
     public void setParentidChangelanguage(long parentidChangelanguage) {
@@ -63,6 +70,8 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pagesArrayList= new ArrayList<>();
+        Bundle extras = getIntent().getExtras();//setting name for chatting
+        this.setUsername(extras.getString("User"));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -211,7 +220,7 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.Chat:
                 Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                intent.putExtra("User", "Christoph Blättler");
+                intent.putExtra("User", this.getUsername());
                 startActivity(intent);
                 default:
             break;

@@ -10,6 +10,10 @@ import com.example.chbla.ba_eresamont.Models.Pages;
 
 public class ShowContentApp {
     CLanguageID cLanguageID = new CLanguageID();
+    private  final String Name_exclude="exlude";
+    private  final String Name_reload="reload";
+    private  final String Name_sizing="sizing";
+    private  final String Name_nocomment="nocomment";
     public ShowContentApp() {
     }
     public void showContentApp(Pages pages, WebView webView, long mlanguageID, boolean tagModus) {
@@ -21,33 +25,50 @@ public class ShowContentApp {
                 webView.setTag(pages.getId());
             if (pages.getParent_id()!=null ){//89 le project
                 parentid=pages.getParent_id();// 100 = oxygen, 85=medical guide
-                if (parentid==87 || pages.getId()==100 ) {//only boite a outil, oxygen algot
+                if (exclude_reload_sizing(parentid, Name_sizing)){
                     webView.setInitialScale(1);
                     webView.getSettings().setLoadWithOverviewMode(true);
                     webView.getSettings().setUseWideViewPort(true);
                 }
             }
-            if (pages.getId()==100)
+            if (exclude_reload_sizing(pages.getId(), Name_nocomment))
                 content=new ContentCorrecter(content).removeComments();
-            if (excluding((pages.getId()))) {//Otherwise i got a backgroumd text under questionaire and evaluation de sante
+            if (exclude_reload_sizing(pages.getId(),Name_exclude)==false){
                 content = new ContentCorrecter(content).contentEscapeProcessing();
                 webView.loadData(content, "text/html", "UTF-8");
-                if (pages.getId() == 95 || pages.getId() == 100 || pages.getId() == 113)
+                if (exclude_reload_sizing(pages.getId(), Name_reload)){
                     webView.reload();
+                }
             }
-             /*pages.getId()==33 || pages.getId()==34 || pages.getId()==103||pages.getId()==118||
-                    pages.getId()==122 || pages.getId()==107 || pages.getId()==91 ||pages.getId()==109*/
-
         }
-
     }
-    public boolean excluding(long id)
-    {
-        boolean check=true;
-        if (id==126)
-            check=false;
-        if (id ==86)
-            check=false;
+    //methode for 3 settings
+    public boolean exclude_reload_sizing(long id, String name){
+        boolean check=false;
+        long arrayprocess[]={};//exclude Otherwise i got a backgroumd text under questionaire
+        long arrayexclud[]={86, 126};//evaluation de sante, questionare
+        long arrayreload[]=  {95, 100, 113};//process consulation,oxygen checklist for medic
+        long arraysizing[]={87};// boite a util, parentid
+        long arrayremcomment[]={100};//algorithme oxigen
+
+        switch (name) {
+            case Name_exclude:
+                arrayprocess = arrayexclud;
+                break;
+            case Name_reload:
+                arrayprocess = arrayreload;
+                break;
+            case Name_sizing:
+                arrayprocess = arraysizing;
+                break;
+            case Name_nocomment:
+                arrayprocess = arrayremcomment;
+                break;
+        }
+        for(int i=0;i<arrayprocess.length;i++){
+            if (id ==arrayprocess[i])
+                check=true;
+        }
         return check;
     }
 }

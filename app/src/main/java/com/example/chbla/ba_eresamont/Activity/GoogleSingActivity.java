@@ -108,8 +108,8 @@ public class GoogleSingActivity extends AppCompatActivity implements
             setAccount(account);
             statusTextView.setText(("Guten Tag, "+account.getDisplayName()));
             intent = new Intent(getApplicationContext(), MainActivity.class);
-            /*intent = new Intent(getApplicationContext(), ChatActivity.class);
-            intent.putExtra("User", account.getDisplayName());*/
+            //intent = new Intent(getApplicationContext(), ChatActivity.class);
+            intent.putExtra("User", account.getDisplayName());
             startActivity(intent);
         }else{
             statusTextView.setText(("Error, "+"User or Password wrong"));
