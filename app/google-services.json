@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:839482838632:android:6fc963c0eb124856",
         "android_client_info": {
-          "package_name": "com.example.chbla.myproject_firebasedemo"
+          "package_name": "ba.work.chbla.myproject_firebasedemo"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "839482838632-21r0fn9h6jup0dduup8jm4spa5dpp7b0.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.chbla.myproject_firebasedemo",
+            "package_name": "ba.work.chbla.myproject_firebasedemo",
             "certificate_hash": "580b3552f03f2d559cb076b1f437fd64e44da5fa"
           }
         },
@@ -54,7 +54,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:839482838632:android:ff40444e52faf5a3",
         "android_client_info": {
-          "package_name": "com.example.chbla.ba_eresamont"
+          "package_name": "ba.work.chbla.ba_eresamont"
         }
       },
       "oauth_client": [
@@ -62,7 +62,7 @@
           "client_id": "839482838632-j2qp5per1p2vahf9fkeh1ejetmocc3h9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.chbla.ba_eresamont",
+            "package_name": "ba.work.chbla.ba_eresamont",
             "certificate_hash": "580b3552f03f2d559cb076b1f437fd64e44da5fa"
           }
         },

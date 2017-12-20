@@ -20,7 +20,6 @@ import android.view.View;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 
-import ba.work.chbla.ba_eresamont.R;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +39,7 @@ import ba.work.chbla.ba_eresamont.Classes.ValueComparator;
 import ba.work.chbla.ba_eresamont.Database.ConnectFirebase;
 import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
 import ba.work.chbla.ba_eresamont.Models.Pages;
+import ba.work.chbla.ba_eresamont.R;
 
 
 public class MainActivity extends AppCompatActivity
