@@ -25,6 +25,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         final String username= getIntent().getExtras().getString("User");
+        DisplayMessage();
 
         FloatingActionButton fab =
                 (FloatingActionButton)findViewById(R.id.fab);
@@ -37,7 +38,7 @@ public class ChatActivity extends AppCompatActivity {
                        .setValue(new ChatMessage(input.getText().
                                toString(),username));
                input.setText("");
-               DisplayMessage();
+
             }
 
         });

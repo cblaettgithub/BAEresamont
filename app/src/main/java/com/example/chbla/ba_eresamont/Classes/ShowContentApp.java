@@ -51,6 +51,7 @@ public class ShowContentApp {
         long arrayreload[]=  {95, 100, 113};//process consulation,oxygen checklist for medic
         long arraysizing[]={87};// boite a util, parentid
         long arrayremcomment[]={100};//algorithme oxigen
+        long arrayimglocal[]={125};
 
         switch (name) {
             case Name_exclude:

@@ -52,4 +52,9 @@ public class ContentCorrecter {
         doc.outputSettings().charset("ASCII");
         return doc.toString();
     }
+    public String settingimgSet(){
+        output=content.replaceAll("resources/img/scaladiborg-en.png",
+                "\"resources/img/scaladiborg-en.png\"");
+        return output;
+    }
 }
