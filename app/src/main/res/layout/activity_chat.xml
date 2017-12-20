@@ -9,7 +9,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.chbla.ba_eresamont.Activity.ChatActivity">
+    tools:context="com.example.chbla.ba_eresamont.ba.example.chbla.ba_eresamont.Activity.ChatActivity">
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"

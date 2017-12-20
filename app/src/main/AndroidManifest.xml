@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.chbla.ba_eresamont">
+    package="ba.work.chbla.ba_eresamont">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- To auto-complete the emtitletext field in the login form with the user's emails -->
