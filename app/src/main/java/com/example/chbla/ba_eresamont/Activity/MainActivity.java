@@ -119,16 +119,18 @@ public class MainActivity extends AppCompatActivity
                  menushow.clear();
                  menushow.add(0, R.id.fragment_zero , 1,
                          "Home").setIcon(R.drawable.ic_menu_gallery);
-                 Map sortedMap = new TreeMap(new ValueComparator(hashMap));
-                 if (sortedMap!=null){
-                     sortedMap.putAll(hashMap);
-                     Iterator iterator=sortedMap.entrySet().iterator();
-                     while(iterator.hasNext()){//neu
-                         Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
-                         if (!entry.getValue().equals("")){
-                             menushow.add(0, Integer.parseInt(entry.getKey()) , 1,
-                                     entry.getValue()).setIcon(R.drawable.ic_menu_gallery);}
-                    }
+                 if (hashMap !=null){
+                     Map sortedMap = new TreeMap(new ValueComparator(hashMap));
+                     if (sortedMap!=null){
+                         sortedMap.putAll(hashMap);
+                         Iterator iterator=sortedMap.entrySet().iterator();
+                         while(iterator.hasNext()){//neu
+                             Map.Entry<String, String> entry =   (Map.Entry<String, String>) iterator.next();
+                             if (!entry.getValue().equals("")){
+                                 menushow.add(0, Integer.parseInt(entry.getKey()) , 1,
+                                         entry.getValue()).setIcon(R.drawable.ic_menu_gallery);}
+                         }
+                     }
                  }
                  break;
             default://Menü bleibt gleich Aufruf mit mcallback..hashmap choice ""
