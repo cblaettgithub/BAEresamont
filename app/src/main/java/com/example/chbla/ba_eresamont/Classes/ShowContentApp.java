@@ -37,6 +37,7 @@ public class ShowContentApp {
                 content = new ContentCorrecter(content).contentEscapeProcessing();
                 webView.loadData(content, "text/html", "UTF-8");
                 if (exclude_reload_sizing(pages.getId(), Name_reload)){
+                    webView.loadData(content, "text/html", "UTF-8");
                     webView.reload();
                 }
             }
