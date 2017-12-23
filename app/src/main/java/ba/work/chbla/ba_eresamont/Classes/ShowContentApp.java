@@ -14,12 +14,13 @@ public class ShowContentApp {
     private  final String Name_reload="reload";
     private  final String Name_sizing="sizing";
     private  final String Name_nocomment="nocomment";
+    private  final String Name_local="local";
     public ShowContentApp() {
     }
     public void showContentApp(Pages pages, WebView webView, long mlanguageID, boolean tagModus) {
         String content="";
         Long parentid;
-        if (pages!=null){
+         if (pages!=null){
             content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
             if (tagModus)
                 webView.setTag(pages.getId());
@@ -29,16 +30,25 @@ public class ShowContentApp {
                     webView.setInitialScale(1);
                     webView.getSettings().setLoadWithOverviewMode(true);
                     webView.getSettings().setUseWideViewPort(true);
+                    webView.getSettings().setSupportZoom(true);//for zooming
+                    webView.getSettings().setBuiltInZoomControls(true);
+                    webView.getSettings().setDisplayZoomControls(true);
                 }
             }
             if (exclude_reload_sizing(pages.getId(), Name_nocomment))
                 content=new ContentCorrecter(content).removeComments();
             if (exclude_reload_sizing(pages.getId(),Name_exclude)==false){
                 content = new ContentCorrecter(content).contentEscapeProcessing();
-                webView.loadData(content, "text/html", "UTF-8");
-                if (exclude_reload_sizing(pages.getId(), Name_reload)){
+                if (exclude_reload_sizing(pages.getId(), Name_local)){
+                    // String data = "<body>" + content+"<img src=\"resources/img/scaladiborg-en.png\"/ height=\"300\" width=\"300\"></body>";
+                    webView.loadDataWithBaseURL("file:///android_asset/",content , "text/html", "utf-8",null);
+                }
+                else {
                     webView.loadData(content, "text/html", "UTF-8");
-                    webView.reload();
+                    if (exclude_reload_sizing(pages.getId(), Name_reload)) {
+                        webView.loadData(content, "text/html", "UTF-8");
+                        webView.reload();
+                    }
                 }
             }
         }
@@ -51,7 +61,7 @@ public class ShowContentApp {
         long arrayreload[]=  {95, 100, 113};//process consulation,oxygen checklist for medic
         long arraysizing[]={87};// boite a util, parentid
         long arrayremcomment[]={100};//algorithme oxigen
-        long arrayimglocal[]={125};
+        long arrayimglocal[]={125};//questionarie, altitude
 
         switch (name) {
             case Name_exclude:
@@ -66,6 +76,10 @@ public class ShowContentApp {
             case Name_nocomment:
                 arrayprocess = arrayremcomment;
                 break;
+            case Name_local:
+                arrayprocess = arrayimglocal;
+                break;
+
         }
         for(int i=0;i<arrayprocess.length;i++){
             if (id ==arrayprocess[i])
