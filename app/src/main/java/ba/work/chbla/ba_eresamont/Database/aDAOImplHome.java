@@ -46,7 +46,7 @@ public class aDAOImplHome extends aDAO {
                             buttonManager.ButtonCreator(pages, null, hashMap, mlanuageId, mCallback);
                         else
                            buttonManager.ButtonCreator(pages, pages, hashMap, mlanuageId, mCallback);
-                           mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
+                           mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", "");
                     }
                 }
             }

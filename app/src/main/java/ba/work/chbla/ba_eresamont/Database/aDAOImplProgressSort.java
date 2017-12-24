@@ -43,7 +43,7 @@ public class aDAOImplProgressSort extends aDAO {
                     Pages pages = dataSnapshot.getValue(Pages.class);
                     buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
                     buttonManager.sortButtonsProgress();
-                   mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
+                   mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", "");
                 }
             }
             @Override

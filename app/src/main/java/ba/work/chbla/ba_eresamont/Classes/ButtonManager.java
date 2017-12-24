@@ -1,5 +1,6 @@
 package ba.work.chbla.ba_eresamont.Classes;
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -54,6 +55,7 @@ public class ButtonManager  {
         return webView;
     }
     final ArrayList<Button> buttonArrayList = new ArrayList<>();
+    private String mTitle;
 
     public ButtonManager(Context contex, LinearLayout linearLayout, WebView webView) {
         this.contex = contex;
@@ -114,6 +116,8 @@ public class ButtonManager  {
     }
     private void SubButton(final Pages pages) {
         final int parent_id;
+        mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
+        Log.d(LOG_TAG, "Title:"+mTitle);
         for(int i=0;i<linearLayout.getChildCount()+1;i++)
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
@@ -147,6 +151,7 @@ public class ButtonManager  {
                     ButtonCreator(pagesArrayList.get(i),  null,hashMap, mlanguageID, mCallback);
                     //hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
                 }
+                mCallback.onArticleSelected(null,"", mTitle);// /settile
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {            }
@@ -168,10 +173,13 @@ public class ButtonManager  {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
+        //tittel ändern
+        mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
+        Log.d(LOG_TAG, "Title:"+mTitle);
 
         new ShowContentApp().showContentApp(pages, webView, mlanguageID, true);
         if (mCallback!=null)//wies mcallback null ?
-            mCallback.onArticleSelected(hashMap,"MenuChange");//Menüs aktualisieren
+            mCallback.onArticleSelected(hashMap,"MenuChange", mTitle);//Menüs aktualisieren
     }
 
 

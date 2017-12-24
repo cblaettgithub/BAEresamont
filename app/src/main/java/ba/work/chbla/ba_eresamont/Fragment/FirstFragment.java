@@ -70,10 +70,10 @@ public class FirstFragment extends Fragment {
     }
     OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
-        void onArticleSelected(TreeMap hashMap, String choice);
+        void onArticleSelected(TreeMap hashMap, String choice, String mTitle);
     }
     public void onListItemClick(ListView l, View v, TreeMap hashMap, String choice) {
-        mCallback.onArticleSelected(hashMap, choice);
+        mCallback.onArticleSelected(hashMap, choice, "");
     }
 
     @Override

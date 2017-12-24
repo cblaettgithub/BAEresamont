@@ -242,6 +242,8 @@ public class MainActivity extends AppCompatActivity
            fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
            fragment.setHashMap(hashMap);
            ReplaceFragmentContent(fragment);
+           //setTitle(hashMap.get(0).toString());
+
         }
     }
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
@@ -308,10 +310,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onArticleSelected(TreeMap ohashMap, String choice) {
+    public void onArticleSelected(TreeMap ohashMap, String choice, String title) {
+       if (title!=""){
+               setTitle(title);
+       }
         hashMap=ohashMap;
         creatingMenus(choice);
     }
-
 }
 

@@ -194,6 +194,7 @@ public class ChangeLanuage {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+
     }
     private void SortButtons (ArrayList < Button > buttonArrayList) {
         Collections collections = null;

@@ -59,9 +59,11 @@ public class ChatActivity extends AppCompatActivity {
                 messageUser.setText(model.getMessageUser());
                 messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
                         model.getMessageTime()));
-                //messageTime.setText("123456");
+
             }
         };
-        listOfMessages.setAdapter(adapter);
+
+        if (adapter!=null)
+            listOfMessages.setAdapter(adapter);
     }
 }

@@ -42,7 +42,7 @@ public class aDAOImplProgress extends aDAO {
                         child("translate").toString()!="" && dataSnapshot.child("parent_id")!=null){
                      Pages pages = dataSnapshot.getValue(Pages.class);
                     buttonManager.ButtonCreator(pages, pages, hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
-                   mCallback.onArticleSelected(buttonManager.getHashMap(),"");
+                   mCallback.onArticleSelected(buttonManager.getHashMap(),"", "");
                 }
             }
             @Override
