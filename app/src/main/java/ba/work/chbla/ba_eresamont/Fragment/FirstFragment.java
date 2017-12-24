@@ -4,13 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.webkit.WebView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import ba.work.chbla.ba_eresamont.Classes.ButtonManager;
 import ba.work.chbla.ba_eresamont.Database.aDAOImplHome;
@@ -19,9 +23,13 @@ import ba.work.chbla.ba_eresamont.Database.aDAOImplProgress;
 import ba.work.chbla.ba_eresamont.Database.aDAOImplProgressSort;
 import ba.work.chbla.ba_eresamont.Interface.IDAO;
 import ba.work.chbla.ba_eresamont.Database.ConnectFirebase;
+import ba.work.chbla.ba_eresamont.Models.ChatMessage;
 import ba.work.chbla.ba_eresamont.Models.Pages;
+import ba.work.chbla.ba_eresamont.R;
 
+import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.util.TreeMap;
@@ -143,9 +151,11 @@ public class FirstFragment extends Fragment {
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
 
+
+
    /* private void ReadDBData_Firebase(Query query, String choice) {
         final String select = choice;
-        final WebView myWebView = view.findViewById(R.id.webView);
+        final WebView myWebView = mview.findViewById(R.id.webView);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         final CLanguageID cLanguageID = new CLanguageID();

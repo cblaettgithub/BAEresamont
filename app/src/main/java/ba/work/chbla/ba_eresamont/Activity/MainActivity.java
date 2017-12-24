@@ -3,11 +3,10 @@ package ba.work.chbla.ba_eresamont.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +36,7 @@ import ba.work.chbla.ba_eresamont.Classes.ChangeLanuage;
 import ba.work.chbla.ba_eresamont.Classes.ShowContentApp;
 import ba.work.chbla.ba_eresamont.Classes.ValueComparator;
 import ba.work.chbla.ba_eresamont.Database.ConnectFirebase;
+import ba.work.chbla.ba_eresamont.Fragment.ChatFragment;
 import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
 import ba.work.chbla.ba_eresamont.Models.Pages;
 import ba.work.chbla.ba_eresamont.R;
@@ -44,7 +44,7 @@ import ba.work.chbla.ba_eresamont.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        FirstFragment.OnHeadlineSelectedListener {
+        FirstFragment.OnHeadlineSelectedListener, ChatFragment.OnHeadlineSelectedListener {
     private DrawerLayout drawerLayout;
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
@@ -224,27 +224,55 @@ public class MainActivity extends AppCompatActivity
                 fragmentGetter();
                 break;
             case R.id.Chat:
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                fragmentGetterChat();
+                /*Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
                 intent.putExtra("User", this.getUsername());
-                startActivity(intent);
-                default:
-            break;
+                startActivity(intent);*/
+                break;
+            default:
         }
         return true;
         //noinspection SimplifiableIfStatement
     }
+    private void fragmentGetterChat() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Bundle args;
+        Fragment fragment = null;
+        fragment = new ChatFragment();
+        args = new Bundle();
+        args.putString("username", this.getUsername());
+        fragment.setArguments(args);
+        fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
+     }
+
+
     private void fragmentGetter() {
-        List<Fragment> fragmentList;
+        List<Fragment> fragmentList;//nicht mehr sortiert ?
         fragmentList=getSupportFragmentManager().getFragments();
+        FirstFragment fragment=null;
 
         if (fragmentList.get(0)!=null){
-           FirstFragment fragment=(FirstFragment)fragmentList.get(0);
-           fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
-           fragment.setHashMap(hashMap);
-           ReplaceFragmentContent(fragment);
-           //setTitle(hashMap.get(0).toString());
-
+            if (fragmentList.get(0)!=(new FirstFragment())){
+                Fragment_Man("home", mlanguageID, 0);
+            }
+            else{
+                fragment=(FirstFragment)fragmentList.get(0);
+                fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
+                fragment.setHashMap(hashMap);
+                ReplaceFragmentContent(fragment);
+            }
         }
+        //old hier sortiert
+        /*List<Fragment> fragmentList;//damit ist es sortiert
+        fragmentList=getSupportFragmentManager().getFragments();
+
+        if (fragmentList.get(0)!=null) {
+            FirstFragment fragment = (FirstFragment) fragmentList.get(0);
+            fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
+            fragment.setHashMap(hashMap);
+            ReplaceFragmentContent(fragment);
+        }*/
+
     }
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
     {//buttons start changelanguage button

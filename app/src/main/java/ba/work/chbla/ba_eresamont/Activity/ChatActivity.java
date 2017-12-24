@@ -59,7 +59,6 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         };
-
         if (adapter!=null)
             listOfMessages.setAdapter(adapter);
     }
