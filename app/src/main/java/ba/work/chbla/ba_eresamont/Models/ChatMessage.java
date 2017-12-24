@@ -7,9 +7,9 @@ import java.util.Date;
  */
 
 public class ChatMessage {
-    private String messageText="leer";
-    private String messageUser="leer";
-    private long messageTime=123456;
+    private String messageText;
+    private String messageUser;
+    private long messageTime;
 
     public ChatMessage(String messageText, String messageUser) {
         this.messageText = messageText;

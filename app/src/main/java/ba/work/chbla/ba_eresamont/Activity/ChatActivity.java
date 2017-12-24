@@ -23,8 +23,6 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         final String username= getIntent().getExtras().getString("User");
-
-
         FloatingActionButton fab =
                 (FloatingActionButton)findViewById(R.id.fab);
 
@@ -36,17 +34,16 @@ public class ChatActivity extends AppCompatActivity {
                        .setValue(new ChatMessage(input.getText().
                                toString(),username));
                input.setText("");
-               DisplayMessage();
             }
-
         });
+        DisplayMessage();
 
     }
     public void DisplayMessage(){
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 
         adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-                R.layout.ls_item, FirebaseDatabase.getInstance().getReference()) {
+                R.layout.message, FirebaseDatabase.getInstance().getReference()) {
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 // Get references to the views of message.xml
