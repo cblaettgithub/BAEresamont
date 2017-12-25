@@ -247,11 +247,11 @@ public class MainActivity extends AppCompatActivity
 
 
     private void fragmentGetter() {
-        List<Fragment> fragmentList;//nicht mehr sortiert ?
+       /* List<Fragment> fragmentList;//nicht mehr sortiert ?
         fragmentList=getSupportFragmentManager().getFragments();
         FirstFragment fragment=null;
 
-        if (fragmentList.get(0)!=null){
+        /*if (fragmentList.get(0)!=null){
             if (fragmentList.get(0)!=(new FirstFragment())){
                 Fragment_Man("home", mlanguageID, 0);
             }
@@ -261,17 +261,17 @@ public class MainActivity extends AppCompatActivity
                 fragment.setHashMap(hashMap);
                 ReplaceFragmentContent(fragment);
             }
-        }
+        }*/
         //old hier sortiert
-        /*List<Fragment> fragmentList;//damit ist es sortiert
+        List<Fragment> fragmentList;//damit ist es sortiert
         fragmentList=getSupportFragmentManager().getFragments();
 
-        if (fragmentList.get(0)!=null) {
+        //if (fragmentList.get(0)!=null) {
             FirstFragment fragment = (FirstFragment) fragmentList.get(0);
             fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
             fragment.setHashMap(hashMap);
             ReplaceFragmentContent(fragment);
-        }*/
+        //}
 
     }
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
