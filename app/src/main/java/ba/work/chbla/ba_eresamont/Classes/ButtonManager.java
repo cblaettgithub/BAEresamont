@@ -33,7 +33,7 @@ public class ButtonManager  {
     private LinearLayout linearLayout=null;
     private TreeMap hashMap;
     private Pages pages;
-    private WebView webView;
+    public WebView webView;
     private ArrayList<Pages> pagesArrayList;
     ConnectFirebase connectFirebase=new ConnectFirebase();
     CLanguageID cLanguageID = new CLanguageID();
@@ -55,6 +55,10 @@ public class ButtonManager  {
     public WebView getWebView() {
         return webView;
     }
+    public ArrayList<Button> getButtonArrayList() {
+        return buttonArrayList;
+    }
+
     final ArrayList<Button> buttonArrayList = new ArrayList<>();
     private String mTitle;
 
@@ -114,6 +118,7 @@ public class ButtonManager  {
     }
     private void SubButton(final Pages pages) {
         final int parent_id;
+        setaDaoName("");
         mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
         Log.d(LOG_TAG, "Title:"+mTitle);
         for(int i=0;i<linearLayout.getChildCount()+1;i++)
@@ -178,6 +183,7 @@ public class ButtonManager  {
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange", mTitle);//Menüs aktualisieren
     }
+
 
 
 }

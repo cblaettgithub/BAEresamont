@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.app.Fragment;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -127,11 +128,11 @@ public class FirstFragment extends Fragment {
         switch (choice){
             case "home"://show all topmenues
                 query=myRef.orderByChild("pages_lang/0/title");
-                //buttonManager.setaDaoName("leftStart");
+                buttonManager.setaDaoName("leftStart");
                 idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);//ReadDBData_Firebase(query, "home");
-                buttonManager.sortButtonsProgress();
-                //mCallback.onArticleSelected(hashMap,"MenuChange");
+
+                 //mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             case "progress"://show under menue
                 query=myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));

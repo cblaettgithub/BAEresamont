@@ -3,8 +3,10 @@ package ba.work.chbla.ba_eresamont.Database;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Button;
 
 import ba.work.chbla.ba_eresamont.Classes.ButtonManager;
+import ba.work.chbla.ba_eresamont.Classes.ButtonsComparator;
 import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
 import ba.work.chbla.ba_eresamont.Models.Pages;
 import ba.work.chbla.ba_eresamont.R;
@@ -13,6 +15,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
 
+import java.util.Collections;
 import java.util.TreeMap;
 
 /**
@@ -35,6 +38,7 @@ public class aDAOImplHome extends aDAO {
         query.addChildEventListener(new ChildEventListener() {
             String temp;
             Pages pages;
+            Collections collections = null;
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
@@ -46,9 +50,12 @@ public class aDAOImplHome extends aDAO {
                             buttonManager.ButtonCreator(pages, null, hashMap, mlanuageId, mCallback);
                         else
                           buttonManager.ButtonCreator(pages, pages, hashMap, mlanuageId, mCallback);
-                          mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", "");
+                        buttonManager.sortButtonsProgress();
+                        mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", "");
+
                     }
                 }
+                //buttonManager.sortButtonsProgress();
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {

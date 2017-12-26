@@ -179,6 +179,7 @@ public class MainActivity extends AppCompatActivity
         if (mlanguageID==0)
             mlanguageID=1;
         Fragment_Man("home", mlanguageID, 0);
+
     }
     private void navigationItem(MenuItem menuItem)
     {
@@ -245,17 +246,19 @@ public class MainActivity extends AppCompatActivity
      }
     private void fragmentGetter() {
         //old hier sortiert
+        Fragment fragment;
         List<Fragment> fragmentList;//damit ist es sortiert
         fragmentList=getSupportFragmentManager().getFragments();
-        Fragment fragment=fragmentList.get(0);
+        fragment=fragmentList.get(0);
         if (fragment instanceof ChatFragment)
             //getSupportFragmentManager().popBackStack();
             setHomeAtfirst();
         else {
+            //getSupportFragmentManager().popBackStack();
             FirstFragment fragment1 = (FirstFragment) fragmentList.get(0);
             fragment1.setMlanguageId(mlanguageID);//change language for buttonmangar
             fragment1.setHashMap(hashMap);
-            ReplaceFragmentContent(fragment);
+            ReplaceFragmentContent(fragment1);
         }
     }
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
