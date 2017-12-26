@@ -53,7 +53,10 @@ public class ChangeLanuage {
         Query query = myRef.orderByChild("pages_lang/0/title");
         String parent_id = "0";
         final LinearLayout contentview = linearLayout;
-        hashMap.clear();
+        if (hashMap!=null)
+            hashMap.clear();
+        else
+            hashMap= new TreeMap();
         final Button button = (Button) contentview.getChildAt(2);
         if (button.getTag().toString() != "0")//wenn parent_id = 0, dann ist parent_id = null-> oberste stfue
             parent_id = button.getTag().toString();        //sonst button in button

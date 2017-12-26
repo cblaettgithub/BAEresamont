@@ -171,7 +171,6 @@ public class MainActivity extends AppCompatActivity
         args.putLong("Language", mlanguage);
         args.putInt("MenuID", menuID);
         fragment.setArguments(args);
-
         fragmentManager.beginTransaction().replace(R.id.container, fragment)
                 .addToBackStack(null).commit();
     }
@@ -244,35 +243,20 @@ public class MainActivity extends AppCompatActivity
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
      }
-
-
     private void fragmentGetter() {
-       /* List<Fragment> fragmentList;//nicht mehr sortiert ?
-        fragmentList=getSupportFragmentManager().getFragments();
-        FirstFragment fragment=null;
-
-        /*if (fragmentList.get(0)!=null){
-            if (fragmentList.get(0)!=(new FirstFragment())){
-                Fragment_Man("home", mlanguageID, 0);
-            }
-            else{
-                fragment=(FirstFragment)fragmentList.get(0);
-                fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
-                fragment.setHashMap(hashMap);
-                ReplaceFragmentContent(fragment);
-            }
-        }*/
         //old hier sortiert
         List<Fragment> fragmentList;//damit ist es sortiert
         fragmentList=getSupportFragmentManager().getFragments();
-
-        //if (fragmentList.get(0)!=null) {
-            FirstFragment fragment = (FirstFragment) fragmentList.get(0);
-            fragment.setMlanguageId(mlanguageID);//change language for buttonmangar
-            fragment.setHashMap(hashMap);
+        Fragment fragment=fragmentList.get(0);
+        if (fragment instanceof ChatFragment)
+            //getSupportFragmentManager().popBackStack();
+            setHomeAtfirst();
+        else {
+            FirstFragment fragment1 = (FirstFragment) fragmentList.get(0);
+            fragment1.setMlanguageId(mlanguageID);//change language for buttonmangar
+            fragment1.setHashMap(hashMap);
             ReplaceFragmentContent(fragment);
-        //}
-
+        }
     }
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
     {//buttons start changelanguage button

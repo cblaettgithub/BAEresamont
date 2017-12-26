@@ -127,8 +127,10 @@ public class FirstFragment extends Fragment {
         switch (choice){
             case "home"://show all topmenues
                 query=myRef.orderByChild("pages_lang/0/title");
+                //buttonManager.setaDaoName("leftStart");
                 idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);//ReadDBData_Firebase(query, "home");
+                buttonManager.sortButtonsProgress();
                 //mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             case "progress"://show under menue

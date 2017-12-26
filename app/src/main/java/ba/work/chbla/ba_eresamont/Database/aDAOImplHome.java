@@ -45,8 +45,8 @@ public class aDAOImplHome extends aDAO {
                         if (pages.getId().toString().equals("89") ||pages.getId().toString().equals("129"))//89 reasomant, 129 news
                             buttonManager.ButtonCreator(pages, null, hashMap, mlanuageId, mCallback);
                         else
-                           buttonManager.ButtonCreator(pages, pages, hashMap, mlanuageId, mCallback);
-                           mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", "");
+                          buttonManager.ButtonCreator(pages, pages, hashMap, mlanuageId, mCallback);
+                          mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", "");
                     }
                 }
             }

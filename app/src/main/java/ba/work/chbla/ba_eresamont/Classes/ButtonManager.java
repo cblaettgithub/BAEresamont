@@ -6,6 +6,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import ba.work.chbla.ba_eresamont.Database.ConnectFirebase;
 import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
@@ -63,19 +64,16 @@ public class ButtonManager  {
         this.webView = webView;
         pagesArrayList=new ArrayList<>();
     }
-
     public TreeMap getHashMap() { return hashMap;   }
     public void setHashMap(TreeMap hashMap) {this.hashMap = hashMap;  }
     public LinearLayout getLinearLayout() { return linearLayout;   }
     public void setLinearLayout(LinearLayout linearLayout) {
         this.linearLayout = linearLayout;   }
     public Context getContex() {    return contex;    }
-
     public Button ConfigButton(Pages pages) {
         String parent_id="0";
         Button button = new Button(this.getContex());
         button.setShadowLayer(2, 1, 1, 60);
-
         button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());//pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getTitle()
         button.setHeight(40);
         button.setId((int) pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getId());// ((int) pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getId())
@@ -105,7 +103,7 @@ public class ButtonManager  {
                     }
                 }
             });
-            if (aDaoName=="leftStart")  //after add, probleme i also want to sort from left menu
+            if (aDaoName=="leftStart"  )  //after add, probleme i also want to sort from left menu
                 buttonArrayList.add(button);
             else
                 linearLayout.addView(button);
@@ -145,7 +143,7 @@ public class ButtonManager  {
                             pagesArrayList.add(data.getValue(pages.getClass()));
                     }
                 }
-                Collections.sort(pagesArrayList, new Sortbyroll());
+                Collections.sort(pagesArrayList, new Sortbyroll(mlanguageID));
                 hashMap.clear();
                 for(int i=0;i<pagesArrayList.size();i++){
                     ButtonCreator(pagesArrayList.get(i),  null,hashMap, mlanguageID, mCallback);
@@ -176,7 +174,6 @@ public class ButtonManager  {
         //tittel ändern
         mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
         Log.d(LOG_TAG, "Title:"+mTitle);
-
         new ShowContentApp().showContentApp(pages, webView, mlanguageID, true);
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange", mTitle);//Menüs aktualisieren

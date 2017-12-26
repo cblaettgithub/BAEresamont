@@ -10,11 +10,18 @@ import java.util.Comparator;
 
 class Sortbyroll implements Comparator<Pages>
 {
+    private long mlanguageID;
+    CLanguageID cLanguageID= new CLanguageID();
+
+    public Sortbyroll(long mlanguageID) {
+        this.mlanguageID = mlanguageID;
+    }
+
     @Override
     public int compare(Pages o1, Pages o2) {
         int result;
-        String title1 = o1.getPages_lang().get(0).getTitle();
-        String title2 = o2.getPages_lang().get(0).getTitle();
+        String title1 = o1.getPages_lang().get(cLanguageID.getArrayIndex(o1, mlanguageID)).getTitle();//new
+        String title2 = o2.getPages_lang().get(cLanguageID.getArrayIndex(o2, mlanguageID)).getTitle();//new
         if ( title1.toString().contains(".")&& title2.toString().contains(".")){
             int indexA = title1.toString().indexOf('.');
             int indexB = title2.toString().indexOf('.');
