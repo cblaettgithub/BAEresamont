@@ -38,8 +38,11 @@ public class ChangeLanuage {
     public Context getContext() {
         return context;    }
     CreatingMenuLeft creatingMenuLeft;
+    private String title;
+    public String getTitle() {      return title;    }
+    public void setTitle(String title) {       this.title = title;    }
 
-    public ChangeLanuage(TreeMap hashMap, long mlanguageID, Context context,NavigationView navigationView) {
+    public ChangeLanuage(TreeMap hashMap, long mlanguageID, Context context, NavigationView navigationView) {
         this.hashMap = hashMap;
         this.mlanguageID = mlanguageID;
         this.context = context;

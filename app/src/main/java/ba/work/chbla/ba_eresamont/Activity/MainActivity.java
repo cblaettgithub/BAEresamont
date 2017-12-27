@@ -251,8 +251,8 @@ public class MainActivity extends AppCompatActivity
         fragmentList=getSupportFragmentManager().getFragments();
         fragment=fragmentList.get(0);
         if (fragment instanceof ChatFragment)
-            //getSupportFragmentManager().popBackStack();
-            setHomeAtfirst();
+           //getSupportFragmentManager().popBackStack();
+           setHomeAtfirst();
         else {
             //getSupportFragmentManager().popBackStack();
             FirstFragment fragment1 = (FirstFragment) fragmentList.get(0);
