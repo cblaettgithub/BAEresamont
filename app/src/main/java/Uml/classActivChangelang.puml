@@ -1,0 +1,18 @@
+@startuml
+start
+ - changeLanguage
+if (0) then (yes)
+    :onchildAdded();
+    :new Button;
+    :buttonArrayList.add();
+    :SortButtons;
+    :creatingMenus;
+elseif (default) then (yes)
+    :onchildAdded();
+    :new Button;
+    :buttonArrayList.add();
+    :SortButtons;
+    :creatingMenus;
+endif
+stop
+@enduml

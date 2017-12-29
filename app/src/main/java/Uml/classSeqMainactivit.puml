@@ -1,0 +1,13 @@
+@startuml
+MainActivity -> FirstFragment: fragmentGetter()
+ FirstFragment->aDAOImplHome:GetDataFirebase()
+ aDAOImplHome->ButtonManager:ButtonCreator()
+ MainActivity -> FirstFragment: fragmentGetter()
+
+  FirstFragment->aDAOImplOne:GetDataFirebase()
+   aDAOImplOne->ButtonManager:ButtonCreator()
+    MainActivity -> FirstFragment: fragmentGetter()
+   FirstFragment->aDAOImplProgressSort:GetDataFirebase()
+ aDAOImplProgressSort->ButtonManager:ButtonCreator()
+
+@enduml

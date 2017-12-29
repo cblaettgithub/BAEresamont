@@ -1,0 +1,11 @@
+@startuml
+
+ class ChatFragment extends Fragment{
+    public ChatFragment()
+    public static ChatFragment newInstance(String param1, String param2)
+    public void onCreate(Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState)
+    public void DisplayMessage()
+}
+@enduml

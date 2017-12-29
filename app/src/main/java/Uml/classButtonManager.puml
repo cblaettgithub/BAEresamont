@@ -1,0 +1,33 @@
+@startuml
+ class ButtonManager  {
+  private String LOG_TAG;
+     private Context contex;
+     public static final String LANGUAGE="3";
+     private LinearLayout linearLayout=null;
+     private TreeMap hashMap;
+     private Pages pages;
+     public WebView webView;
+     private ArrayList<Pages> pagesArrayList;
+     ConnectFirebase connectFirebase;
+     CLanguageID cLanguageID;
+     Query query=null;
+     private long mlanguageID;//no value
+     int i=1;
+     private String aDaoName;
+     public FirstFragment.OnHeadlineSelectedListener mCallback;
+     final DatabaseReference myRef;
+     final ArrayList<Button> buttonArrayList;
+     private String mTitle;
+     public ButtonManager(Context contex, LinearLayout linearLayout, WebView webView)
+     public Button ConfigButton(Pages pages)
+     public void ButtonCreator(final Pages pages, final Pages pages2, final TreeMap hashMap,
+                                    long mlanguageID, FirstFragment.OnHeadlineSelectedListener mCallback)
+     private void SubButton(final Pages pages)
+     public void sortButtonsProgress()
+     private void ButtonShowContent(Pages pages)
+
+
+     }
+
+
+@enduml

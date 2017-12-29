@@ -1,0 +1,20 @@
+@startuml
+
+class ChangeLanuage {
+  private String LOG_TAG;
+    private ConnectFirebase connectFirebase;
+    private TreeMap hashMap;
+    private long mlanguageID;
+    private Context context;
+    private long mparentid;
+    NavigationView navigationView;
+    final CLanguageID cLanguageID;
+    CreatingMenuLeft creatingMenuLeft;
+    private String title;
+    public ChangeLanuage(TreeMap hashMap, long mlanguageID, Context context, NavigationView navigationView) {
+    public void changeLanguage(LinearLayout linearLayout)
+    public void refrehMenuLanuager(long parentid)
+ private void SortButtons (ArrayList < Button > buttonArrayList)
+}
+
+@enduml

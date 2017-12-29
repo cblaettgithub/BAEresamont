@@ -1,0 +1,16 @@
+@startuml
+start
+- GetDataFirebase(String choice, long lang, int MenuId)
+if ("home") then (yes)
+  : idao = new aDAOImplHome;
+elseif ("progress") then (yes)
+  : idao = new aDAOImplProgress;
+
+elseif (default) then (yes)
+  :  idao = new aDAOImplOne;
+  if ("!=progress") then (yes)
+  :   idao = new aDAOImplProgressSort;
+endif
+endif
+stop
+@enduml

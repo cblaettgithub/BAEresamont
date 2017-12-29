@@ -1,0 +1,44 @@
+@startuml
+
+interface IDAO{
+ReadDBData_Firebase(view,Callback)
+}
+abstract class aDAO   implements IDAO {
+ public aDAO( query,  choice,  buttonManager,  hashMap,
+  mlanguage,  onetwopage) {
+
+    }
+
+class aDAOImplProgressSort extends aDAO{
+public aDAOImplProgressSort( query,  choice,
+ buttonManager, TreeMap hashMap,  mlanguage,   onetwopage) {
+     super(query, choice, buttonManager, hashMap,
+      mlanguage, onetwopage);
+ }
+
+class aDAOImplHome extends aDAO{
+public aDAOImplHome( query,  choice,
+  buttonManager, hashMap,  mlanguage,  onetwopage) {
+ super(query, choice, buttonManager,
+ hashMap, mlanguage, onetwopage);
+}
+
+class aDAOImplProgress extends aDAO {
+public aDAOImplProgress( query,  choice,
+buttonManager,  hashMap,  mlanguage,  onetwopage) {
+     super(query, choice, buttonManager,
+      hashMap, mlanguage, onetwopage);
+ }
+
+  class aDAOImplOne extends aDAO {
+     public aDAOImplOne( query,  choice,
+      buttonManager,  hashMap,  mlanguage,  onetwopage) {
+         super(query, choice, buttonManager,
+          hashMap, mlanguage, onetwopage);
+     }
+
+
+
+
+
+@enduml

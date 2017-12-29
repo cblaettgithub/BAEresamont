@@ -154,8 +154,6 @@ public class FirstFragment extends Fragment {
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
 
-
-
    /* private void ReadDBData_Firebase(Query query, String choice) {
         final String select = choice;
         final WebView myWebView = mview.findViewById(R.id.webView);

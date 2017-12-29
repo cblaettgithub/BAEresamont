@@ -1,0 +1,25 @@
+@startuml
+
+
+class FirstFragment extends Fragment{
+ private TreeMap hashMap;
+    private ConnectFirebase connectFirebase;
+    private DatabaseReference databaseReference;
+    Context context;
+    View view;
+    private String LOG_TAG;
+    private ButtonManager buttonManager;
+    private LinearLayout linearLayout=null;
+    private WebView webView;
+    private Pages pages;
+    public long mlanguageId;
+    private static String LANGUAGE="0";
+    private Integer mMenuId;
+    private static boolean mMainDetail;
+    OnHeadlineSelectedListener mCallback;
+     public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState)
+
+     public void GetDataFirebase(String choice, long lang, int MenuId)
+    }
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+ class MainActivity extends AppCompatActivity{
+
+ public void creatingMenus(String choice)
+  public void onBackPressed()
+   private void Fragment_Man(String value, long mlanguage, int menuID)
+  public void setHomeAtfirst()
+  private void navigationItem(MenuItem menuItem)
+  private void FragmentManager(MenuItem menuItem)
+ public boolean onCreateOptionsMenu(Menu menu)
+   public boolean onOptionsItemSelected(MenuItem item)
+  private void fragmentGetterChat()
+  private void fragmentGetter()
+   public void ReplaceFragmentContent(Fragment fragment)
+  public boolean onNavigationItemSelected(@NonNull MenuItem item)
+  public void onArticleSelected(TreeMap ohashMap, String choice, String title)
+ }
+
+
+@enduml
