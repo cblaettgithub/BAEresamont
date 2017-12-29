@@ -36,6 +36,7 @@ public class aDAOImplOne extends aDAO {
        this.query.addChildEventListener(new ChildEventListener() {
             String content="", neu="";
             Pages pages;
+            //just for one item
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                     Pages pages=dataSnapshot.getValue(Pages.class);

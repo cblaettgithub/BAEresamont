@@ -22,7 +22,6 @@ import java.util.TreeMap;
 public class aDAOImplProgress extends aDAO {
 
     public  static final String LANGUAGE="1";
-
     public aDAOImplProgress(Query query, String choice, ButtonManager buttonManager, TreeMap hashMap, long mlanguage, boolean onetwopage) {
         super(query, choice, buttonManager, hashMap, mlanguage, onetwopage);
     }

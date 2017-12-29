@@ -207,6 +207,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    //switch betweend the different Language Settings
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -234,6 +235,7 @@ public class MainActivity extends AppCompatActivity
         return true;
         //noinspection SimplifiableIfStatement
     }
+    //Replace the fragment, add Username
     private void fragmentGetterChat() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Bundle args;
@@ -244,6 +246,8 @@ public class MainActivity extends AppCompatActivity
         fragment.setArguments(args);
         fragmentManager.beginTransaction().replace(R.id.container, fragment).commit();
      }
+     //Get the fragment, if last fragment is chat then start sethomefirst,
+     // else set the language and the hashmap
     private void fragmentGetter() {
         //old hier sortiert
         Fragment fragment;
@@ -261,6 +265,7 @@ public class MainActivity extends AppCompatActivity
             ReplaceFragmentContent(fragment1);
         }
     }
+    //Replace the fragmentconent and also refresh the language title and menues
     public void ReplaceFragmentContent(Fragment fragment)//either we change the webview or else the buttons
     {//buttons start changelanguage button
 
@@ -273,15 +278,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
         changeLanuage= new ChangeLanuage(hashMap, mlanguageID, getApplication(),navigationView);
 
-        //parentid weiss ich über buttontag
+        //parentid know we about the buttontag
         if (buttons.getChildCount()==0) { //  if (contentview.getChildCount()==0){
-            connectFirebase= new ConnectFirebase();//nur ein content wechseln
+            connectFirebase= new ConnectFirebase();//only change onecontent
             final DatabaseReference myRef = connectFirebase.getDatabaseReference();
             bundle = fragment.getArguments();
             Query query;
             String parentchoice;
 
-            if(contentView.getTag()!=null)//Aufruf vom linken Menü
+            if(contentView.getTag()!=null)//we know now that we callled from left menue
                 parentchoice=contentView.getTag().toString();
             else
                 parentchoice=bundle.getString("Fragmentname");
@@ -323,7 +328,8 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
+    // we set the new hasmap(the names of the menuitesm, and also set new the title
+    //at the top, we have called this methode from fragment with an interface
     @Override
     public void onArticleSelected(TreeMap ohashMap, String choice, String title) {
        if (title!=""){

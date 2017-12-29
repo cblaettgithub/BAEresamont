@@ -72,6 +72,7 @@ public class GoogleSingActivity extends AppCompatActivity implements
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+    // Switch between login or logout
     @Override
     public void onClick(View v){
         switch (v.getId()){
@@ -93,7 +94,7 @@ public class GoogleSingActivity extends AppCompatActivity implements
             handleSignInResult(result);
             }
         }
-
+    // Handle the result of input parameter, if suceed start the app, else give out an error
     private void handleSignInResult(GoogleSignInResult result) {
         Log.d(TAG, "handleSignInResult:"+result.isSuccess());
         if (result.isSuccess()){
@@ -108,6 +109,7 @@ public class GoogleSingActivity extends AppCompatActivity implements
             statusTextView.setText(("Error, "+"User or Password wrong"));
         }
     }
+    //sign out the user
     private void signOut() {
         Auth.GoogleSignInApi.signOut((mGoogleApiClient)).setResultCallback(new ResultCallback<Status>() {
             @Override
@@ -116,8 +118,7 @@ public class GoogleSingActivity extends AppCompatActivity implements
             }
         });
     }
-       // [START signin]
-
+      // task if connection failed
     public void onConnectionFailed(ConnectionResult connectionResult){
         Log.d(TAG, "onConnectionFailed:"+connectionResult);
     }

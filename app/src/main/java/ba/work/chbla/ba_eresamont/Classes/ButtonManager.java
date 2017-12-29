@@ -74,6 +74,9 @@ public class ButtonManager  {
     public void setLinearLayout(LinearLayout linearLayout) {
         this.linearLayout = linearLayout;   }
     public Context getContex() {    return contex;    }
+
+    //we make here the setting of a button, the text, the height and also
+    //the the tag, that we need later on maincativit onReplaceFragmentContent
     public Button ConfigButton(Pages pages) {
         String parent_id="0";
         Button button = new Button(this.getContex());
@@ -116,6 +119,9 @@ public class ButtonManager  {
             hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
 
     }
+
+    // /we set here the title for the top, also put the button to the layout
+    //also we call later this method rekursively, also we sett the parentid
     private void SubButton(final Pages pages) {
         final int parent_id;
         setaDaoName("");
@@ -166,12 +172,14 @@ public class ButtonManager  {
             public void onCancelled(DatabaseError databaseError) {            }
         });
     }
+    //sort the buttons, first sort buttons, second removeView, third add buttons
     public void sortButtonsProgress(){
         Collections.sort(buttonArrayList, new ButtonsComparator());
         linearLayout.removeAllViewsInLayout();;
         for(int i=0;i<buttonArrayList.size();i++)
             linearLayout.addView(buttonArrayList.get(i));
     }
+    // we call here the method that shows the information on the webviews
     private void ButtonShowContent(Pages pages){//problem hashmap nicht aktualisert
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);

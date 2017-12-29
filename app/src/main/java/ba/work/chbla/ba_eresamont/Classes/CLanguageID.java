@@ -5,7 +5,7 @@ import ba.work.chbla.ba_eresamont.Models.Pages;
 /**
  * Created by chbla on 26.11.2017.
  */
-
+//we get the languaged id, with that we get the arrayindes of the language
 public class CLanguageID {
     private int mArrayIndex;//setted language 1 French, 2 Italian 3 Englisch
     public CLanguageID(){};

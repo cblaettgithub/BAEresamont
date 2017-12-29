@@ -96,7 +96,7 @@ public class ChatFragment extends Fragment
     public void DisplayMessage(){
         ListView listOfMessages = (ListView) mview.findViewById(R.id.list_of_messages);
         //DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReferenceFromUrl(
-        //       "http://..user");
+        //       "http://..user") with taht we get a new place on the;
 
         adapter = new FirebaseListAdapter<ChatMessage>(getActivity(), ChatMessage.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference()) {

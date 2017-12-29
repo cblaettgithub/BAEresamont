@@ -39,6 +39,9 @@ public class ChatActivity extends AppCompatActivity {
         DisplayMessage();
 
     }
+    /* Display the message on the screen, content the MessageText, MessageUser
+    and the time, will be always called when entered an input
+     */
     public void DisplayMessage(){
         ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
 

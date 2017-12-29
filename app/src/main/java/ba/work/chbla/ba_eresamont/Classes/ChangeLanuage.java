@@ -22,6 +22,7 @@ import java.util.TreeMap;
 
 /**
  * Created by chbla on 10.12.2017.
+  * changinge the language for the app, all content
  */
 
 public class ChangeLanuage {
@@ -65,8 +66,9 @@ public class ChangeLanuage {
             parent_id = button.getTag().toString();        //sonst button in button
         final ArrayList<Button> buttonArrayList = new ArrayList<>();
 
-        switch (parent_id) {//Liste anzeigen
-            //we start again the frameset with new language.
+        switch (parent_id) {//show list
+            //we start again the frameset with new language.//create new button, add buttons to arraylist
+            //sort buttons, replace the content with the content of buttons
             case "0":
                 query.addChildEventListener(new ChildEventListener() {
                     Pages pages;
@@ -109,7 +111,7 @@ public class ChangeLanuage {
                     }
                 });
                 break;
-            default://Ein Element anzeigen
+            default://show one element, create a button, set to the arraylist, sort and replace contetn
                 DatabaseReference ref = myRef.getParent();
                 query = ref.orderByChild("/pages/");
                 query.addChildEventListener(new ChildEventListener() {
@@ -162,7 +164,7 @@ public class ChangeLanuage {
                 break;
         }
     }
-
+    // refresh the menuelanugage, put to the hashmap the menuelangueitiems
     public void refrehMenuLanuager(long parentid){
         final DatabaseReference myRef = connectFirebase.getDatabaseReference();
         Query query=myRef.orderByChild("parent_id").equalTo(parentid);

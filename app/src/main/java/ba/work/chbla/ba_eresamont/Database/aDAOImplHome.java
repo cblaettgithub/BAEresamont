@@ -39,7 +39,7 @@ public class aDAOImplHome extends aDAO {
             String temp;
             Pages pages;
             Collections collections = null;
-
+            //we call the buttonmanager, after we call the method sort of buttonmanager
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                 if (dataSnapshot.child("parent_id").exists() == false) {

@@ -5,6 +5,7 @@ import java.util.Map;
 
 /**
  * Created by chbla on 13.10.2017.
+ *  Pages_lang hold the content in the field translate or plaintext
  */
 
 public class Pages_lang {

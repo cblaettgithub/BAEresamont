@@ -13,7 +13,10 @@ import java.util.TreeMap;
 /**
  * Created by chbla on 10.12.2017.
  */
-
+//we set here the mainmenue, if the hashvalue is null we do nothing,
+// after that we sorted the hashmap with the valuecomparator
+// we set the menue with the key and the content of the hashmap
+ //this method from several in the classes of this app
 public class CreatingMenuLeft extends AppCompatActivity {
     NavigationView navigationView;
 

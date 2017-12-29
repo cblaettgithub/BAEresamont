@@ -6,6 +6,7 @@ import java.util.Map;
 
 /**
  * Created by chbla on 11.10.2017.
+ * this classes stand for the item of the pages and it holds the pages-lang classes
  */
 
 public class Pages {

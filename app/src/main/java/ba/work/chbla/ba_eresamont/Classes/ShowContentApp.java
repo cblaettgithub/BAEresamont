@@ -10,6 +10,13 @@ import ba.work.chbla.ba_eresamont.Models.Pages;
 
 public class ShowContentApp {
     CLanguageID cLanguageID = new CLanguageID();
+    //for every method we set a constant
+    // with the pages id we know which one we work for
+    //exclude: we dont show this pagea
+    //relaod: we reload the page of the webview for working
+    //sizing: we resized the webview for zoom
+    //nocomment: we remove comments
+    //local: we set a local image at it
     private  final String Name_exclude="exlude";
     private  final String Name_reload="reload";
     private  final String Name_sizing="sizing";

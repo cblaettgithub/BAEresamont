@@ -124,7 +124,10 @@ public class FirstFragment extends Fragment {
         mlanguageId =lang;
         mMenuId=MenuId;
 
-         IDAO idao;
+        //we switch between the home, progress and default
+        //home stand for the homebutton, progess shows the undermenue
+        //default we will start when we clicke the left menue
+        IDAO idao;
         switch (choice){
             case "home"://show all topmenues
                 query=myRef.orderByChild("pages_lang/0/title");
