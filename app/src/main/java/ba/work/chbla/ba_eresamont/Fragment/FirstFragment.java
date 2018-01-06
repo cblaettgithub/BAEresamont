@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import ba.work.chbla.ba_eresamont.Activity.MainActivity;
 import ba.work.chbla.ba_eresamont.Classes.ButtonManager;
 import ba.work.chbla.ba_eresamont.Database.aDAOImplHome;
 import ba.work.chbla.ba_eresamont.Database.aDAOImplOne;
@@ -33,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.HashMap;
 import java.util.TreeMap;
 
 /**
@@ -104,8 +106,7 @@ public class FirstFragment extends Fragment {
         setContext(container.getContext());
         Bundle bundle = getArguments();
         if (hashMap==null)//beim ersten Mal
-            hashMap=new TreeMap();
-        //hashMap=new TreeMap();alte
+        hashMap=new TreeMap();
         buttonManager= new ButtonManager(getContext(),
                 (LinearLayout)view.findViewById(ba.work.chbla.ba_eresamont.R.id.outputlabel),
                 (WebView) view.findViewById(ba.work.chbla.ba_eresamont.R.id.webView));
@@ -141,8 +142,8 @@ public class FirstFragment extends Fragment {
                 idao.ReadDBData_Firebase(view, mCallback);
                 break;
             default://left menue start
-                query = myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
-                idao = new aDAOImplOne(query, "", buttonManager, hashMap, mlanguageId, false);
+                query = myRef.orderByChild("id").equalTo(Integer.parseInt(choice));//with(Mainact) mcallback we get bach the menueitems
+                idao = new aDAOImplOne(query, "", buttonManager, ((MainActivity) mCallback).getHashMap(), mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);
                 if (choice!="progress") {
                     buttonManager.setaDaoName("leftStart");

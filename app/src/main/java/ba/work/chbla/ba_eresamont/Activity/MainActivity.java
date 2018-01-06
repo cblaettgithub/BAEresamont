@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity
         ShowContentApp.OnHeadlineSelectedListener
 {
     private DrawerLayout drawerLayout;
+    public TreeMap getHashMap() {
+        return hashMap;
+    }
+
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();
     private long mlanguageID;//1 French //default
