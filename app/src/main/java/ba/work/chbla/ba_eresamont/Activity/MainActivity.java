@@ -180,7 +180,8 @@ public class MainActivity extends AppCompatActivity
     public void setHomeAtfirst(){
         if (mlanguageID==0){
             mlanguageID=1;
-            mTitleArray=null;
+            for(int i=1;i<=3;i++)
+            mTitleArray[i]="Home";
         }
         Fragment_Man("home", mlanguageID, 0);
 
@@ -282,7 +283,10 @@ public class MainActivity extends AppCompatActivity
         final ChangeLanuage changeLanuage;
         NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
         changeLanuage= new ChangeLanuage(hashMap, mlanguageID, getApplication(),navigationView);
-        setTitle(mTitleArray[(int)mlanguageID]);//change the language of the title
+        if (getTitle()=="Home")
+           setTitle("Home");
+        else
+            setTitle(mTitleArray[(int)mlanguageID]);//change the language of the title
         //parentid know we about the buttontag
         if (buttons.getChildCount()==0) { //  if (contentview.getChildCount()==0){
             connectFirebase= new ConnectFirebase();//only change onecontent
