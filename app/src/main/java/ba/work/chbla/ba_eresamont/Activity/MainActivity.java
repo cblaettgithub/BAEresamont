@@ -44,7 +44,9 @@ import ba.work.chbla.ba_eresamont.R;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        FirstFragment.OnHeadlineSelectedListener, ChatFragment.OnHeadlineSelectedListener {
+        FirstFragment.OnHeadlineSelectedListener, ChatFragment.OnHeadlineSelectedListener,
+        ShowContentApp.OnHeadlineSelectedListener
+{
     private DrawerLayout drawerLayout;
     private TreeMap hashMap;
     private String LOG_TAG=MainActivity.class.getSimpleName();

@@ -123,10 +123,9 @@ public class FirstFragment extends Fragment {
         Query query=null;
         mlanguageId =lang;
         mMenuId=MenuId;
-
         //we switch between the home, progress and default
         //home stand for the homebutton, progess shows the undermenue
-        //default we will start when we clicke the left menue
+        //default we will start when we click the left menue
         IDAO idao;
         switch (choice){
             case "home"://show all topmenues
@@ -134,7 +133,6 @@ public class FirstFragment extends Fragment {
                 buttonManager.setaDaoName("leftStart");
                 idao = new aDAOImplHome(query,"",buttonManager,hashMap,mlanguageId, false);
                 idao.ReadDBData_Firebase(view, mCallback);//ReadDBData_Firebase(query, "home");
-
                  //mCallback.onArticleSelected(hashMap,"MenuChange");
                 break;
             case "progress"://show under menue
@@ -145,7 +143,7 @@ public class FirstFragment extends Fragment {
             default://left menue start
                 query = myRef.orderByChild("id").equalTo(Integer.parseInt(choice));
                 idao = new aDAOImplOne(query, "", buttonManager, hashMap, mlanguageId, false);
-                idao.ReadDBData_Firebase(view, null);
+                idao.ReadDBData_Firebase(view, mCallback);
                 if (choice!="progress") {
                     buttonManager.setaDaoName("leftStart");
                     query = myRef.orderByChild("parent_id").equalTo(Integer.parseInt(choice));

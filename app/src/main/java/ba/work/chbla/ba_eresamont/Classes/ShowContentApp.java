@@ -1,7 +1,12 @@
 package ba.work.chbla.ba_eresamont.Classes;
 
+import android.view.View;
 import android.webkit.WebView;
+import android.widget.ListView;
 
+import java.util.TreeMap;
+
+import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
 import ba.work.chbla.ba_eresamont.Models.Pages;
 
 /**
@@ -22,16 +27,28 @@ public class ShowContentApp {
     private  final String Name_sizing="sizing";
     private  final String Name_nocomment="nocomment";
     private  final String Name_local="local";
+    private long mlanguageID;
+    private String[] mTitleArray=new String[4];
+    OnHeadlineSelectedListener mCallback;
+    public interface OnHeadlineSelectedListener {
+        void onArticleSelected(TreeMap hashMap, String choice, String[] mTitle);
+    }
+    public void onListItemClick(ListView l, View v, TreeMap hashMap, String choice) {
+        mCallback.onArticleSelected(hashMap, choice, null);
+    }
     public ShowContentApp() {
     }
     public void showContentApp(Pages pages, WebView webView, long mlanguageID, boolean tagModus) {
+
         String content="";
+        this.mlanguageID=mlanguageID;
         Long parentid;
          if (pages!=null){
             content = pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTranslate().toString();
             if (tagModus)
                 webView.setTag(pages.getId());
             if (pages.getParent_id()!=null ){//89 le project
+
                 parentid=pages.getParent_id();// 100 = oxygen, 85=medical guide
                 if (exclude_reload_sizing(parentid, Name_sizing)){
                     webView.setInitialScale(1);
@@ -94,4 +111,5 @@ public class ShowContentApp {
         }
         return check;
     }
+
 }
