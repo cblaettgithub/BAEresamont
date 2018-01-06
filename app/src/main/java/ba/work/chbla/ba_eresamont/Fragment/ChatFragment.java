@@ -36,10 +36,10 @@ public class ChatFragment extends Fragment
 
     ChatFragment.OnHeadlineSelectedListener mCallback;
     public interface OnHeadlineSelectedListener {
-        void onArticleSelected(TreeMap hashMap, String choice, String mTitle);
+        void onArticleSelected(TreeMap hashMap, String choice, String[] mTitle);
     }
     public void onListItemClick(ListView l, View v, TreeMap hashMap, String choice) {
-        mCallback.onArticleSelected(hashMap, choice, "");
+        mCallback.onArticleSelected(hashMap, choice, null);
     }
 
     // TODO: Rename and change types of parameters
@@ -95,9 +95,8 @@ public class ChatFragment extends Fragment
 
     public void DisplayMessage(){
         ListView listOfMessages = (ListView) mview.findViewById(R.id.list_of_messages);
-        //DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReferenceFromUrl(
-        //       "http://..user") with taht we get a new place on the;
-
+        //DatabaseReference myRef= FirebaseDatabase.getInstance();
+        //this.myRef = database.getReference("chat");
         adapter = new FirebaseListAdapter<ChatMessage>(getActivity(), ChatMessage.class,
                 R.layout.message, FirebaseDatabase.getInstance().getReference()) {
             @Override

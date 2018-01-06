@@ -66,7 +66,6 @@ public class GoogleSingActivity extends AppCompatActivity implements
 
         signOutButton=(Button)findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener(this);
-
     }
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);

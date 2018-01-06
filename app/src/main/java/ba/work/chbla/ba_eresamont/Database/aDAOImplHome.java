@@ -51,7 +51,7 @@ public class aDAOImplHome extends aDAO {
                         else
                           buttonManager.ButtonCreator(pages, pages, hashMap, mlanuageId, mCallback);
                         buttonManager.sortButtonsProgress();
-                        mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", "");
+                        mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", null);
 
                     }
                 }

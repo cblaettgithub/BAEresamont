@@ -60,7 +60,8 @@ public class ButtonManager  {
     }
 
     final ArrayList<Button> buttonArrayList = new ArrayList<>();
-    private String mTitle;
+    //old private String mTitle;
+    private String[] mTitleArray=new String[4];
 
     public ButtonManager(Context contex, LinearLayout linearLayout, WebView webView) {
         this.contex = contex;
@@ -125,8 +126,9 @@ public class ButtonManager  {
     private void SubButton(final Pages pages) {
         final int parent_id;
         setaDaoName("");
-        mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
-        Log.d(LOG_TAG, "Title:"+mTitle);
+        filltitlearray(pages);     //new
+        //old mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
+
         for(int i=0;i<linearLayout.getChildCount()+1;i++)
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
@@ -160,7 +162,7 @@ public class ButtonManager  {
                     ButtonCreator(pagesArrayList.get(i),  null,hashMap, mlanguageID, mCallback);
                     //hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
                 }
-                mCallback.onArticleSelected(null,"", mTitle);// /settile
+                mCallback.onArticleSelected(null,"", mTitleArray);// /settile
             }
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {            }
@@ -184,16 +186,25 @@ public class ButtonManager  {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-        //tittel ändern
-        mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
-        Log.d(LOG_TAG, "Title:"+mTitle);
+        //tittel ändern//
+        filltitlearray(pages);//new
+        //old//mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
+
         new ShowContentApp().showContentApp(pages, webView, mlanguageID, true);
         if (mCallback!=null)//wies mcallback null ?
-            mCallback.onArticleSelected(hashMap,"MenuChange", mTitle);//Menüs aktualisieren
+            mCallback.onArticleSelected(hashMap,"MenuChange", mTitleArray);//Menüs aktualisieren
     }
-
-
-
+    //we read here all language title (3 titles)//french, italien, english
+    //fill into this array, arrayindex 1 for french ,2 for italian, 3 for english
+    private void filltitlearray(Pages pages){
+        int rowid =(int)mlanguageID;
+        mTitleArray[rowid]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
+        int i=1;
+        for(long j=1;j<=3;j++){
+            mTitleArray[i]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, j)).getTitle();
+            i++;
+        }
+    }
 }
 
 

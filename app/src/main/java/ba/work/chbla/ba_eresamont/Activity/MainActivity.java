@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity
         return parentidChangelanguage;    }
     public void setParentidChangelanguage(long parentidChangelanguage) {
         this.parentidChangelanguage = parentidChangelanguage;    }
+    private String[] mTitleArray=new String[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,10 +175,11 @@ public class MainActivity extends AppCompatActivity
         fragmentManager.beginTransaction().replace(R.id.container, fragment)
                 .addToBackStack(null).commit();
     }
-
     public void setHomeAtfirst(){
-        if (mlanguageID==0)
+        if (mlanguageID==0){
             mlanguageID=1;
+            mTitleArray=null;
+        }
         Fragment_Man("home", mlanguageID, 0);
 
     }
@@ -211,6 +213,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+       //anpassungen hier
         switch(id){
             case R.id.French_settings:
                 mlanguageID =1;
@@ -277,7 +280,7 @@ public class MainActivity extends AppCompatActivity
         final ChangeLanuage changeLanuage;
         NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
         changeLanuage= new ChangeLanuage(hashMap, mlanguageID, getApplication(),navigationView);
-
+        setTitle(mTitleArray[(int)mlanguageID]);//change the language of the title
         //parentid know we about the buttontag
         if (buttons.getChildCount()==0) { //  if (contentview.getChildCount()==0){
             connectFirebase= new ConnectFirebase();//only change onecontent
@@ -331,9 +334,12 @@ public class MainActivity extends AppCompatActivity
     // we set the new hasmap(the names of the menuitesm, and also set new the title
     //at the top, we have called this methode from fragment with an interface
     @Override
-    public void onArticleSelected(TreeMap ohashMap, String choice, String title) {
-       if (title!=""){
-               setTitle(title);
+    public void onArticleSelected(TreeMap ohashMap, String choice, String[] title) {
+        int lang;
+       if (title!=null){
+         lang=(int)mlanguageID;
+         mTitleArray=title;//we fill the titlearray in mainactivy for later call from changelanugage
+         setTitle(title[lang]);//setTitle is a method of the acticivty class of android
        }
         hashMap=ohashMap;
         creatingMenus(choice);
