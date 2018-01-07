@@ -60,11 +60,11 @@ public class GoogleSingActivity extends AppCompatActivity implements
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-        statusTextView=(TextView)findViewById(R.id.status_textview);
-        signInButton=(SignInButton)findViewById(R.id.sign_in_button);
+        statusTextView= findViewById(R.id.status_textview);
+        signInButton= findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
 
-        signOutButton=(Button)findViewById(R.id.signOutButton);
+        signOutButton= findViewById(R.id.signOutButton);
         signOutButton.setOnClickListener(this);
     }
     private void signIn() {

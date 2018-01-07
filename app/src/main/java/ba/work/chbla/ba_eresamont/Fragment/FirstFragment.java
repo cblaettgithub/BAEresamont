@@ -4,38 +4,25 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.text.format.DateFormat;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.app.Fragment;
 import android.webkit.WebView;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
-
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import java.util.TreeMap;
 import ba.work.chbla.ba_eresamont.Activity.MainActivity;
 import ba.work.chbla.ba_eresamont.Classes.ButtonManager;
+import ba.work.chbla.ba_eresamont.Database.ConnectFirebase;
 import ba.work.chbla.ba_eresamont.Database.aDAOImplHome;
 import ba.work.chbla.ba_eresamont.Database.aDAOImplOne;
 import ba.work.chbla.ba_eresamont.Database.aDAOImplProgress;
 import ba.work.chbla.ba_eresamont.Database.aDAOImplProgressSort;
 import ba.work.chbla.ba_eresamont.Interface.IDAO;
-import ba.work.chbla.ba_eresamont.Database.ConnectFirebase;
-import ba.work.chbla.ba_eresamont.Models.ChatMessage;
 import ba.work.chbla.ba_eresamont.Models.Pages;
-import ba.work.chbla.ba_eresamont.R;
-
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-
-import java.util.HashMap;
-import java.util.TreeMap;
 
 /**
  * Created by chbla on 31.10.2017.
@@ -156,58 +143,5 @@ public class FirstFragment extends Fragment {
         //this.connectFirebase.close();//nachdem hier ausgeklammert wurde, konnte ih die app im handy starten
     }
 
-   /* private void ReadDBData_Firebase(Query query, String choice) {
-        final String select = choice;
-        final WebView myWebView = mview.findViewById(R.id.webView);
-        WebSettings webSettings = myWebView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        final CLanguageID cLanguageID = new CLanguageID();
-
-        query.addChildEventListener(new ChildEventListener() {
-            String temp;
-            Pages pages;
-
-            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
-                switch (select){
-                    case "home":
-                        if (dataSnapshot.child("parent_id").exists() == false) {
-                            if (dataSnapshot.child("pages_lang").child(LANGUAGE).child("title").
-                                    getValue() != null) {
-                                pages = dataSnapshot.getValue(Pages.class);
-                                if (pages.getId().toString().equals("89") ||pages.getId().toString().equals("129"))//89 reasomant, 129 news
-                                    buttonManager.ButtonCreator(pages, null, hashMap, mlanguageId, mCallback);
-                                else
-                                    buttonManager.ButtonCreator(pages, pages, hashMap, mlanguageId, mCallback);
-                                mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
-                                }
-                        }
-                         break;
-                    case "progress":
-                        if (dataSnapshot.child("pages_lang").child(LANGUAGE).
-                                child("translate").toString()!=""){
-                            temp = (String) dataSnapshot.child("pages_lang").
-                                    child(LANGUAGE).child("title").getValue();
-                            Pages pages = dataSnapshot.getValue(Pages.class);
-                            buttonManager.ButtonCreator(pages, null, hashMap, mlanguageId, mCallback);
-                            mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange");
-                        }
-                        break;
-                    default:
-                        webView.loadData("<p> there is no content available", "text/html", "UTF-8");
-                        break;
-                }
-            }
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-            }
-            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
-            }
-            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
-            }
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.w(LOG_TAG, "Failed to read value.", error.toException());
-            }            ;
-        });
-    }*/
 
 }

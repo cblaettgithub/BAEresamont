@@ -1,16 +1,12 @@
 package ba.work.chbla.ba_eresamont.Classes;
+
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
-import ba.work.chbla.ba_eresamont.Database.ConnectFirebase;
-import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
-import ba.work.chbla.ba_eresamont.Models.Pages;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +16,10 @@ import com.google.firebase.database.Query;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
+
+import ba.work.chbla.ba_eresamont.Database.ConnectFirebase;
+import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
+import ba.work.chbla.ba_eresamont.Models.Pages;
 
 /**
  * Created by chbla on 22.11.2017.
@@ -58,7 +58,6 @@ public class ButtonManager  {
     public ArrayList<Button> getButtonArrayList() {
         return buttonArrayList;
     }
-
     final ArrayList<Button> buttonArrayList = new ArrayList<>();
     //old private String mTitle;
     private String[] mTitleArray=new String[4];
@@ -120,15 +119,13 @@ public class ButtonManager  {
             hashMap.put(pages.getId().toString(), pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
 
     }
-
     // /we set here the title for the top, also put the button to the layout
     //also we call later this method rekursively, also we sett the parentid
     private void SubButton(final Pages pages) {
         final int parent_id;
         setaDaoName("");
-        filltitlearray(pages);     //new
-        //old mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
-
+        mTitleArray=new TitleFiller().filltitlearray(pages);
+        //filltitlearray(pages);     //new
         for(int i=0;i<linearLayout.getChildCount()+1;i++)
             linearLayout.removeViewAt(i);
         linearLayout.removeViewAt(0);
@@ -177,7 +174,7 @@ public class ButtonManager  {
     //sort the buttons, first sort buttons, second removeView, third add buttons
     public void sortButtonsProgress(){
         Collections.sort(buttonArrayList, new ButtonsComparator());
-        linearLayout.removeAllViewsInLayout();;
+        linearLayout.removeAllViewsInLayout();
         for(int i=0;i<buttonArrayList.size();i++)
             linearLayout.addView(buttonArrayList.get(i));
     }
@@ -186,25 +183,14 @@ public class ButtonManager  {
         WebSettings webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         linearLayout.removeAllViews();
-        //tittel ändern//
-        filltitlearray(pages);//new
-        //old//mTitle=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
-
+        //titel ändern//
+        mTitleArray=new TitleFiller().filltitlearray(pages);
+        //filltitlearray(pages);//new
         new ShowContentApp().showContentApp(pages, webView, mlanguageID, true);
         if (mCallback!=null)//wies mcallback null ?
             mCallback.onArticleSelected(hashMap,"MenuChange", mTitleArray);//Menüs aktualisieren
     }
-    //we read here all language title (3 titles)//french, italien, english
-    //fill into this array, arrayindex 1 for french ,2 for italian, 3 for english
-    private void filltitlearray(Pages pages){
-        int rowid =(int)mlanguageID;
-        mTitleArray[rowid]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
-        int i=1;
-        for(long j=1;j<=3;j++){
-            mTitleArray[i]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, j)).getTitle();
-            i++;
-        }
-    }
+
 }
 
 

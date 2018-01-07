@@ -1,7 +1,6 @@
 package ba.work.chbla.ba_eresamont.Classes;
 
 import android.support.annotation.NonNull;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Entities;

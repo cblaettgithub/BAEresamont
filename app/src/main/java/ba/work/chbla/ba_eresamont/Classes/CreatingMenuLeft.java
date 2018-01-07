@@ -3,9 +3,7 @@ package ba.work.chbla.ba_eresamont.Classes;
 import android.support.design.widget.NavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
-
 import ba.work.chbla.ba_eresamont.R;
-
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -19,7 +17,6 @@ import java.util.TreeMap;
  //this method from several in the classes of this app
 public class CreatingMenuLeft extends AppCompatActivity {
     NavigationView navigationView;
-
     public CreatingMenuLeft(NavigationView navigationView) {
         this.navigationView = navigationView;
     }

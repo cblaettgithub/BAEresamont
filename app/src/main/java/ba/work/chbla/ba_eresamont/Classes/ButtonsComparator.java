@@ -10,7 +10,8 @@ import java.util.Comparator;
 
 public class ButtonsComparator implements Comparator<Button> {
 
-    public ButtonsComparator(){};
+    public ButtonsComparator(){}
+
     public int compare(Button o1, Button o2) {
         int result;
         String title1 = o1.getText().toString();

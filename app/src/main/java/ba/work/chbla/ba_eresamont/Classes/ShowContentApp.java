@@ -3,10 +3,7 @@ package ba.work.chbla.ba_eresamont.Classes;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ListView;
-
 import java.util.TreeMap;
-
-import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
 import ba.work.chbla.ba_eresamont.Models.Pages;
 
 /**

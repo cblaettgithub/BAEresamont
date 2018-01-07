@@ -206,7 +206,7 @@ public class ChangeLanuage {
     }
     private void SortButtons (ArrayList < Button > buttonArrayList) {
         Collections collections = null;
-        collections.sort(buttonArrayList, new ButtonsComparator());
+        Collections.sort(buttonArrayList, new ButtonsComparator());
     }        //connectFirebase.close();
 }
 

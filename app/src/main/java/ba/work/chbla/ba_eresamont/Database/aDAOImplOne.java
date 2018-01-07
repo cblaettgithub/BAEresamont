@@ -3,6 +3,7 @@ package ba.work.chbla.ba_eresamont.Database;
 
 import ba.work.chbla.ba_eresamont.Classes.ButtonManager;
 import ba.work.chbla.ba_eresamont.Classes.ShowContentApp;
+import ba.work.chbla.ba_eresamont.Classes.TitleFiller;
 import ba.work.chbla.ba_eresamont.Fragment.FirstFragment;
 import ba.work.chbla.ba_eresamont.Models.Pages;
 
@@ -45,10 +46,11 @@ public class aDAOImplOne extends aDAO {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Pages pages=dataSnapshot.getValue(Pages.class);
                 final FirstFragment.OnHeadlineSelectedListener mCallback=Callback;
-                filltitlearray(pages);
+                mTitleArray=new TitleFiller().filltitlearray(pages);
+                //filltitlearray(pages);
                 if (mCallback!=null)//wies mcallback null ?
                     mCallback.onArticleSelected(hashMap,"MenuChange", mTitleArray);//Menüs aktualisieren
-                new ShowContentApp().showContentApp(pages, webView, mlanuageId, true); ;
+                new ShowContentApp().showContentApp(pages, webView, mlanuageId, true);
             }
            @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -64,13 +66,5 @@ public class aDAOImplOne extends aDAO {
             }
         });
     }
-    private void filltitlearray(Pages pages){
-        int rowid =(int)mlanguage;
-        mTitleArray[rowid]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguage)).getTitle();//Titel oben
-        int i=1;
-        for(long j=1;j<=3;j++){
-            mTitleArray[i]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, j)).getTitle();
-            i++;
-        }
-    }
+
 }

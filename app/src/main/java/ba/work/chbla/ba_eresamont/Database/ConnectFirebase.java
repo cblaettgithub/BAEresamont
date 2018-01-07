@@ -1,13 +1,10 @@
 package ba.work.chbla.ba_eresamont.Database;
 
 import android.webkit.WebView;
-
 import ba.work.chbla.ba_eresamont.Classes.ButtonManager;
 import ba.work.chbla.ba_eresamont.Models.Pages;
-
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.util.TreeMap;
 
 /**

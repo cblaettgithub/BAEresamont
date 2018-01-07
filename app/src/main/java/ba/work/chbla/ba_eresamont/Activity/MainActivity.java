@@ -1,12 +1,10 @@
 package ba.work.chbla.ba_eresamont.Activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -83,7 +81,7 @@ public class MainActivity extends AppCompatActivity
         Bundle extras = getIntent().getExtras();//setting name for chatting
         this.setUsername(extras.getString("User"));
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
        /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -93,25 +91,21 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });*/
-        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         Menu menu= navigationView.getMenu();
         menu.clear();
-
         Menu menushow= navigationView.getMenu();
         menushow.add(0, R.id.fragment_zero , 1,
                 "Home").setIcon(R.drawable.ic_menu_gallery);
-
         navigationView.invalidate();
         setHomeAtfirst();
-
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
              @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -120,11 +114,10 @@ public class MainActivity extends AppCompatActivity
             }
         });
       }
-
     public void creatingMenus(String choice) {
          switch (choice){
              case "MenuChange":
-                 NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
+                 NavigationView navigationView= findViewById(R.id.nav_view);
                  Menu menushow= navigationView.getMenu();
                  menushow.clear();
                  menushow.add(0, R.id.fragment_zero , 1,
@@ -150,7 +143,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         Log.d("backpressed","*******************backpressed");
         //Fragment_Man("1", mlanguageID, 0);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -285,7 +278,7 @@ public class MainActivity extends AppCompatActivity
         WebView contentView = (WebView)line1.getChildAt(0);
         Bundle bundle;
         final ChangeLanuage changeLanuage;
-        NavigationView navigationView= (NavigationView) findViewById(R.id.nav_view);;
+        NavigationView navigationView= findViewById(R.id.nav_view);
         changeLanuage= new ChangeLanuage(hashMap, mlanguageID, getApplication(),navigationView);
         if (getTitle()=="Home")
            setTitle("Home");
@@ -313,11 +306,10 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    new ShowContentApp().showContentApp(pages, contentView, mlanguageID, false); ;
+                    new ShowContentApp().showContentApp(pages, contentView, mlanguageID, false);
                     if (pages.getParent_id()!=null)
                            changeLanuage.refrehMenuLanuager(pages.getParent_id());//um die Sprachen im Menü zu wechseln
                 }
-
                 @Override
                 public void onChildChanged(DataSnapshot dataSnapshot, String s) {                    }
                 @Override
@@ -337,7 +329,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

@@ -77,12 +77,12 @@ public class ChatFragment extends Fragment
         Bundle bundle = getArguments();
         setUsername(bundle.getString("username"));
         FloatingActionButton fab =
-                (FloatingActionButton) mview.findViewById(R.id.fab);
+                mview.findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText input = (EditText)mview.findViewById(R.id.input);
+                EditText input = mview.findViewById(R.id.input);
                 FirebaseDatabase.getInstance().getReference().push()
                         .setValue(new ChatMessage(input.getText().
                                 toString(),getUsername()));
@@ -94,7 +94,7 @@ public class ChatFragment extends Fragment
     }
 
     public void DisplayMessage(){
-        ListView listOfMessages = (ListView) mview.findViewById(R.id.list_of_messages);
+        ListView listOfMessages = mview.findViewById(R.id.list_of_messages);
         //DatabaseReference myRef= FirebaseDatabase.getInstance();
         //this.myRef = database.getReference("chat");
         adapter = new FirebaseListAdapter<ChatMessage>(getActivity(), ChatMessage.class,
@@ -102,9 +102,9 @@ public class ChatFragment extends Fragment
             @Override
             protected void populateView(View v, ChatMessage model, int position) {
                 // Get references to the views of message.xml
-                TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                TextView messageTime = (TextView)v.findViewById(R.id.message_time);
+                TextView messageText = v.findViewById(R.id.message_text);
+                TextView messageUser = v.findViewById(R.id.message_user);
+                TextView messageTime = v.findViewById(R.id.message_time);
 
                 // Set their text
                 messageText.setText(model.getMessageText());
