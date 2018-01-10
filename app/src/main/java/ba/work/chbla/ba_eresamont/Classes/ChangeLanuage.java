@@ -3,6 +3,7 @@ package ba.work.chbla.ba_eresamont.Classes;
 import android.content.Context;
 import android.support.design.widget.NavigationView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -78,20 +79,35 @@ public class ChangeLanuage {
                         if (dataSnapshot.child("parent_id").exists() == false) {
                             if (dataSnapshot.child("pages_lang").child("0").child("title").
                                     getValue() != null) {
-                                pages = dataSnapshot.getValue(Pages.class);                                 Button button;
+                                pages = dataSnapshot.getValue(Pages.class);
+                                Button button=new Button(getContext());;
                                 if (pages != null) {
-                                    button = new Button(getContext());
-                                    //Button button= (Button)contentview.getChildAt(i);//error null
-                                    button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());
-                                    hashMap.put(String.valueOf(pages.getId().toString()), button.getText());
-                                    buttonArrayList.add(button);
+                                    for(int i=0;i<contentview.getChildCount();i++)
+                                    {   //we get a button from the linearview(gui)
+                                        Button button1 =(Button)contentview.getChildAt(i);
+                                        if (button1.getId()==pages.getId()) {//check if same id
+                                            ((Button) contentview.getChildAt(i)).setText(pages.getPages_lang()
+                                                    .get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());//set new title in the other language
+                                            buttonArrayList.add((Button) contentview.getChildAt(i));//add to the list for later sorting
+                                            hashMap.put(String.valueOf(pages.getId().toString()), button1.getText());//for the left menue
+                                        }
+                                    }
                                     i++;
                                 }
                             }
                         }
-                        SortButtons(buttonArrayList);
-                        for (int i = 0; i < buttonArrayList.size(); i++) {
-                            ((Button) contentview.getChildAt(i)).setText(buttonArrayList.get(i).getText());
+                        if (buttonArrayList.size()==7) {//only when i have seven element of the topmenu
+                            SortButtons(buttonArrayList);
+                            for(int i=0;i<contentview.getChildCount()+1;i++)//we remove all items
+                                contentview.removeViewAt(i);
+                            contentview.removeViewAt(0);
+                            if(contentview.getChildCount()>1){
+                                contentview.removeViewAt(1);
+                                contentview.removeViewAt(0);
+                            }
+                            for (int i = 0; i < buttonArrayList.size(); i++) {//we add the new button to the gui
+                                contentview.addView(buttonArrayList.get(i));
+                            }
                         }
                         creatingMenuLeft.creatingMenus("MenuChange", hashMap);
                         //SortButtons(buttonArrayList);
@@ -128,16 +144,17 @@ public class ChangeLanuage {
                             Pages pages1 = data.getValue(Pages.class);
                             if (pages1.getParent_id() != null) {
                                 if (pages1.getParent_id() == parent_id) {
-                                    button = new Button(getContext());
+                                    button = new Button(getContext());//we create a button because we need that kind of type for copying
                                     button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
                                     button.setId(Integer.parseInt(pages1.getId().toString()));
                                     buttonArrayList.add(button);
+                                    i++;
                                     //((Button)contentview.getChildAt(i)).setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
                                    /*if (pages1.getPages_lang()!=null){
                                        button.setText(pages1.getPages_lang().get(cLanguageID.getArrayIndex(pages1, mlanguageID)).getTitle());
                                    }*/
                                     //hashMap.put(String.valueOf(i),button.getText());old 10.12.2017
-                                    i++;
+
                                 }
                             }
                         }

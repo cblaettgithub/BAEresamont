@@ -83,7 +83,8 @@ public class ButtonManager  {
         button.setShadowLayer(2, 1, 1, 60);
         button.setText(pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());//pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getTitle()
         button.setHeight(40);
-        button.setId((int) pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getId());// ((int) pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getId())
+        //button.setId((int) pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getId());// ((int) pages.getPages_lang().get(Integer.parseInt(mlanguageID)).getId())
+        button.setId(Integer.parseInt(pages.getId().toString()));
         if (pages.getParent_id()!=null)
             parent_id=pages.getParent_id().toString();
         button.setTag(parent_id);//(Integer.parseInt(pages.getParent_id().toString()))
@@ -144,11 +145,7 @@ public class ButtonManager  {
                 for (DataSnapshot data :dataSnapshot.getChildren()) {
                    // if (data.getValue(Pages.class).getParent_id().equals(i))
                     Pages pages1=data.getValue(Pages.class);
-                      /*if (pages1.getId()==86 || pages1.getId()==126){
-                        webView.setTop(550);//for querstion +evaluation de sante
-                        new ShowContentApp().showContentApp(pages1, webView, mlanguageID, true);
-                    }*/
-                    if (pages1.getParent_id()!=null ) {
+                       if (pages1.getParent_id()!=null ) {
                         if (Integer.parseInt(pages1.getParent_id().toString()) == parent_id)
                             pagesArrayList.add(data.getValue(pages.getClass()));
                     }

@@ -45,7 +45,6 @@ public class ShowContentApp {
             if (tagModus)
                 webView.setTag(pages.getId());
             if (pages.getParent_id()!=null ){//89 le project
-
                 parentid=pages.getParent_id();// 100 = oxygen, 85=medical guide
                 if (exclude_reload_sizing(parentid, Name_sizing)){
                     webView.setInitialScale(1);
@@ -68,7 +67,7 @@ public class ShowContentApp {
                     webView.loadData(content, "text/html", "UTF-8");
                     if (exclude_reload_sizing(pages.getId(), Name_reload)) {
                         webView.loadData(content, "text/html", "UTF-8");
-                        webView.reload();
+                        //webView.reload();//we have deactivated this method
                     }
                 }
             }
@@ -108,5 +107,4 @@ public class ShowContentApp {
         }
         return check;
     }
-
 }

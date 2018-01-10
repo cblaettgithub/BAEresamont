@@ -20,7 +20,7 @@ public class TitleFiller {
     //fill into this array, arrayindex 1 for french ,2 for italian, 3 for english
     public String[] filltitlearray(Pages pages){
         int rowid =(int)mlanguageID;
-        mTitleArray[rowid]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
+        //mTitleArray[rowid]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle();//Titel oben
         int i=1;
         for(long j=1;j<=3;j++){
             mTitleArray[i]=pages.getPages_lang().get(cLanguageID.getArrayIndex(pages, j)).getTitle();
