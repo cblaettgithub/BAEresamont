@@ -4,8 +4,12 @@ start
 if (0) then (yes)
     :onchildAdded();
     :new Button;
-    :buttonArrayList.add();
+    :for(int i=0;i<contentview.getChildCount;i++)
+      if(button.getID==pages.getID)
+                :buttonArrayList.add();
     :SortButtons;
+    :for(int i=0;i<buttonarraylist.size;i++)
+    contentView.addView(buttonarray.get(i));
     :creatingMenus;
 elseif (default) then (yes)
     :onchildAdded();

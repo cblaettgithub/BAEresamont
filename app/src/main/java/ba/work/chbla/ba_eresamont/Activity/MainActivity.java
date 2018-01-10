@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity
     public void setUsername(String username) {
         this.username = username;
     }
-    private String username;
+    private  String username="";
     public long getParentidChangelanguage() {
         return parentidChangelanguage;    }
     public void setParentidChangelanguage(long parentidChangelanguage) {
@@ -79,18 +79,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         pagesArrayList= new ArrayList<>();
         Bundle extras = getIntent().getExtras();//setting name for chatting
+
         this.setUsername(extras.getString("User"));
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       /* FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+
         drawerLayout = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);

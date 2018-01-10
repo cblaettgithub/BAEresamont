@@ -12,6 +12,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.TreeMap;
@@ -21,17 +23,15 @@ import ba.work.chbla.ba_eresamont.R;
 
 public class ChatFragment extends Fragment
 {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+   /* private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";*/
     private FirebaseListAdapter<ChatMessage> adapter;
-    public String getUsername() {
-        return username;
-    }
+    private String username="";
+    public String getUsername() {        return username;  }
     public void setUsername(String username) {
+
         this.username = username;
     }
-
-    private String username;
     View mview;
 
     ChatFragment.OnHeadlineSelectedListener mCallback;
@@ -43,30 +43,13 @@ public class ChatFragment extends Fragment
     }
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public ChatFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static ChatFragment newInstance(String param1, String param2) {
-        ChatFragment fragment = new ChatFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -85,7 +68,7 @@ public class ChatFragment extends Fragment
                 EditText input = mview.findViewById(R.id.input);
                 FirebaseDatabase.getInstance().getReference().push()
                         .setValue(new ChatMessage(input.getText().
-                                toString(),getUsername()));
+                                toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
                 input.setText("");
             }
         });

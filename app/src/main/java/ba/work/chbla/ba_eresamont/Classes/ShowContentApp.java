@@ -24,6 +24,7 @@ public class ShowContentApp {
     private  final String Name_sizing="sizing";
     private  final String Name_nocomment="nocomment";
     private  final String Name_local="local";
+    private  final String Name_local_Gmedical="local_Guide_medical";
     private long mlanguageID;
     private String[] mTitleArray=new String[4];
     OnHeadlineSelectedListener mCallback;
@@ -50,9 +51,6 @@ public class ShowContentApp {
                     webView.setInitialScale(1);
                     webView.getSettings().setLoadWithOverviewMode(true);
                     webView.getSettings().setUseWideViewPort(true);
-                    webView.getSettings().setSupportZoom(true);//for zooming
-                    webView.getSettings().setBuiltInZoomControls(true);
-                    webView.getSettings().setDisplayZoomControls(true);
                 }
             }
             if (exclude_reload_sizing(pages.getId(), Name_nocomment))
@@ -63,6 +61,11 @@ public class ShowContentApp {
                     // String data = "<body>" + content+"<img src=\"resources/img/scaladiborg-en.png\"/ height=\"300\" width=\"300\"></body>";
                     webView.loadDataWithBaseURL("file:///android_asset/",content , "text/html", "utf-8",null);
                 }
+                if (exclude_reload_sizing(pages.getId(), Name_local_Gmedical)) {
+                    webView.getSettings().setLoadWithOverviewMode(true);
+                    webView.getSettings().setUseWideViewPort(true);
+                    webView.loadDataWithBaseURL("file:///android_asset/",content , "text/html", "utf-8",null);
+                }
                 else {
                     webView.loadData(content, "text/html", "UTF-8");
                     if (exclude_reload_sizing(pages.getId(), Name_reload)) {
@@ -71,6 +74,9 @@ public class ShowContentApp {
                     }
                 }
             }
+             webView.getSettings().setSupportZoom(true);//for zooming
+             webView.getSettings().setBuiltInZoomControls(true);
+             webView.getSettings().setDisplayZoomControls(true);
         }
     }
     //methode for 3 settings
@@ -82,6 +88,7 @@ public class ShowContentApp {
         long arraysizing[]={87};// boite a util, parentid
         long arrayremcomment[]={100};//algorithme oxigen
         long arrayimglocal[]={125};//questionarie, altitude
+        long arrayimglocal_guideMedical[]={92};//Guide Medical number 20, medecine de montagne
 
         switch (name) {
             case Name_exclude:
@@ -98,6 +105,9 @@ public class ShowContentApp {
                 break;
             case Name_local:
                 arrayprocess = arrayimglocal;
+                break;
+            case Name_local_Gmedical:
+                arrayprocess = arrayimglocal_guideMedical;
                 break;
 
         }
