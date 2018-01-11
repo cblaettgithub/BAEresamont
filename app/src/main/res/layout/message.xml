@@ -9,14 +9,11 @@
         android:layout_alignParentLeft="true"
         android:id="@+id/message_user"
         android:textStyle="normal|bold" />
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/message_user"
         android:layout_alignParentLeft="true"
-        android:layout_marginTop="10dp"
         android:id="@+id/message_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp" />
@@ -25,6 +22,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/message_user"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:id="@+id/message_time" />
 </RelativeLayout>

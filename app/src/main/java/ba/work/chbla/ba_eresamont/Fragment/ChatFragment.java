@@ -65,10 +65,11 @@ public class ChatFragment extends Fragment
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 EditText input = mview.findViewById(R.id.input);
                 FirebaseDatabase.getInstance().getReference().push()
                         .setValue(new ChatMessage(input.getText().
-                                toString(), FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
+                                toString(), getUsername()));
                 input.setText("");
             }
         });
