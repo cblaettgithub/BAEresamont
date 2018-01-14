@@ -41,7 +41,8 @@ public class aDAOImplProgressSort extends aDAO {
                 if (dataSnapshot.child("pages_lang").child(LANGUAGE).
                         child("translate").toString()!="" && dataSnapshot.child("parent_id")!=null){
                     Pages pages = dataSnapshot.getValue(Pages.class);
-                    buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
+                    //buttonManager.ButtonCreator(pages, null,hashMap, cLanguageID.getArrayIndex(pages, mlanuageId), null);
+                    buttonManager.ButtonCreator(pages, null,hashMap, mlanuageId, null);
                     buttonManager.sortButtonsProgress();
                    mCallback.onArticleSelected(buttonManager.getHashMap(),"MenuChange", null);
                 }

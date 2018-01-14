@@ -89,7 +89,7 @@ public class ChangeLanuage {
                                             ((Button) contentview.getChildAt(i)).setText(pages.getPages_lang()
                                                     .get(cLanguageID.getArrayIndex(pages, mlanguageID)).getTitle());//set new title in the other language
                                             buttonArrayList.add((Button) contentview.getChildAt(i));//add to the list for later sorting
-                                            hashMap.put(String.valueOf(pages.getId().toString()), button1.getText());//for the left menue
+                                            //hashMap.put(String.valueOf(pages.getId().toString()), button1.getText());//for the left menue
                                         }
                                     }
                                     i++;
