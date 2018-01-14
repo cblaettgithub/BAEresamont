@@ -107,6 +107,7 @@ public class ChangeLanuage {
                             }
                             for (int i = 0; i < buttonArrayList.size(); i++) {//we add the new button to the gui
                                 contentview.addView(buttonArrayList.get(i));
+                                hashMap.put(String.valueOf(buttonArrayList.get(i).getId()), buttonArrayList.get(i).getText());
                             }
                         }
                         creatingMenuLeft.creatingMenus("MenuChange", hashMap);
@@ -186,7 +187,8 @@ public class ChangeLanuage {
         final DatabaseReference myRef = connectFirebase.getDatabaseReference();
         Query query=myRef.orderByChild("parent_id").equalTo(parentid);
         //Query query = myRef.orderByChild("pages_lang/0/title");
-        hashMap.clear();
+        if (hashMap!=null)
+         hashMap.clear();
 
         query.addChildEventListener(new ChildEventListener() {
             Pages pages;

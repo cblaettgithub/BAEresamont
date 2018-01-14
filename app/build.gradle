@@ -14,8 +14,8 @@ android {
         applicationId "ba.work.chbla.ba_eresamont"
         minSdkVersion 16
         targetSdkVersion 26
-        versionCode 3
-        versionName '3.0'
+        versionCode 4
+        versionName '4.0'
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.config
     }
@@ -47,7 +47,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:11.6.0'
     compile 'org.jsoup:jsoup:1.11.2'
     compile 'com.firebaseui:firebase-ui:0.6.2'
-    compile 'com.firebase:firebase-client-android:2.5.2+'
+    compile 'com.firebase:firebase-client-android:2.5.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
